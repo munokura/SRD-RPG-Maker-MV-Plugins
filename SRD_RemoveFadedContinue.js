@@ -7,7 +7,7 @@
  * @help
  *
  * Remove Faded Continue
- * Version 1.00
+ * Version 1.01
  * SumRndmDde
  *
  *
@@ -30,16 +30,63 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc タイトル画面からグレーアウトした'コンティニュー'を非表示にします。
+ *
+ * @author SumRndmDde
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/mv-plugins/
+ *
+ *
+ * Remove Faded Continue
+ * Version 1.01
+ * SumRndmDde
+ *
+ *
+ * 重要な注意事項
+ * このプラグインにはプラグインコマンドがありません。
+ * Window_TitleCommand.prototype.makeCommandList が上書きされます。
+ *
+ *
+ * ==========================================================================
+ * 使い方
+ * ==========================================================================
+ *
+ * タイトル画面からグレーアウトした'コンティニュー'を非表示にします。
+ * セーブしたデータがある場合のみ表示されます。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-(function() {
+(function () {
+	'use strict';
 
-	Window_TitleCommand.prototype.makeCommandList = function() {
-    	this.addCommand(TextManager.newGame,   'newGame');
-    	if(this.isContinueEnabled())
-    	{
-    		this.addCommand(TextManager.continue_, 'continue', this.isContinueEnabled());
-    	}
-    	this.addCommand(TextManager.options,   'options');
+	Window_TitleCommand.prototype.makeCommandList = function () {
+		this.addCommand(TextManager.newGame, 'newGame');
+		if (this.isContinueEnabled()) {
+			this.addCommand(TextManager.continue_, 'continue', this.isContinueEnabled());
+		}
+		this.addCommand(TextManager.options, 'options');
 	};
 
-}
+})();

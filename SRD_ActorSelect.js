@@ -58,7 +58,7 @@
  * @help
  *
  * Actor Select
- * Version 1.00
+ * Version 1.01
  * SumRndmDde
  *
  *
@@ -124,14 +124,188 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc アクターを選択する画面を呼び出せます。
+ * @author SumRndmDde
+ * 
+ * @param Num of Visible Rows
+ * @text 表示行数
+ * @desc ウィンドウの行数。数値・JavaScriptが使用可能。
+ * パーティーのアクターよりも行が少なくてもスクロールします。
+ * @default 4
+ * 
+ * @param X Position
+ * @text X位置
+ * @desc アクター選択画面のX位置
+ * 数値・JavaScriptが使用可能。デフォルト:0
+ * @default 0
+ * 
+ * @param Y Position
+ * @text Y位置
+ * @desc アクター選択画面のY位置
+ * 数値・JavaScriptが使用可能。デフォルト:0
+ * @default 0
+ * 
+ * @param Window Width
+ * @text ウィンドウ幅
+ * @desc アクター選択画面の幅
+ * 数値・JavaScriptが使用可能。デフォルト:Graphics.boxWidth
+ * @default Graphics.boxWidth
+ * 
+ * @param Window Height
+ * @text ウィンドウ高さ
+ * @desc アクター選択画面の高さ
+ * 数値・JavaScriptが使用可能。デフォルト:Graphics.boxHeight
+ * @default Graphics.boxHeight
+ * 
+ * @param Draw Face?
+ * @text 顔画像を表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターの顔を表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw Name?
+ * @text 名前を表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターの名前を表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw Icons?
+ * @text アイコンを表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターのアイコンを表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw Level?
+ * @text レベルを表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターのレベルを表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw Class?
+ * @text 職業を表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターの職業を表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw HP?
+ * @text HPを表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * 表示:true / 非表示:false
+ * @desc アクター選択画面にアクターのHPを表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @param Draw MP?
+ * @text MPを表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * @desc アクター選択画面にアクターのMPを表示
+ * 表示:true / 非表示:false
+ * @default true
+ * 
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ * 
+ * 元プラグイン: http://sumrndm.site/actor-select/
+ * 
+ * 
+ * Actor Select
+ * Version 1.01
+ * SumRndmDde
+ * 
+ * 
+ * アクターを選択する画面を呼び出せます。
+ * 
+ * 
+ * ==========================================================================
+ *  プラグインコマンド
+ * ==========================================================================
+ * 
+ * 
+ *    OpenActorSelect x
+ * =======================
+ * 
+ * アクター選択画面を開きます。
+ * 
+ * 例:
+ *   OpenActorSelect 2
+ * アクター選択画面を開き、選択したアクターIDを変数ID2に代入します。
+ * 
+ * 
+ *    OpenActorSelect skill
+ * ===========================
+ * 
+ * アクター選択画面を開きます。
+ * アクターを選択すると、
+ * プレイヤーはそのアクターのスキルメニューに移動します。
+ * 
+ * 
+ *    OpenActorSelect equip
+ * ===========================
+ * 
+ * アクター選択画面を開きます。
+ * アクターを選択すると、
+ * プレイヤーはそのアクターの装備メニューに移動します。
+ * 
+ * 
+ *    OpenActorSelect status
+ * ============================
+ * 
+ * アクター選択画面を開きます。
+ * アクターを選択すると、
+ * プレイヤーはそのアクターのステータスメニューに移動します。
+ * 
+ * 
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ * 
+ * ヘルプファイルの終わりへようこそ。
+ * 
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ * 
+ * https://www.youtube.com/c/SumRndmDde
+ * 
+ * 
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.ActorSelect = SRD.ActorSelect || {};
 
 var Imported = Imported || {};
-Imported["SumRndmDde Actor Select"] = true;
+Imported["SumRndmDde Actor Select"] = 1.01;
 
-(function(_) {
+(function (_) {
 
 	_.rows = String(PluginManager.parameters('SRD_ActorSelect')['Num of Visible Rows']);
 	_.x = String(PluginManager.parameters('SRD_ActorSelect')['X Position']);
@@ -152,16 +326,16 @@ Imported["SumRndmDde Actor Select"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Game_Temp_initialize = Game_Temp.prototype.initialize;
-	Game_Temp.prototype.initialize = function() {
-	    _Game_Temp_initialize.call(this);
-	    this._tempVariableStorageforActorId = 0;
+	Game_Temp.prototype.initialize = function () {
+		_Game_Temp_initialize.call(this);
+		this._tempVariableStorageforActorId = 0;
 	};
 
-	Game_Temp.prototype.getTempVariableStorageforActorId = function() {
+	Game_Temp.prototype.getTempVariableStorageforActorId = function () {
 		return this._tempVariableStorageforActorId;
 	};
 
-	Game_Temp.prototype.setTempVariableStorageforActorId = function(id) {
+	Game_Temp.prototype.setTempVariableStorageforActorId = function (id) {
 		this._tempVariableStorageforActorId = id;
 	};
 
@@ -170,15 +344,14 @@ Imported["SumRndmDde Actor Select"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-	    _Game_Interpreter_pluginCommand.call(this);
-
-	    if(command.trim().toLowerCase() === 'openactorselect') {
-	    	if(args.length === 1) {
-	    		$gameTemp.setTempVariableStorageforActorId(String(args[0]));
-	    		SceneManager.push(Scene_ActorSelect);
-	    	}
-	    }
+	Game_Interpreter.prototype.pluginCommand = function (command, args) {
+		_Game_Interpreter_pluginCommand.apply(this, arguments);
+		if (command.trim().toLowerCase() === 'openactorselect') {
+			if (args.length === 1) {
+				$gameTemp.setTempVariableStorageforActorId(String(args[0]));
+				SceneManager.push(Scene_ActorSelect);
+			}
+		}
 	};
 
 	//-----------------------------------------------------------------------------
@@ -186,173 +359,173 @@ Imported["SumRndmDde Actor Select"] = true;
 	//-----------------------------------------------------------------------------
 
 	function Scene_ActorSelect() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 
 	Scene_ActorSelect.prototype = Object.create(Scene_MenuBase.prototype);
 	Scene_ActorSelect.prototype.constructor = Scene_ActorSelect;
 
-	Scene_ActorSelect.prototype.initialize = function() {
-	    Scene_MenuBase.prototype.initialize.call(this);
+	Scene_ActorSelect.prototype.initialize = function () {
+		Scene_MenuBase.prototype.initialize.call(this);
 	};
 
-	Scene_ActorSelect.prototype.create = function() {
-	    Scene_MenuBase.prototype.create.call(this);
-	    this.createStatusWindow();
+	Scene_ActorSelect.prototype.create = function () {
+		Scene_MenuBase.prototype.create.call(this);
+		this.createStatusWindow();
 	};
 
-	Scene_ActorSelect.prototype.start = function() {
-	    Scene_MenuBase.prototype.start.call(this);
-	    this._statusWindow.refresh();
-	    this._statusWindow.select(0);
-	    this.commandPersonal();
+	Scene_ActorSelect.prototype.start = function () {
+		Scene_MenuBase.prototype.start.call(this);
+		this._statusWindow.refresh();
+		this._statusWindow.select(0);
+		this.commandPersonal();
 	};
 
-	Scene_ActorSelect.prototype.createStatusWindow = function() {
-	    this._statusWindow = new Window_ActorSelect(eval(_.x), eval(_.y));
-	    this.addWindow(this._statusWindow);
+	Scene_ActorSelect.prototype.createStatusWindow = function () {
+		this._statusWindow = new Window_ActorSelect(eval(_.x), eval(_.y));
+		this.addWindow(this._statusWindow);
 	};
 
-	Scene_ActorSelect.prototype.commandPersonal = function() {
-	    this._statusWindow.selectLast();
-	    this._statusWindow.activate();
-	    this._statusWindow.setHandler('ok',     this.onPersonalOk.bind(this));
-	    this._statusWindow.setHandler('cancel', this.onPersonalCancel.bind(this));
+	Scene_ActorSelect.prototype.commandPersonal = function () {
+		this._statusWindow.selectLast();
+		this._statusWindow.activate();
+		this._statusWindow.setHandler('ok', this.onPersonalOk.bind(this));
+		this._statusWindow.setHandler('cancel', this.onPersonalCancel.bind(this));
 	};
 
-	Scene_ActorSelect.prototype.onPersonalOk = function() {
+	Scene_ActorSelect.prototype.onPersonalOk = function () {
 		var id = $gameParty.members()[this._statusWindow.index()].actorId();
 		var varId = $gameTemp.getTempVariableStorageforActorId();
-		if(varId.match(/\s*skill\s*/i)) {
+		if (varId.match(/\s*skill\s*/i)) {
 			$gameParty.setMenuActor($gameActors.actor(Number(id)));
 			SceneManager.goto(Scene_Skill);
-		} else if(varId.match(/\s*equip\s*/i)) {
+		} else if (varId.match(/\s*equip\s*/i)) {
 			$gameParty.setMenuActor($gameActors.actor(Number(id)));
 			SceneManager.goto(Scene_Equip);
-		} else if(varId.match(/\s*status\s*/i)) {
+		} else if (varId.match(/\s*status\s*/i)) {
 			$gameParty.setMenuActor($gameActors.actor(Number(id)));
 			SceneManager.goto(Scene_Status);
-		} else if(varId.match(/\d+/)) {
+		} else if (varId.match(/\d+/)) {
 			$gameVariables.setValue(Number(varId), id);
 			this.popScene();
 		}
 	};
 
-	Scene_ActorSelect.prototype.onPersonalCancel = function() {
+	Scene_ActorSelect.prototype.onPersonalCancel = function () {
 		this.popScene();
 	};
-	
+
 	//-----------------------------------------------------------------------------
 	// Window_ActorSelect
 	//-----------------------------------------------------------------------------
 
 	function Window_ActorSelect() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 
 	Window_ActorSelect.prototype = Object.create(Window_Selectable.prototype);
 	Window_ActorSelect.prototype.constructor = Window_ActorSelect;
 
-	Window_ActorSelect.prototype.initialize = function(x, y) {
-	    var width = this.windowWidth();
-	    var height = this.windowHeight();
-	    Window_Selectable.prototype.initialize.call(this, x, y, width, height);
-	    this._formationMode = false;
-	    this._pendingIndex = -1;
-	    this.loadImages();
-	    this.refresh();
+	Window_ActorSelect.prototype.initialize = function (x, y) {
+		var width = this.windowWidth();
+		var height = this.windowHeight();
+		Window_Selectable.prototype.initialize.call(this, x, y, width, height);
+		this._formationMode = false;
+		this._pendingIndex = -1;
+		this.loadImages();
+		this.refresh();
 	};
 
-	Window_ActorSelect.prototype.windowWidth = function() {
-	    return eval(_.width);
+	Window_ActorSelect.prototype.windowWidth = function () {
+		return eval(_.width);
 	};
 
-	Window_ActorSelect.prototype.windowHeight = function() {
-	    return eval(_.height);
+	Window_ActorSelect.prototype.windowHeight = function () {
+		return eval(_.height);
 	};
 
-	Window_ActorSelect.prototype.maxItems = function() {
-	    return $gameParty.size();
+	Window_ActorSelect.prototype.maxItems = function () {
+		return $gameParty.size();
 	};
 
-	Window_ActorSelect.prototype.itemHeight = function() {
-	    var clientHeight = this.height - this.padding * 2;
-	    return Math.floor(clientHeight / this.numVisibleRows());
+	Window_ActorSelect.prototype.itemHeight = function () {
+		var clientHeight = this.height - this.padding * 2;
+		return Math.floor(clientHeight / this.numVisibleRows());
 	};
 
-	Window_ActorSelect.prototype.numVisibleRows = function() {
-	    return eval(_.rows);
+	Window_ActorSelect.prototype.numVisibleRows = function () {
+		return eval(_.rows);
 	};
 
-	Window_ActorSelect.prototype.loadImages = function() {
-	    $gameParty.members().forEach(function(actor) {
-	        ImageManager.loadFace(actor.faceName());
-	    }, this);
+	Window_ActorSelect.prototype.loadImages = function () {
+		$gameParty.members().forEach(function (actor) {
+			ImageManager.loadFace(actor.faceName());
+		}, this);
 	};
 
-	Window_ActorSelect.prototype.drawItem = function(index) {
-	    this.drawItemBackground(index);
-	    if(_.drawFace) this.drawItemImage(index);
-	    this.drawItemStatus(index);
+	Window_ActorSelect.prototype.drawItem = function (index) {
+		this.drawItemBackground(index);
+		if (_.drawFace) this.drawItemImage(index);
+		this.drawItemStatus(index);
 	};
 
-	Window_ActorSelect.prototype.drawItemBackground = function(index) {
-	    if (index === this._pendingIndex) {
-	        var rect = this.itemRect(index);
-	        var color = this.pendingColor();
-	        this.changePaintOpacity(false);
-	        this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
-	        this.changePaintOpacity(true);
-	    }
+	Window_ActorSelect.prototype.drawItemBackground = function (index) {
+		if (index === this._pendingIndex) {
+			var rect = this.itemRect(index);
+			var color = this.pendingColor();
+			this.changePaintOpacity(false);
+			this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
+			this.changePaintOpacity(true);
+		}
 	};
 
-	Window_ActorSelect.prototype.drawItemImage = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    this.changePaintOpacity(actor.isBattleMember());
-	    this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
-	    this.changePaintOpacity(true);
+	Window_ActorSelect.prototype.drawItemImage = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		this.changePaintOpacity(actor.isBattleMember());
+		this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
+		this.changePaintOpacity(true);
 	};
 
-	Window_ActorSelect.prototype.drawItemStatus = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    var x = rect.x + 162;
-	    var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
-	    var width = rect.width - x - this.textPadding();
-	    var lineHeight = this.lineHeight();
-	    var x2 = x + 180;
-	    var width2 = Math.min(200, width - 180 - this.textPadding());
-	    if(_.drawName) this.drawActorName(actor, x, y);
-	    if(_.drawLevel) this.drawActorLevel(actor, x, y + lineHeight * 1);
-	    if(_.drawIcons) this.drawActorIcons(actor, x, y + lineHeight * 2);
-	    if(_.drawClass) this.drawActorClass(actor, x2, y);
-	    if(_.drawHP) this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
-	    if(_.drawMP) this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
+	Window_ActorSelect.prototype.drawItemStatus = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		var x = rect.x + 162;
+		var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
+		var width = rect.width - x - this.textPadding();
+		var lineHeight = this.lineHeight();
+		var x2 = x + 180;
+		var width2 = Math.min(200, width - 180 - this.textPadding());
+		if (_.drawName) this.drawActorName(actor, x, y);
+		if (_.drawLevel) this.drawActorLevel(actor, x, y + lineHeight * 1);
+		if (_.drawIcons) this.drawActorIcons(actor, x, y + lineHeight * 2);
+		if (_.drawClass) this.drawActorClass(actor, x2, y);
+		if (_.drawHP) this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
+		if (_.drawMP) this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
 	};
 
-	Window_ActorSelect.prototype.isCurrentItemEnabled = function() {
-	    if (this._formationMode) {
-	        var actor = $gameParty.members()[this.index()];
-	        return actor && actor.isFormationChangeOk();
-	    } else {
-	        return true;
-	    }
+	Window_ActorSelect.prototype.isCurrentItemEnabled = function () {
+		if (this._formationMode) {
+			var actor = $gameParty.members()[this.index()];
+			return actor && actor.isFormationChangeOk();
+		} else {
+			return true;
+		}
 	};
 
-	Window_ActorSelect.prototype.selectLast = function() {
-	    this.select($gameParty.menuActor().index() || 0);
+	Window_ActorSelect.prototype.selectLast = function () {
+		this.select($gameParty.menuActor().index() || 0);
 	};
 
-	Window_ActorSelect.prototype.pendingIndex = function() {
-	    return this._pendingIndex;
+	Window_ActorSelect.prototype.pendingIndex = function () {
+		return this._pendingIndex;
 	};
 
-	Window_ActorSelect.prototype.setPendingIndex = function(index) {
-	    var lastPendingIndex = this._pendingIndex;
-	    this._pendingIndex = index;
-	    this.redrawItem(this._pendingIndex);
-	    this.redrawItem(lastPendingIndex);
+	Window_ActorSelect.prototype.setPendingIndex = function (index) {
+		var lastPendingIndex = this._pendingIndex;
+		this._pendingIndex = index;
+		this.redrawItem(this._pendingIndex);
+		this.redrawItem(lastPendingIndex);
 	};
 
 })(SRD.ActorSelect)

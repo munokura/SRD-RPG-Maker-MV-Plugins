@@ -64,7 +64,6 @@
  * @desc This is the x position of the Command Window.
  * Can be a Number or JavaScript eval.
  * @default (this._statusWindow.y + this._statusWindow.height) - this._commandWindow.height
- * @help
  *
  * @param Max Columns
  * @desc The maximum amount of columns the command window can have.
@@ -145,7 +144,7 @@
  * @help
  *
  * Alternative Menu Screen: Bust Select
- * Version 1.01
+ * Version 1.02
  * SumRndmDde
  *
  *
@@ -229,8 +228,274 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc メインメニューに立ち絵やSV戦闘キャラを表示します
+ * @author SumRndmDde
+ *
+ * @param Show Gold Window
+ * @text 所持金ウィンドウを表示
+ * @desc メニューに所持金ウィンドウを表示
+ * @default true
+ *
+ * @param Show SV Window
+ * @text SVウィンドウを表示
+ * @desc SV戦闘キャラウィンドウを表示
+ * @default true
+ *
+ * @param == Bust Position ==
+ * @text -- 立ち絵位置 --
+ * @default
+ *
+ * @param Bust X Pos
+ * @text 立ち絵X位置
+ * @desc デフォルトでは、立ち絵は(0, 0)の位置に配置されています。このパラメータを使用して、全ての立ち絵のデフォルトのX位置を設定することができます。
+ * @default 0
+ *
+ * @param Bust Y Pos
+ * @text 立ち絵Y位置
+ * @desc デフォルトでは、立ち絵の位置は(0, 0)です。このパラメータを使用すると、全ての立ち絵のデフォルトのY位置を設定することができます。
+ * @default 0
+ *
+ * @param == Bust Window ==
+ * @text -- 立ち絵ウィンドウ --
+ * @default
+ *
+ * @param Bust Window Rows
+ * @text 立ち絵ウィンドウ行数
+ * @desc 立ち絵ウィンドウの行数
+ * @default 1
+ *
+ * @param Bust Window Cols
+ * @text 立ち絵ウィンドウ列数
+ * @desc 立ち絵ウィンドウの列数
+ * @default 1
+ *
+ * @param Bust Window X
+ * @text 立ち絵ウィンドウX位置
+ * @desc 立ち絵ウィンドウのX位置
+ * 数値または JavaScript eval を使えます
+ * @default 20
+ *
+ * @param Bust Window Y
+ * @text 立ち絵ウィンドウY位置
+ * @desc 立ち絵ウィンドウのY位置
+ * 数値または JavaScript eval を使えます
+ * @default (Graphics.height / 2) - (this._statusWindow.height / 2)
+ *
+ * @param Bust Window Width
+ * @text 立ち絵ウィンドウ幅
+ * @desc 立ち絵ウィンドウの幅。
+ * 数値または JavaScript eval を使えます
+ * @default (Graphics.width / 2) - 40
+ *
+ * @param Bust Window Height
+ * @text 立ち絵ウィンドウ高さ
+ * @desc 立ち絵ウィンドウの高さ。
+ * 数値または JavaScript eval を使えます
+ * @default Graphics.height - 120
+ *
+ * @param == Command Window ==
+ * @text -- コマンドウィンドウ --
+ * @default
+ *
+ * @param Command Window X
+ * @text コマンドウィンドウX
+ * @desc コマンドウィンドウのXの位置です。
+ * 数値または JavaScript eval を使えます
+ * @default Graphics.width - this._commandWindow.width - 20
+ *
+ * @param Command Window Y
+ * @text コマンドウィンドウ Y
+ * @desc コマンドウィンドウのY位置です。
+ * 数値または JavaScript eval を使えます
+ * @default (this._statusWindow.y + this._statusWindow.height) - this._commandWindow.height
+ *
+ * @param Max Columns
+ * @text コマンド列数
+ * @desc コマンドウィンドウの最大列数
+ * @default 1
+ *
+ * @param Visible Rows
+ * @text コマンド行数
+ * @desc コマンドウィンドウで表示する行数
+ * @default 5
+ *
+ * @param == HP Window ==
+ * @text -- HPウィンドウ --
+ * @default
+ *
+ * @param Draw MP Bar
+ * @text MPバーを描画
+ * @desc HPウィンドウにMPバーを表示
+ * @default false
+ *
+ * @param Draw TP Bar
+ * @text TPバーを描く
+ * @desc HPウィンドウにTPバーを表示
+ * @default false
+ *
+ * @param HP Window X
+ * @text HPウィンドウX
+ * @desc HPウィンドウのX位置です。
+ * 数値または JavaScript eval を使えます
+ * @default this._commandWindow.x
+ *
+ * @param HP Window Y
+ * @text HPウィンドウY
+ * @desc HPウィンドウのY位置です。
+ * 数値または JavaScript eval を使えます
+ * @default ((this._commandWindow.y - (this._goldWindow.y + this._goldWindow.height)) / 2) - (this._hpWindow.height / 2) + (this._goldWindow.y + this._goldWindow.height)
+ *
+ * @param HP Window Width
+ * @text HPウィンドウ幅
+ * @desc HPウィンドウの幅です。画面サイズに応じて大きくするか小さくするかを設定します。デフォルトは 256 です。
+ * @default 256
+ *
+ * @param == Battler Window ==
+ * @text -- バトラーウィンドウ --
+ * @default
+ *
+ * @param Battler X Pos
+ * @text バトラーX位置
+ * @desc サイドビューバトラーのウィンドウ内のX位置です。
+ * @default 6
+ *
+ * @param Battler Y Pos
+ * @text バトラーY位置
+ * @desc サイドビューバトラーのウィンドウ内のY位置です。
+ * @default 6
+ *
+ * @param B. Window X
+ * @text B. ウィンドウX位置
+ * @desc バトラーウィンドウのX位置。
+ * 数値または JavaScript eval を使えます
+ * @default Graphics.width - 128
+ *
+ * @param B. Window Y
+ * @text B. ウィンドウY位置
+ * @desc バトラーウィンドウのYの位置。
+ * 数値または JavaScript eval を使えます
+ * @default this._hpWindow.y
+ *
+ * @param B. Window Width
+ * @text B. ウィンドウ幅
+ * @desc バトラーウィンドウの幅。
+ * 数値または JavaScript eval を使えます
+ * @default this.fittingHeight(2)
+ *
+ * @param B. Window Height
+ * @text B. ウィンドウ高
+ * @desc バトラーウィンドウの高さ。
+ * 数値または JavaScript eval を使えます
+ * @default this.fittingHeight(2)
+ *
+ * @param == Gold Window ==
+ * @text -- 所持金ウィンドウ --
+ * @default
+ *
+ * @param Gold Window X
+ * @text 所持金ウィンドウX
+ * @desc 所持金ウィンドウのX位置です。
+ * 数値または JavaScript eval を使えます
+ * @default this._commandWindow.x
+ *
+ * @param Gold Window Y
+ * @text 所持金ウィンドウY
+ * @desc 所持金ウィンドウのY位置です。
+ * 数値または JavaScript eval を使えます
+ * @default this._statusWindow.y
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/ams-bust-select/
+ *
+ *
+ * Alternative Menu Screen: Bust Select
+ * Version 1.02
+ * SumRndmDde
+ *
+ *
+ * Changelog: Version 1.01
+ *            - Allowed customization of positions for Gold,
+ *              Command, and HP windows.
+ *            - Can customize rows and columns for Bust Window
+ *
+ *
+ * 別のメニュー画面を与えます。
+ * 立ち絵とSV戦闘キャラに特化した特別なリクエストでした。
+ *
+ *
+ * ==========================================================================
+ *  立ち絵の設定方法
+ * ==========================================================================
+ *
+ * 各アクターの立ち絵を設定するには、
+ * アクターのメモ欄に以下のメモタグを使用します。
+ *
+ *  <Menu Bust: filename>
+ *
+ * このアクターの胸像に使用したい画像ファイル名を入力してください。
+ * ※ファイル名は大文字小文字を区別し、拡張子(.png)は含めないでください。
+ *
+ * 下記に保存する必要があります。
+ * img/SumRndmDde/menu
+ *
+ *
+ * ==========================================================================
+ *  立ち絵にカスタムポジションを設定する方法
+ * ==========================================================================
+ *
+ * 以下は任意のメモタグです。
+ * 以下を使用して、立ち絵のXとYを設定します(アクターのメモ欄)。
+ *
+ *  <Menu Bust X: number>
+ *  <Menu Bust Y: number>
+ *
+ * デフォルトでは、立ち絵はパラメータの座標に設定されていますが、
+ * アクターの特定の立ち絵が少し中心からずれているように見える場合、
+ * これらのメモタグで、位置を調整できます。
+ *
+ *
+ * ==========================================================================
+ *  立ち絵を一定の幅と高さに伸ばす方法
+ * ==========================================================================
+ *
+ * 以下はオプションのメモタグです。
+ * 以下を使用して、
+ * 立ち絵の幅と高さを指定した幅と高さ(アクターのメモ欄)に引き伸ばします。
+ *
+ *  <Menu Bust Width: number>
+ *  <Menu Bust Height: number>
+ *
+ * デフォルトでは、立ち絵は画像ファイルと同じ幅と高さになっていますが、
+ * これを利用して、立ち絵を伸ばす幅と高さをカスタムで設定することができます。
+ *
+ * 例:
+ *  <Menu Bust Width: 128>
+ *  <Menu Bust Height: 160>
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-(function() {
+(function () {
 
 	var gold = String(PluginManager.parameters('SRD_AltMenuScreen_BustSelect')['Show Gold Window']).trim().toLowerCase() === 'true';
 	var sv = String(PluginManager.parameters('SRD_AltMenuScreen_BustSelect')['Show SV Window']).trim().toLowerCase() === 'true';
@@ -262,236 +527,233 @@
 
 	var notetagsLoaded = false;
 	var _DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-	DataManager.isDatabaseLoaded = function() {
-	    if(!_DataManager_isDatabaseLoaded.call(this)) return false;
-	    if(!notetagsLoaded) {
-	    	for(var i = 1; i < $dataActors.length; i++) {
-	    		if($dataActors[i].note.match(/<Menu\s*Bust\s*:\s*(.*)\s*>/im)) {
-	    			$dataActors[i].ams_bs_bust = RegExp.$1;
-	    		}
-	    		if($dataActors[i].note.match(/<Menu\s*Bust\s*X\s*:\s*(.*)\s*>/im)) {
-	    			$dataActors[i].ams_bs_x = parseInt(RegExp.$1);
-	    		}
-	    		if($dataActors[i].note.match(/<Menu\s*Bust\s*Y\s*:\s*(.*)\s*>/im)) {
-	    			$dataActors[i].ams_bs_y = parseInt(RegExp.$1);
-	    		}
-	    		if($dataActors[i].note.match(/<Menu\s*Bust\s*Width\s*:\s*(.*)\s*>/im)) {
-	    			$dataActors[i].ams_bs_w = parseInt(RegExp.$1);
-	    		}
-	    		if($dataActors[i].note.match(/<Menu\s*Bust\s*Height\s*:\s*(.*)\s*>/im)) {
-	    			$dataActors[i].ams_bs_h = parseInt(RegExp.$1);
-	    		}
-	    	}
-	    	notetagsLoaded = true;
-	    }
-	    return true;
+	DataManager.isDatabaseLoaded = function () {
+		if (!_DataManager_isDatabaseLoaded.call(this)) return false;
+		if (!notetagsLoaded) {
+			for (var i = 1; i < $dataActors.length; i++) {
+				if ($dataActors[i].note.match(/<Menu\s*Bust\s*:\s*(.*)\s*>/im)) {
+					$dataActors[i].ams_bs_bust = RegExp.$1;
+				}
+				if ($dataActors[i].note.match(/<Menu\s*Bust\s*X\s*:\s*(.*)\s*>/im)) {
+					$dataActors[i].ams_bs_x = parseInt(RegExp.$1);
+				}
+				if ($dataActors[i].note.match(/<Menu\s*Bust\s*Y\s*:\s*(.*)\s*>/im)) {
+					$dataActors[i].ams_bs_y = parseInt(RegExp.$1);
+				}
+				if ($dataActors[i].note.match(/<Menu\s*Bust\s*Width\s*:\s*(.*)\s*>/im)) {
+					$dataActors[i].ams_bs_w = parseInt(RegExp.$1);
+				}
+				if ($dataActors[i].note.match(/<Menu\s*Bust\s*Height\s*:\s*(.*)\s*>/im)) {
+					$dataActors[i].ams_bs_h = parseInt(RegExp.$1);
+				}
+			}
+			notetagsLoaded = true;
+		}
+		return true;
 	};
-	if(!ImageManager.loadSumRndmDdeMB) {
-		ImageManager.loadSumRndmDdeMB = function(filename, hue) {
-	        return this.loadBitmap('img/SumRndmDde/menu/', filename, hue, true);
-	    };
+	if (!ImageManager.loadSumRndmDdeMB) {
+		ImageManager.loadSumRndmDdeMB = function (filename, hue) {
+			return this.loadBitmap('img/SumRndmDde/menu/', filename, hue, true);
+		};
 	}
 	var _Scene_Menu_create = Scene_Menu.prototype.create;
-	Scene_Menu.prototype.create = function() {
-	    _Scene_Menu_create.call(this);
-	    this.createHPWindow(this._statusWindow);
-	    this.createSVBattler(this._statusWindow);
-	    this._statusWindow.x = eval(bwX);
+	Scene_Menu.prototype.create = function () {
+		_Scene_Menu_create.call(this);
+		this.createHPWindow(this._statusWindow);
+		this.createSVBattler(this._statusWindow);
+		this._statusWindow.x = eval(bwX);
 		this._statusWindow.y = eval(bwY);
 		this._commandWindow.x = eval(comX);
 		this._commandWindow.y = eval(comY);
-		this._goldWindow.x = eval(goldX);//this._hpWindow.x;
-	    this._goldWindow.y = eval(goldY);//this._statusWindow.y;
-	    this._hpWindow.x = eval(hpX);//this._commandWindow.x;
-	    this._hpWindow.y = eval(hpY);
-	    //var distance = (this._commandWindow.y - (this._goldWindow.y + this._goldWindow.height));
-		//this._hpWindow.y = (distance / 2) - (this._hpWindow.height / 2) + (this._goldWindow.y + this._goldWindow.height);
-		//this._hpWindow.y = ((this._commandWindow.y - (this._goldWindow.y + this._goldWindow.height)) / 2) - (this._hpWindow.height / 2) + (this._goldWindow.y + this._goldWindow.height);
-		//this._svWindow.x = Graphics.width - 128;
-		//this._svWindow.y = this._hpWindow.y;
+		this._goldWindow.x = eval(goldX);
+		this._goldWindow.y = eval(goldY);
+		this._hpWindow.x = eval(hpX);
+		this._hpWindow.y = eval(hpY);
 		this._svWindow.x = eval(batXW);
 		this._svWindow.y = eval(batYH);
 	};
 	var _Scene_Menu_createGoldWindow = Scene_Menu.prototype.createGoldWindow;
-	Scene_Menu.prototype.createGoldWindow = function() {
-		if(gold) {
+	Scene_Menu.prototype.createGoldWindow = function () {
+		if (gold) {
 			_Scene_Menu_createGoldWindow.call(this);
 		} else {
-			this._goldWindow = {x: 0, y: 0, height: 72};
+			this._goldWindow = { x: 0, y: 0, height: 72 };
 		}
 	};
-	Scene_Menu.prototype.createHPWindow = function(window) {
-	    this._hpWindow = new Window_HPWindow(0, 0, window);
-	    this.addWindow(this._hpWindow);
+	Scene_Menu.prototype.createHPWindow = function (window) {
+		this._hpWindow = new Window_HPWindow(0, 0, window);
+		this.addWindow(this._hpWindow);
 	};
-	Scene_Menu.prototype.createSVBattler = function(window) {
-	    this._svWindow = new Window_SVBattler(0, 0, window);
-	    if(sv) this.addWindow(this._svWindow);
+	Scene_Menu.prototype.createSVBattler = function (window) {
+		this._svWindow = new Window_SVBattler(0, 0, window);
+		if (sv) this.addWindow(this._svWindow);
 	};
-	Window_MenuCommand.prototype.windowWidth = function() {
-	    return (Graphics.width / 2) - 40;
+	Window_MenuCommand.prototype.windowWidth = function () {
+		return (Graphics.width / 2) - 40;
 	};
-	Window_MenuCommand.prototype.maxCols = function() {
-	    return col;
+	Window_MenuCommand.prototype.maxCols = function () {
+		return col;
 	};
-	Window_MenuCommand.prototype.numVisibleRows = function() {
-	    return row;
+	Window_MenuCommand.prototype.numVisibleRows = function () {
+		return row;
 	};
-	Window_MenuCommand.prototype.itemTextAlign = function() {
-	    return 'center';
+	Window_MenuCommand.prototype.itemTextAlign = function () {
+		return 'center';
 	};
 	var _Window_MenuStatus_loadImages = Window_MenuStatus.prototype.loadImages;
-	Window_MenuStatus.prototype.loadImages = function() {
-	    _Window_MenuStatus_loadImages.call(this);
-	    $gameParty.members().forEach(function(actor) {
-	    	if(actor.actor().ams_bs_bust) {
-	        	ImageManager.loadSumRndmDdeMB(actor.actor().ams_bs_bust);
-	        }
-	    }, this);
+	Window_MenuStatus.prototype.loadImages = function () {
+		_Window_MenuStatus_loadImages.call(this);
+		$gameParty.members().forEach(function (actor) {
+			if (actor.actor().ams_bs_bust) {
+				ImageManager.loadSumRndmDdeMB(actor.actor().ams_bs_bust);
+			}
+		}, this);
 	};
-	Window_MenuStatus.prototype.windowWidth = function() {
+	Window_MenuStatus.prototype.windowWidth = function () {
 		return eval(bwW);
 	};
-	Window_MenuStatus.prototype.windowHeight = function() {
-	    return eval(bwH);
+	Window_MenuStatus.prototype.windowHeight = function () {
+		return eval(bwH);
 	};
-	Window_MenuStatus.prototype.numVisibleRows = function() {
+	Window_MenuStatus.prototype.numVisibleRows = function () {
 		return bustRows;
 	};
-	Window_MenuStatus.prototype.maxCols = function() {
-	    return bustCols;
+	Window_MenuStatus.prototype.maxCols = function () {
+		return bustCols;
 	};
-	Window_MenuStatus.prototype.drawItem = function(index) {
-	    this.drawItemBackground(index);
-	    this.drawItemImage(index);
-	    //this.drawItemStatus(index);
+	Window_MenuStatus.prototype.drawItem = function (index) {
+		this.drawItemBackground(index);
+		this.drawItemImage(index);
+		//this.drawItemStatus(index);
 	};
-	Window_MenuStatus.prototype.drawItemImage = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    this.changePaintOpacity(actor.isBattleMember());
-	    var x = (actor.actor().ams_bs_x) ? actor.actor().ams_bs_x : bustX;
-	    var y = (actor.actor().ams_bs_y) ? actor.actor().ams_bs_y : bustY;
-	    var w = (actor.actor().ams_bs_w) ? actor.actor().ams_bs_w : -1;
-	    var h = (actor.actor().ams_bs_h) ? actor.actor().ams_bs_h : -1;
-	    this.drawBust(actor, rect.x + x, rect.y + y, w, h);
-	    this.changePaintOpacity(true);
+	Window_MenuStatus.prototype.drawItemImage = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		this.changePaintOpacity(actor.isBattleMember());
+		var x = (actor.actor().ams_bs_x) ? actor.actor().ams_bs_x : bustX;
+		var y = (actor.actor().ams_bs_y) ? actor.actor().ams_bs_y : bustY;
+		var w = (actor.actor().ams_bs_w) ? actor.actor().ams_bs_w : -1;
+		var h = (actor.actor().ams_bs_h) ? actor.actor().ams_bs_h : -1;
+		this.drawBust(actor, rect.x + x, rect.y + y, w, h);
+		this.changePaintOpacity(true);
 	};
-	Window_MenuStatus.prototype.drawBust = function(actor, x, y, width, height) {
-	    var bitmap = ImageManager.loadSumRndmDdeMB(actor.actor().ams_bs_bust);
-	    width = (width < 0) ? bitmap.width : width;
-	    height = (height < 0) ? bitmap.height : height;
-	    this.contents.blt(bitmap, 0, 0, bitmap.width, bitmap.height, x, y, width, height);
+	Window_MenuStatus.prototype.drawBust = function (actor, x, y, width, height) {
+		var bitmap = ImageManager.loadSumRndmDdeMB(actor.actor().ams_bs_bust);
+		bitmap.addLoadListener(function () {
+			width = (width < 0) ? bitmap.width : width;
+			height = (height < 0) ? bitmap.height : height;
+			this.contents.blt(bitmap, 0, 0, bitmap.width, bitmap.height, x, y, width, height);
+		}.bind(this));
 	};
 	var _Window_MenuStatus_deselect = Window_MenuStatus.prototype.deselect;
-	Window_MenuStatus.prototype.deselect = function() {
-	    _Window_MenuStatus_deselect.call(this);
-	    this._index = 0;
+	Window_MenuStatus.prototype.deselect = function () {
+		_Window_MenuStatus_deselect.call(this);
+		this._index = 0;
 	};
 	function Window_HPWindow() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 	Window_HPWindow.prototype = Object.create(Window_Base.prototype);
 	Window_HPWindow.prototype.constructor = Window_HPWindow;
-	Window_HPWindow.prototype.initialize = function(x, y, win) {
-	    var width = this.windowWidth();
-	    var height = this.windowHeight();
-	    Window_Base.prototype.initialize.call(this, x, y, width, height);
-	    this._window = win;
-	    this._index = 0;
-	    this._name = '';
-	    this._actor = $gameParty.members()[this._index];
-	    this.refresh();
+	Window_HPWindow.prototype.initialize = function (x, y, win) {
+		var width = this.windowWidth();
+		var height = this.windowHeight();
+		Window_Base.prototype.initialize.call(this, x, y, width, height);
+		this._window = win;
+		this._index = 0;
+		this._name = '';
+		this._actor = $gameParty.members()[this._index];
+		this.refresh();
 	};
-	Window_HPWindow.prototype.windowWidth = function() {
-	    return hpWidth;
+	Window_HPWindow.prototype.windowWidth = function () {
+		return hpWidth;
 	};
-	Window_HPWindow.prototype.windowHeight = function() {
-		if(mpBar && tpBar) return this.fittingHeight(4);
-		if(mpBar || tpBar) return this.fittingHeight(3);
-	    return this.fittingHeight(2);
+	Window_HPWindow.prototype.windowHeight = function () {
+		if (mpBar && tpBar) return this.fittingHeight(4);
+		if (mpBar || tpBar) return this.fittingHeight(3);
+		return this.fittingHeight(2);
 	};
-	Window_HPWindow.prototype.refresh = function() {
-	    var x = this.textPadding();
-	    var y = 0;
-	    var width = this.contents.width - this.textPadding() * 2;
-	    var actor = $gameParty.members()[this._index];
-	    this._name = actor.name();
-	    this.contents.clear();
-	    this.drawActorName(actor, x, y);
+	Window_HPWindow.prototype.refresh = function () {
+		var x = this.textPadding();
+		var y = 0;
+		var width = this.contents.width - this.textPadding() * 2;
+		var actor = $gameParty.members()[this._index];
+		this._name = actor.name();
+		this.contents.clear();
+		this.drawActorName(actor, x, y);
 		this.drawActorHp(actor, x, y + this.lineHeight(), width);
 		var i = 2;
-		if(mpBar) {
+		if (mpBar) {
 			this.drawActorMp(actor, x, y + (this.lineHeight() * i), width);
 			i += 1;
 		}
-		if(tpBar) this.drawActorTp(actor, x, y + (this.lineHeight() * i), width);
+		if (tpBar) this.drawActorTp(actor, x, y + (this.lineHeight() * i), width);
 		this._double = true;
 	};
 	var _Window_HPWindow_update = Window_HPWindow.prototype.update;
-	Window_HPWindow.prototype.update = function() {
-	    _Window_HPWindow_update.call(this);
-	    if(this._window.index() >= 0 && this._index != this._window.index()) {
-	    	this._index = this._window.index();
-	    	this.refresh();
-	    }
-	    if(this._name != $gameParty.members()[this._index]) {
-	    	this.refresh();
-	    }
+	Window_HPWindow.prototype.update = function () {
+		_Window_HPWindow_update.call(this);
+		if (this._window.index() >= 0 && this._index != this._window.index()) {
+			this._index = this._window.index();
+			this.refresh();
+		}
+		if (this._name != $gameParty.members()[this._index]) {
+			this.refresh();
+		}
 	};
-	Window_HPWindow.prototype.open = function() {
-	    this.refresh();
-	    Window_Base.prototype.open.call(this);
+	Window_HPWindow.prototype.open = function () {
+		this.refresh();
+		Window_Base.prototype.open.call(this);
 	};
 	function Window_SVBattler() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 	Window_SVBattler.prototype = Object.create(Window_Base.prototype);
 	Window_SVBattler.prototype.constructor = Window_SVBattler;
-	Window_SVBattler.prototype.initialize = function(x, y, win) {
-	    var width = this.windowWidth();
-	    var height = this.windowHeight();
-	    Window_Base.prototype.initialize.call(this, x, y, width, height);
-	    this._window = win;
-	    this._index = 0;
-	    this._frame = 0;
-	    this._timer = 0;
-	    this.refresh();
+	Window_SVBattler.prototype.initialize = function (x, y, win) {
+		var width = this.windowWidth();
+		var height = this.windowHeight();
+		Window_Base.prototype.initialize.call(this, x, y, width, height);
+		this._window = win;
+		this._index = 0;
+		this._frame = 0;
+		this._timer = 0;
+		this.refresh();
 	};
-	Window_SVBattler.prototype.windowWidth = function() {
-	    return eval(batW);
+	Window_SVBattler.prototype.windowWidth = function () {
+		return eval(batW);
 	};
-	Window_SVBattler.prototype.windowHeight = function() {
-	    return eval(batH);
+	Window_SVBattler.prototype.windowHeight = function () {
+		return eval(batH);
 	};
-	Window_SVBattler.prototype.refresh = function() {
-	    var x = this.textPadding();
-	    var y = 0;
-	    var width = this.contents.width - this.textPadding() * 2;
-	    var actor = $gameParty.members()[this._index];
-	    this.contents.clear();
-	    var pic = ImageManager.loadSvActor(actor.battlerName());
-        var a = this._frame * (pic.width / 9);
-        this.contents.blt(pic, a, 0, pic.width / 9, pic.height / 6, eval(batX), eval(batY));
+	Window_SVBattler.prototype.refresh = function () {
+		var x = this.textPadding();
+		var y = 0;
+		var width = this.contents.width - this.textPadding() * 2;
+		var actor = $gameParty.members()[this._index];
+		this.contents.clear();
+		var pic = ImageManager.loadSvActor(actor.battlerName());
+		var a = this._frame * (pic.width / 9);
+		this.contents.blt(pic, a, 0, pic.width / 9, pic.height / 6, eval(batX), eval(batY));
 	};
 	var _Window_SVBattler_update = Window_SVBattler.prototype.update;
-	Window_SVBattler.prototype.update = function() {
+	Window_SVBattler.prototype.update = function () {
 		_Window_SVBattler_update.call(this);
 		this._timer += 1;
-		if(this._timer === 10) this._frame = 1;
-		if(this._timer === 20) this._frame = 2;
-		if(this._timer === 30) this._frame = 1;
-		if(this._timer === 40) {
+		if (this._timer === 10) this._frame = 1;
+		if (this._timer === 20) this._frame = 2;
+		if (this._timer === 30) this._frame = 1;
+		if (this._timer === 40) {
 			this._frame = 0;
 			this._timer = 0;
 		}
-		if(this._window.index() >= 0 && this._index != this._window.index()) {
-	    	this._index = this._window.index();
-	    }
+		if (this._window.index() >= 0 && this._index != this._window.index()) {
+			this._index = this._window.index();
+		}
 		this.refresh();
-    }
-	Window_SVBattler.prototype.open = function() {
-	    this.refresh();
-	    Window_Base.prototype.open.call(this);
+	}
+	Window_SVBattler.prototype.open = function () {
+		this.refresh();
+		Window_Base.prototype.open.call(this);
 	};
 })();

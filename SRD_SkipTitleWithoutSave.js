@@ -27,32 +27,78 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc セーブデータが存在しない場合、タイトル画面をスキップし、ニューゲームにします。
+ * @author SumRndmDde
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/mv-plugins/
+ *
+ *
+ * Skip Title Screen Without Save
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * ==========================================================================
+ * 重要事項
+ * ==========================================================================
+ * このプラグインにはプラグインコマンドがありません。
+ * Scene_Boot.prototype.start を上書きします。
+ *
+ *
+ * ==========================================================================
+ * 使い方
+ * ==========================================================================
+ *
+ * セーブデータが存在しない場合、
+ * タイトル画面をスキップし、ニューゲームにします。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-(function() {
+(function () {
 
-	Scene_Boot.prototype.start = function() {
-	    Scene_Base.prototype.start.call(this);
-	    SoundManager.preloadImportantSounds();
-	    if (DataManager.isBattleTest()) {
-	        DataManager.setupBattleTest();
-	        SceneManager.goto(Scene_Battle);
-	    } else if (DataManager.isEventTest()) {
-	        DataManager.setupEventTest();
-	        SceneManager.goto(Scene_Map);
-	    } else {
-	        this.checkPlayerLocation();
-	        DataManager.setupNewGame();
-	        if(DataManager.isAnySavefileExists())
-	        {
-	        	SceneManager.goto(Scene_Title);
-	        }
-	        else
-	        {
-	        	SceneManager.goto(Scene_Map);
-	        }
-	        Window_TitleCommand.initCommandPosition();
-	    }
-	    this.updateDocumentTitle();
+	Scene_Boot.prototype.start = function () {
+		Scene_Base.prototype.start.call(this);
+		SoundManager.preloadImportantSounds();
+		if (DataManager.isBattleTest()) {
+			DataManager.setupBattleTest();
+			SceneManager.goto(Scene_Battle);
+		} else if (DataManager.isEventTest()) {
+			DataManager.setupEventTest();
+			SceneManager.goto(Scene_Map);
+		} else {
+			this.checkPlayerLocation();
+			DataManager.setupNewGame();
+			if (DataManager.isAnySavefileExists()) {
+				SceneManager.goto(Scene_Title);
+			}
+			else {
+				SceneManager.goto(Scene_Map);
+			}
+			Window_TitleCommand.initCommandPosition();
+		}
+		this.updateDocumentTitle();
 	};
 
 })();

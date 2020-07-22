@@ -104,6 +104,136 @@
  *   ~ SumRndmDde
  *
  */
+/*:ja
+ * @plugindesc 文章にアニメーション効果を追加できます。
+ * @author SumRndmDde
+ *
+ * @param Reset Shaking per Box
+ * @text シェイクリセット
+ * @type boolean
+ * @on 有効
+ * @off 無効
+ * @desc メッセージ・ウィンドウを閉じる度に、全効果をリセット
+ * 有効:true / 無効:false
+ * @default true
+ *
+ * @param Default Shaking Power
+ * @text シェイク範囲
+ * @desc '\Shake'使用時のデフォルトのシェイク範囲
+ * @default $.randomNum(0.2, 0.5)
+ *
+ * @param Default Shaking Max
+ * @text シェイク最大値
+ * @desc '\Shake'使用時のデフォルトのシェイク最大値
+ * @default 1
+ *
+ * @param Default Wave Power
+ * @text ウェーブ範囲
+ * @desc 'Wave'使用時のデフォルトの範囲
+ * @default 0.5
+ *
+ * @param Default Wave Max
+ * @text ウェーブ最大値
+ * @desc 'Wave'使用時のデフォルトの最大値
+ * @default 4
+ *
+ * @param Default Slide Power
+ * @text スライド範囲
+ * @desc 'Slide'使用時のデフォルトの範囲
+ * @default 0.5
+ *
+ * @param Default Slide Max
+ * @text スライド最大値
+ * @desc 'Slide'使用時のデフォルトの最大値
+ * @default 4
+ *
+ * @param Copy Outline
+ * @text アウトラインのコピー
+ * @type boolean
+ * @on 有効
+ * @off 無効
+ * @desc アウトラインをコピー
+ * 有効:true / 無効:false
+ * @default true
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/shaking-text/
+ *
+ *
+ * Shaking Text
+ * Version 1.12
+ * SumRndmDde
+ *
+ *
+ * 文章にアニメーション効果を追加できます。
+ *
+ * 文章を表示中に非常に簡単な制御文字で行うことができます。
+ * 独自のシェイクとウェーブのエフェクトを追加できます。
+ *
+ *
+ * ==========================================================================
+ *  文章制御文字を表示
+ * ==========================================================================
+ *
+ * 文章を表示するイベントでは、以下の制御文字を使用します。
+ *
+ * \Shake
+ * -  文章をデフォルトのシェイク値に設定
+ * \Shake<power>
+ * -  単純な数値からシェイク効果を作成
+ * \Shake<xSpd, ySpd>
+ * -  xとyの速度を別々にしてシェイクを作成
+ * \Shake<xSpd, ySpd, xMax, yMax>
+ * -  シェイク効果を絶対的に設定できます。
+ * キャラクターが反転する前に移動できる最大距離とともに、
+ * x/yの速度を設定できます。
+ *
+ * -------------------------------------------------------------------------
+ *
+ * \Wave
+ * -  デフォルトのウェーブ値に基づいてウェーブ効果を設定
+ * \Wave<speed, max>
+ * -  速度とキャラクターが移動できる最大距離に基づいてウェーブ効果を設定
+ *
+ * -------------------------------------------------------------------------
+ *
+ * \Slide
+ * -  デフォルトのスライド値に基づいてスライド効果を設定
+ * \Slide<speed, max>
+ * -  速度とキャラクターが移動できる最大距離に基づいてスライド効果を設定
+ *
+ * -------------------------------------------------------------------------
+ *
+ * \Circle
+ * -  サークル効果を設定
+ *
+ * -------------------------------------------------------------------------
+ *
+ * \ResetShake
+ * -  全効果をリセット
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ *
+ */
 
 var SRD = SRD || {};
 SRD.ShakingText = SRD.ShakingText || {};
@@ -111,7 +241,7 @@ SRD.ShakingText = SRD.ShakingText || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Shaking Text"] = 1.12;
 
-(function(_) {
+(function (_) {
 
 	var params = PluginManager.parameters('SRD_ShakingText');
 
@@ -125,10 +255,10 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	_.outline = String(params['Copy Outline']).trim().toLowerCase() === 'true';
 
 	var $ = {};
-	$.randomNum = function(min, max) {
+	$.randomNum = function (min, max) {
 		var temp = (max - min) * 100;
 		var temp2 = min * 100;
-		if(temp <= 0) alert("When using the 'randomNum' function, the minimum number was greater than the maximum.");
+		if (temp <= 0) alert("When using the 'randomNum' function, the minimum number was greater than the maximum.");
 		return Number(Math.floor(Math.randomInt(temp) + temp2) / 100);
 	}
 
@@ -137,7 +267,7 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	//-----------------------------------------------------------------------------
 
 	var _Window_Message_initialize = Window_Message.prototype.initialize;
-	Window_Message.prototype.initialize = function(x, y, width, height) {
+	Window_Message.prototype.initialize = function (x, y, width, height) {
 		_Window_Message_initialize.call(this, x, y, width, height);
 		this._textShaking = [0, 0, 0, 0];
 		this._shakingSprites = [];
@@ -145,9 +275,9 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	};
 
 	var _Window_Message_processNormalCharacter = Window_Message.prototype.processNormalCharacter;
-	Window_Message.prototype.processNormalCharacter = function(textState) {
-		if(this.isShakingActive() && !this._checkWordWrapMode) {
-			if(Imported.YEP_MessageCore && this.checkWordWrap(textState)) {
+	Window_Message.prototype.processNormalCharacter = function (textState) {
+		if (this.isShakingActive() && !this._checkWordWrapMode) {
+			if (Imported.YEP_MessageCore && this.checkWordWrap(textState)) {
 				return this.processNewLine(textState);
 			}
 			var c = textState.text[textState.index++];
@@ -161,22 +291,22 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	};
 
 	var _Window_Message_obtainEscapeCode = Window_Message.prototype.obtainEscapeCode;
-	Window_Message.prototype.obtainEscapeCode = function(textState) {
+	Window_Message.prototype.obtainEscapeCode = function (textState) {
 		var shake = (Imported.YEP_MessageCore) ? !this._checkWordWrapMode : true;
 		textState.index++;
-		if(textState.text.slice(textState.index, textState.index+5).match(/shake/i)) {
+		if (textState.text.slice(textState.index, textState.index + 5).match(/shake/i)) {
 			textState.index += 5;
 			return (shake) ? "SHAKE" : "";
-		} else if(textState.text.slice(textState.index, textState.index+4).match(/wave/i)) {
+		} else if (textState.text.slice(textState.index, textState.index + 4).match(/wave/i)) {
 			textState.index += 4;
 			return (shake) ? "WAVE" : "";
-		} else if(textState.text.slice(textState.index, textState.index+5).match(/slide/i)) {
+		} else if (textState.text.slice(textState.index, textState.index + 5).match(/slide/i)) {
 			textState.index += 5;
 			return (shake) ? "SLIDE" : "";
-		} else if(textState.text.slice(textState.index, textState.index+6).match(/circle/i)) {
+		} else if (textState.text.slice(textState.index, textState.index + 6).match(/circle/i)) {
 			textState.index += 6;
 			return (shake) ? "CIRCLE" : "";
-		} else if(textState.text.slice(textState.index, textState.index+10).match(/resetshake/i)) {
+		} else if (textState.text.slice(textState.index, textState.index + 10).match(/resetshake/i)) {
 			textState.index += 10;
 			return (shake) ? "RESETSHAKE" : "";
 		} else {
@@ -185,23 +315,23 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 		}
 	};
 
-	Window_Message.prototype.isShakingActive = function() {
-		return (this._textShaking[0] > 0 || this._textShaking[0] === 'circle') || 
+	Window_Message.prototype.isShakingActive = function () {
+		return (this._textShaking[0] > 0 || this._textShaking[0] === 'circle') ||
 			this._textShaking[1] > 0 || this._textShaking[2] > 0 || this._textShaking[3] > 0;
 	};
 
-	Window_Message.prototype.createShakingCharacter = function(textState, c, w, h) {
-		if(this._textShaking[0] === 'circle') {
+	Window_Message.prototype.createShakingCharacter = function (textState, c, w, h) {
+		if (this._textShaking[0] === 'circle') {
 			var sprite = new Sprite_Shake(new Bitmap(w, h), 'circle', 0, 0, 0);
 		} else {
-			var sprite = new Sprite_Shake(new Bitmap(w, h), eval(this._textShaking[0]), eval(this._textShaking[1]), 
+			var sprite = new Sprite_Shake(new Bitmap(w, h), eval(this._textShaking[0]), eval(this._textShaking[1]),
 				eval(this._textShaking[2]), eval(this._textShaking[3]));
 		}
 		sprite.bitmap.textColor = this.contents.textColor;
 		sprite.bitmap.paintOpacity = this.contents.paintOpacity;
 		sprite.bitmap.fontSize = this.contents.fontSize;
 		sprite.bitmap.fontFace = this.contents.fontFace;
-		if(_.outline) sprite.bitmap._drawTextOutline = this.contents._drawTextOutline;
+		if (_.outline) sprite.bitmap._drawTextOutline = this.contents._drawTextOutline;
 		sprite.bitmap.drawText(c, 0, 0, w, h);
 		sprite.x = textState.x + this.standardPadding();
 		sprite.y = textState.y + this.standardPadding();
@@ -209,8 +339,8 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 		sprite._yBase = sprite.y;
 		this.addChild(sprite);
 		this._shakingSprites.push(sprite);
-		if(this._showFast || this._lineShowFast) {
-			for(var i = 0; i < this._fastShakeInterval; i++) {
+		if (this._showFast || this._lineShowFast) {
+			for (var i = 0; i < this._fastShakeInterval; i++) {
 				sprite.update();
 			}
 			this._fastShakeInterval += 2;
@@ -220,118 +350,118 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	};
 
 	var _Window_Message_processEscapeCharacter = Window_Message.prototype.processEscapeCharacter;
-	Window_Message.prototype.processEscapeCharacter = function(code, textState) {
+	Window_Message.prototype.processEscapeCharacter = function (code, textState) {
 		switch (code) {
-		case 'SHAKE':
-			var params = this.obtainShakingTextParams(textState);
-			var info = String(params).match(/(.+)\s*,\s*(.+)\s*,\s*(.*)\s*,\s*(.*)/);
-			var info2 = String(params).match(/(.+)\s*,\s*(.+)/);
-			var info3 = String(params).match(/(.+)/);
-			if(info) {
-				this._textShaking[0] = String(info[1]);
-				this._textShaking[1] = String(info[2]);
-				this._textShaking[2] = String(info[3]);
-				this._textShaking[3] = String(info[4]);
-			} else if(info2) {
-				this._textShaking[0] = String(info2[1]);
-				this._textShaking[1] = String(info2[2]);
-				this._textShaking[2] = _.defaultShakeMax;
-				this._textShaking[3] = _.defaultShakeMax;
-			} else if(info3) {
-				var spd = "Math.random() + " + String(Math.floor((Number(info3[1]) / 10) * 100) / 100);
-				this._textShaking[0] = spd;
-				this._textShaking[1] = spd;
-				this._textShaking[2] = _.defaultShakeMax;
-				this._textShaking[3] = _.defaultShakeMax;
-			} else {
-				this._textShaking[0] = _.defaultShakePower;
-				this._textShaking[1] = _.defaultShakePower;
-				this._textShaking[2] = _.defaultShakeMax;
-				this._textShaking[3] = _.defaultShakeMax;
-			}
-			break;
-		case 'WAVE':
-			var info = String(this.obtainShakingTextParams(textState)).match(/(.+)\s*,\s*(.+)/);
-			this._textShaking[0] = "0";
-			this._textShaking[2] = "0";
-			if(info) {
-				this._textShaking[1] = String(info[1]);
-				this._textShaking[3] = String(info[2]);
-			} else {
-				this._textShaking[1] = _.defaultWavePower;
-				this._textShaking[3] = _.defaultWaveMax;
-			}
-			break;
-		case 'SLIDE':
-			var info = String(this.obtainShakingTextParams(textState)).match(/(.+)\s*,\s*(.+)/);
-			this._textShaking[1] = "0";
-			this._textShaking[3] = "0";
-			if(info) {
-				this._textShaking[0] = String(info[1]);
-				this._textShaking[2] = String(info[2]);
-			} else {
-				this._textShaking[0] = _.defaultWavePower;
-				this._textShaking[2] = _.defaultWaveMax;
-			}
-			break;
-		case 'CIRCLE':
-			this._textShaking[0] = "circle";
-			this._textShaking[1] = 0;
-			this._textShaking[2] = 0;
-			this._textShaking[3] = 0;
-			break;
-		case 'RESETSHAKE':
-			this.resetShaking();
-			break;
-		default:
-			_Window_Message_processEscapeCharacter.call(this, code, textState);
-			break;
+			case 'SHAKE':
+				var params = this.obtainShakingTextParams(textState);
+				var info = String(params).match(/(.+)\s*,\s*(.+)\s*,\s*(.*)\s*,\s*(.*)/);
+				var info2 = String(params).match(/(.+)\s*,\s*(.+)/);
+				var info3 = String(params).match(/(.+)/);
+				if (info) {
+					this._textShaking[0] = String(info[1]);
+					this._textShaking[1] = String(info[2]);
+					this._textShaking[2] = String(info[3]);
+					this._textShaking[3] = String(info[4]);
+				} else if (info2) {
+					this._textShaking[0] = String(info2[1]);
+					this._textShaking[1] = String(info2[2]);
+					this._textShaking[2] = _.defaultShakeMax;
+					this._textShaking[3] = _.defaultShakeMax;
+				} else if (info3) {
+					var spd = "Math.random() + " + String(Math.floor((Number(info3[1]) / 10) * 100) / 100);
+					this._textShaking[0] = spd;
+					this._textShaking[1] = spd;
+					this._textShaking[2] = _.defaultShakeMax;
+					this._textShaking[3] = _.defaultShakeMax;
+				} else {
+					this._textShaking[0] = _.defaultShakePower;
+					this._textShaking[1] = _.defaultShakePower;
+					this._textShaking[2] = _.defaultShakeMax;
+					this._textShaking[3] = _.defaultShakeMax;
+				}
+				break;
+			case 'WAVE':
+				var info = String(this.obtainShakingTextParams(textState)).match(/(.+)\s*,\s*(.+)/);
+				this._textShaking[0] = "0";
+				this._textShaking[2] = "0";
+				if (info) {
+					this._textShaking[1] = String(info[1]);
+					this._textShaking[3] = String(info[2]);
+				} else {
+					this._textShaking[1] = _.defaultWavePower;
+					this._textShaking[3] = _.defaultWaveMax;
+				}
+				break;
+			case 'SLIDE':
+				var info = String(this.obtainShakingTextParams(textState)).match(/(.+)\s*,\s*(.+)/);
+				this._textShaking[1] = "0";
+				this._textShaking[3] = "0";
+				if (info) {
+					this._textShaking[0] = String(info[1]);
+					this._textShaking[2] = String(info[2]);
+				} else {
+					this._textShaking[0] = _.defaultWavePower;
+					this._textShaking[2] = _.defaultWaveMax;
+				}
+				break;
+			case 'CIRCLE':
+				this._textShaking[0] = "circle";
+				this._textShaking[1] = 0;
+				this._textShaking[2] = 0;
+				this._textShaking[3] = 0;
+				break;
+			case 'RESETSHAKE':
+				this.resetShaking();
+				break;
+			default:
+				_Window_Message_processEscapeCharacter.call(this, code, textState);
+				break;
 		}
 	};
 
-	Window_Message.prototype.obtainShakingTextParams = function(textState) {
+	Window_Message.prototype.obtainShakingTextParams = function (textState) {
 		var arr = /^\<.+\>/.exec(textState.text.slice(textState.index));
 		if (arr) {
 			textState.index += arr[0].length;
-			return String(arr[0].slice(1, arr[0].length-1));
+			return String(arr[0].slice(1, arr[0].length - 1));
 		} else {
 			return '';
 		}
 	};
 
 	var _Window_Message_open = Window_Message.prototype.open;
-	Window_Message.prototype.open = function() {
+	Window_Message.prototype.open = function () {
 		_Window_Message_open.call(this);
-		for(var i = 0; i < this._shakingSprites.length; i++) {
+		for (var i = 0; i < this._shakingSprites.length; i++) {
 			this._shakingSprites[i].opacity = 255;
 		}
 	};
 
 	var _Window_Message_close = Window_Message.prototype.close;
-	Window_Message.prototype.close = function() {
+	Window_Message.prototype.close = function () {
 		_Window_Message_close.call(this);
-		for(var i = 0; i < this._shakingSprites.length; i++) {
+		for (var i = 0; i < this._shakingSprites.length; i++) {
 			this._shakingSprites[i].opacity = 0;
 		}
 	};
 
-	Window_Message.prototype.removeShakingSprites = function() {
-		for(var i = 0; i < this._shakingSprites.length; i++) {
+	Window_Message.prototype.removeShakingSprites = function () {
+		for (var i = 0; i < this._shakingSprites.length; i++) {
 			this.removeChild(this._shakingSprites[i]);
 		}
 	};
 
-	Window_Message.prototype.resetShaking = function() {
-		for(var i = 0; i < this._textShaking.length; i++) {
+	Window_Message.prototype.resetShaking = function () {
+		for (var i = 0; i < this._textShaking.length; i++) {
 			this._textShaking[i] = 0;
 		}
 	};
 
 	var _Window_Message_newPage = Window_Message.prototype.newPage;
-	Window_Message.prototype.newPage = function(textState) {
+	Window_Message.prototype.newPage = function (textState) {
 		_Window_Message_newPage.call(this, textState);
 		this.removeShakingSprites();
-		if(_.resetShaking) this.resetShaking();
+		if (_.resetShaking) this.resetShaking();
 	};
 
 	//-----------------------------------------------------------------------------
@@ -345,9 +475,9 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 	Sprite_Shake.prototype = Object.create(Sprite.prototype);
 	Sprite_Shake.prototype.constructor = Sprite_Shake;
 
-	Sprite_Shake.prototype.initialize = function(bitmap, xSpd, ySpd, xMax, yMax) {
+	Sprite_Shake.prototype.initialize = function (bitmap, xSpd, ySpd, xMax, yMax) {
 		Sprite.prototype.initialize.call(this, bitmap);
-		if(xSpd === 'circle') {
+		if (xSpd === 'circle') {
 			this._xSpd = 'circle';
 			this._aniCouter = 0;
 			this._xBase = this.x;
@@ -362,11 +492,11 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 		}
 	};
 
-	Sprite_Shake.prototype.update = function() {
+	Sprite_Shake.prototype.update = function () {
 		Sprite.prototype.update.call(this);
-		if(this._xSpd === 'circle') {
+		if (this._xSpd === 'circle') {
 			this._aniCouter -= (Math.PI * 0.06);
-			if(this._aniCouter > (Math.PI * 2)) this._aniCouter -= (Math.PI * 2);
+			if (this._aniCouter > (Math.PI * 2)) this._aniCouter -= (Math.PI * 2);
 			this._xAniOff = Math.cos(this._aniCouter) * 3;
 			this._yAniOff = Math.sin(this._aniCouter) * 3;
 			this.x = this._xBase + this._xAniOff;
@@ -374,8 +504,8 @@ Imported["SumRndmDde Shaking Text"] = 1.12;
 		} else {
 			this.x += this._xSpd;
 			this.y += this._ySpd;
-			if(Math.abs(this.x - this._xBase) > this._xMax) this._xSpd *= (-1);
-			if(Math.abs(this.y - this._yBase) > this._yMax) this._ySpd *= (-1);
+			if (Math.abs(this.x - this._xBase) > this._xMax) this._xSpd *= (-1);
+			if (Math.abs(this.y - this._yBase) > this._yMax) this._ySpd *= (-1);
 		}
 	};
 

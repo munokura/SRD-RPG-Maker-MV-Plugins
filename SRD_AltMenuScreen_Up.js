@@ -44,8 +44,74 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc 上部にコマンドメニューがあり、その下に2x2のアクター表示があります。
+ * @author SumRndmDde
+ *
+ * @param Gold Position
+ * @text 所持金ウィンドウ位置
+ * @type select
+ * @option 上
+ * @value top
+ * @option 下
+ * @value bottom
+ * @desc 所持金のウィンドウの位置
+ * 上:top / 下:bottom
+ * @default top
+ *
+ * @param Command Columns
+ * @text コマンド最大列数
+ * @type number
+ * @desc コマンドの最大列数
+ * @default 4
+ *
+ * @param Command Rows
+ * @text コマンド表示行数
+ * @type number
+ * @desc コマンドの表示行数
+ * @default 2
+ *
+ * @param Face Position
+ * @text 顔画像の位置
+ * @type select
+ * @option 上
+ * @value top
+ * @option 中央
+ * @value middle
+ * @option 下
+ * @value bottom
+ * @desc メニューの顔画像の位置
+ * 上:top / 中央:middle / 下:bottom
+ * @default middle
+ *
+ * @param Y Offset
+ * @text ステータスの行高
+ * @type number
+ * @desc アクターメニューの各ステータスの行高
+ * @default 30
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/5-alternative-menu-screens/
+ *
+ * Alternative Menu Screen: Up
+ * Version 1.01
+ * SumRndmDde
+ *
+ * Changelog (v1.01): Fixed Shop Choices
+ *
+ * 別のメニュー画面にします。
+ * 上部にコマンドメニューがあり、その下に2x2のアクター表示があります。
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-(function() {
+(function () {
 	var sumGoldPos = String(PluginManager.parameters('SRD_AltMenuScreen_Up')['Gold Position']).trim().toLowerCase();
 	var sumColumns = Number(PluginManager.parameters('SRD_AltMenuScreen_Up')['Command Columns']);
 	var sumRows = Number(PluginManager.parameters('SRD_AltMenuScreen_Up')['Command Rows']);
@@ -53,104 +119,104 @@
 	var sumYOffset = Number(PluginManager.parameters('SRD_AltMenuScreen_Up')['Y Offset']);
 
 	var _Scene_Menu_create = Scene_Menu.prototype.create;
-	Scene_Menu.prototype.create = function() {
-	    _Scene_Menu_create.call(this);
-	    if(sumGoldPos === 'bottom') {
-		    this._statusWindow.x = 0;
-		    this._statusWindow.y = this._commandWindow.height;
-		    this._goldWindow.y = this._statusWindow.y + this._statusWindow.height;
+	Scene_Menu.prototype.create = function () {
+		_Scene_Menu_create.call(this);
+		if (sumGoldPos === 'bottom') {
+			this._statusWindow.x = 0;
+			this._statusWindow.y = this._commandWindow.height;
+			this._goldWindow.y = this._statusWindow.y + this._statusWindow.height;
 		} else {
-		    this._goldWindow.y = this._commandWindow.height;
-		    this._statusWindow.x = 0;
-		    this._statusWindow.y = this._goldWindow.y + this._goldWindow.height;
+			this._goldWindow.y = this._commandWindow.height;
+			this._statusWindow.x = 0;
+			this._statusWindow.y = this._goldWindow.y + this._goldWindow.height;
 		}
 	};
-	Scene_Menu.prototype.createGoldWindow = function() {
-	    this._goldWindow = new Window_Gold2(0, 0);
-	    this._goldWindow.y = Graphics.boxHeight - this._goldWindow.height;
-	    this.addWindow(this._goldWindow);
+	Scene_Menu.prototype.createGoldWindow = function () {
+		this._goldWindow = new Window_Gold2(0, 0);
+		this._goldWindow.y = Graphics.boxHeight - this._goldWindow.height;
+		this.addWindow(this._goldWindow);
 	};
-	Window_MenuCommand.prototype.windowWidth = function() {
-	    return Graphics.width;
+	Window_MenuCommand.prototype.windowWidth = function () {
+		return Graphics.width;
 	};
-	Window_MenuCommand.prototype.maxCols = function() {
-	    return sumColumns;
+	Window_MenuCommand.prototype.maxCols = function () {
+		return sumColumns;
 	};
-	Window_MenuCommand.prototype.numVisibleRows = function() {
-	    return sumRows;
+	Window_MenuCommand.prototype.numVisibleRows = function () {
+		return sumRows;
 	};
-	Window_MenuStatus.prototype.windowWidth = function() {
-	    return Graphics.width;
+	Window_MenuStatus.prototype.windowWidth = function () {
+		return Graphics.width;
 	};
-	Window_MenuStatus.prototype.windowHeight = function() {
-	    return Graphics.height - 180;
+	Window_MenuStatus.prototype.windowHeight = function () {
+		return Graphics.height - 180;
 	};
-	Window_MenuStatus.prototype.numVisibleRows = function() {
-	    return 2;
+	Window_MenuStatus.prototype.numVisibleRows = function () {
+		return 2;
 	};
-	Window_MenuStatus.prototype.maxCols = function() {
-	    return 2;
+	Window_MenuStatus.prototype.maxCols = function () {
+		return 2;
 	};
-	Window_MenuStatus.prototype.drawItemImage = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    this.changePaintOpacity(actor.isBattleMember());
-	    if(sumFacePos === 'top') {
-	    	this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
-	    } else if(sumFacePos === 'bottom') {
-	    	this.drawActorFace(actor, rect.x + 1, rect.y + (rect.height / 4) + 8, Window_Base._faceWidth, Window_Base._faceHeight);
-	    } else {
-	    	this.drawActorFace(actor, rect.x + 1, rect.y + rect.height / 8, Window_Base._faceWidth, Window_Base._faceHeight);
-	    }
-	    this.changePaintOpacity(true);
+	Window_MenuStatus.prototype.drawItemImage = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		this.changePaintOpacity(actor.isBattleMember());
+		if (sumFacePos === 'top') {
+			this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
+		} else if (sumFacePos === 'bottom') {
+			this.drawActorFace(actor, rect.x + 1, rect.y + (rect.height / 4) + 8, Window_Base._faceWidth, Window_Base._faceHeight);
+		} else {
+			this.drawActorFace(actor, rect.x + 1, rect.y + rect.height / 8, Window_Base._faceWidth, Window_Base._faceHeight);
+		}
+		this.changePaintOpacity(true);
 	};
-	Window_MenuStatus.prototype.drawItemStatus = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    var x = rect.x + 162;
-	    var y = rect.y;
-	    var yOffset = sumYOffset;
-	    var width = rect.width - (Window_Base._faceWidth + 30);
-	    this.drawActorName(actor, x, y, width);
-	    this.drawActorLevel(actor, x, y + yOffset, width);
-	    this.drawActorIcons(actor, x, y + (yOffset * 2), width);
-	    this.drawActorClass(actor, x, y + (yOffset * 3), width);
-	    this.drawActorHp(actor, x, y + (yOffset * 4), width);
-	    this.drawActorMp(actor, x, y + (yOffset * 5), width);
+	Window_MenuStatus.prototype.drawItemStatus = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		var x = rect.x + 162;
+		var y = rect.y;
+		var yOffset = sumYOffset;
+		var width = rect.width - (Window_Base._faceWidth + 30);
+		this.drawActorName(actor, x, y, width);
+		this.drawActorLevel(actor, x, y + yOffset, width);
+		this.drawActorIcons(actor, x, y + (yOffset * 2), width);
+		this.drawActorClass(actor, x, y + (yOffset * 3), width);
+		this.drawActorHp(actor, x, y + (yOffset * 4), width);
+		this.drawActorMp(actor, x, y + (yOffset * 5), width);
 	};
 
 	function Window_Gold2() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 	Window_Gold2.prototype = Object.create(Window_Base.prototype);
 	Window_Gold2.prototype.constructor = Window_Gold2;
-	Window_Gold2.prototype.initialize = function(x, y) {
-	    var width = this.windowWidth();
-	    var height = this.windowHeight();
-	    Window_Base.prototype.initialize.call(this, x, y, width, height);
-	    this.refresh();
+	Window_Gold2.prototype.initialize = function (x, y) {
+		var width = this.windowWidth();
+		var height = this.windowHeight();
+		Window_Base.prototype.initialize.call(this, x, y, width, height);
+		this.refresh();
 	};
-	Window_Gold2.prototype.windowWidth = function() {
-	    return Graphics.width;
+	Window_Gold2.prototype.windowWidth = function () {
+		return Graphics.width;
 	};
-	Window_Gold2.prototype.windowHeight = function() {
-	    return this.fittingHeight(1);
+	Window_Gold2.prototype.windowHeight = function () {
+		return this.fittingHeight(1);
 	};
-	Window_Gold2.prototype.refresh = function() {
-	    var x = this.textPadding();
-	    var width = this.contents.width - this.textPadding() * 2;
-	    this.contents.clear();
-	    this.drawCurrencyValue(this.value(), this.currencyUnit(), x, 0, width);
+	Window_Gold2.prototype.refresh = function () {
+		var x = this.textPadding();
+		var width = this.contents.width - this.textPadding() * 2;
+		this.contents.clear();
+		this.drawCurrencyValue(this.value(), this.currencyUnit(), x, 0, width);
 	};
 
-	Window_Gold2.prototype.value = function() {
-	    return $gameParty.gold();
+	Window_Gold2.prototype.value = function () {
+		return $gameParty.gold();
 	};
-	Window_Gold2.prototype.currencyUnit = function() {
-	    return TextManager.currencyUnit;
+	Window_Gold2.prototype.currencyUnit = function () {
+		return TextManager.currencyUnit;
 	};
-	Window_Gold2.prototype.open = function() {
-	    this.refresh();
-	    Window_Base.prototype.open.call(this);
+	Window_Gold2.prototype.open = function () {
+		this.refresh();
+		Window_Base.prototype.open.call(this);
 	};
 })();

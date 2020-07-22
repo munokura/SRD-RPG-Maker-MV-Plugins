@@ -33,6 +33,46 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc 全てのウィンドウを別の描画レイヤーに分離します。
+ * @author SumRndmDde
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/window-layers/
+ *
+ *
+ * Window Layers
+ * Version 2.10
+ * SumRndmDde
+ *
+ * RPGツクールMV1.3.1以上を使用していることを確認してください。
+ *
+ * 全てのウィンドウを別の描画レイヤーに分離して、
+ * お互いに上書きさせるのではなく、別の描画レイヤーに分離します。
+ *
+ * プラグインを入れるだけで動作します。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.WindowLayers = SRD.WindowLayers || {};
@@ -40,38 +80,38 @@ SRD.WindowLayers = SRD.WindowLayers || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Window Layers"] = 2.10;
 
-(function(_) {
+(function (_) {
 
-"use strict";
+	"use strict";
 
-if(PIXI.Container) {
+	if (PIXI.Container) {
 
-WindowLayer.prototype.initialize = function() {
-	PIXI.Container.call(this);
-	this._width = 0;
-	this._height = 0;
-	this.interactive = false;
-};
+		WindowLayer.prototype.initialize = function () {
+			PIXI.Container.call(this);
+			this._width = 0;
+			this._height = 0;
+			this.interactive = false;
+		};
 
-WindowLayer.prototype.renderCanvas = PIXI.Container.prototype.renderCanvas;
-WindowLayer.prototype._canvasClearWindowRect = PIXI.Container.prototype._canvasClearWindowRect;
-WindowLayer.prototype.renderWebGL = PIXI.Container.prototype.renderWebGL;
-WindowLayer.prototype._maskWindow = PIXI.Container.prototype._maskWindow;
+		WindowLayer.prototype.renderCanvas = PIXI.Container.prototype.renderCanvas;
+		WindowLayer.prototype._canvasClearWindowRect = PIXI.Container.prototype._canvasClearWindowRect;
+		WindowLayer.prototype.renderWebGL = PIXI.Container.prototype.renderWebGL;
+		WindowLayer.prototype._maskWindow = PIXI.Container.prototype._maskWindow;
 
-} else {
+	} else {
 
-WindowLayer.prototype.initialize = function() {
-	PIXI.DisplayObjectContainer.call(this);
-	this._width = 0;
-	this._height = 0;
-	this.interactive = false;
-};
+		WindowLayer.prototype.initialize = function () {
+			PIXI.DisplayObjectContainer.call(this);
+			this._width = 0;
+			this._height = 0;
+			this.interactive = false;
+		};
 
-WindowLayer.prototype._renderCanvas = PIXI.DisplayObjectContainer.prototype._renderCanvas;
-WindowLayer.prototype._canvasClearWindowRect = PIXI.DisplayObjectContainer.prototype._canvasClearWindowRect;
-WindowLayer.prototype._renderWebGL = PIXI.DisplayObjectContainer.prototype._renderWebGL;
-WindowLayer.prototype._maskWindow = PIXI.DisplayObjectContainer.prototype._maskWindow;
+		WindowLayer.prototype._renderCanvas = PIXI.DisplayObjectContainer.prototype._renderCanvas;
+		WindowLayer.prototype._canvasClearWindowRect = PIXI.DisplayObjectContainer.prototype._canvasClearWindowRect;
+		WindowLayer.prototype._renderWebGL = PIXI.DisplayObjectContainer.prototype._renderWebGL;
+		WindowLayer.prototype._maskWindow = PIXI.DisplayObjectContainer.prototype._maskWindow;
 
-}
+	}
 
 })(SRD.WindowLayers);

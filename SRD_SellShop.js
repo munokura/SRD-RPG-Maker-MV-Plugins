@@ -71,6 +71,82 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc 特定商品を特別価格で買い取るショップを作れます。
+ * @author SumRndmDde
+ *
+ * @param Price Multiplier
+ * @text 価格比率
+ * @desc 売却専門ショップの売却価格比率
+ * @default 1.25
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/sell-shop/
+ *
+ *
+ * Sell Shop
+ * Version 1.00
+ * SumRndmDde
+ *
+ * Random Credits:
+ * ~ HimeworksのVX Aceのスクリプトを元にしたリクエストが元になっています。 ~
+ *
+ *
+ * 売却専門ショップを作ることができます。
+ *
+ * 売却専門ショップは、売却できるアイテムのリストを提示します。
+ * 一般的な使い方として、通常のショップで売却するよりも高く売れます。
+ *
+ *
+ * ==========================================================================
+ *  使用方法
+ * ==========================================================================
+ *
+ * 売却専門ショップを作るには、プラグインコマンドを使います。
+ *
+ *   SetSellShop
+ * 'ショップの処理'イベントを呼び出す直前に実行してください。
+ *
+ *
+ * ==========================================================================
+ *  売却価格の設定
+ * ==========================================================================
+ *
+ * 売却専門ショップは
+ * アイテムの価格に"価格比率"パラメータを乗じた金額で買い取ります。
+ * 例えば、アイテムの価格が100ゴールドで、"価格比率"が1.25の場合、
+ * ショップは125ゴールドで買い取ります。
+ *
+ *
+ * ==========================================================================
+ *
+ * 以下のメモタグを使用して、
+ * 商品の売却専門ショップ価格を手動で設定することができます。
+ *
+ *   <Sell Shop Price: x>
+ * 使用したい価格にxを設定します。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.SellShop = SRD.SellShop || {};
@@ -78,23 +154,23 @@ SRD.SellShop = SRD.SellShop || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Sell Shop"] = true;
 
-(function(_) {
+(function (_) {
 
 	_.priceMul = Number(PluginManager.parameters('SRD_SellShop')['Price Multiplier']);
 
 	var notetagsLoaded = false;
 	var _DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-	DataManager.isDatabaseLoaded = function() {
-	    if(!_DataManager_isDatabaseLoaded.call(this)) return false;
-	    if(!notetagsLoaded) {
-	    	for(var i = 1; i < $dataItems.length; i++) {
-	    		if($dataItems[i].note.match(/<\s*Sell\s*Shop\s*Price\s*:\s*(\d+)\s*>/im)) {
-	    			$dataItems[i].ss_price = parseInt(RegExp.$1);
-	    		}
-	    	}
-	    	notetagsLoaded = true;
-	    }
-	    return true;
+	DataManager.isDatabaseLoaded = function () {
+		if (!_DataManager_isDatabaseLoaded.call(this)) return false;
+		if (!notetagsLoaded) {
+			for (var i = 1; i < $dataItems.length; i++) {
+				if ($dataItems[i].note.match(/<\s*Sell\s*Shop\s*Price\s*:\s*(\d+)\s*>/im)) {
+					$dataItems[i].ss_price = parseInt(RegExp.$1);
+				}
+			}
+			notetagsLoaded = true;
+		}
+		return true;
 	};
 
 	//-----------------------------------------------------------------------------
@@ -102,17 +178,17 @@ Imported["SumRndmDde Sell Shop"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Game_Temp_initialize = Game_Temp.prototype.initialize;
-	Game_Temp.prototype.initialize = function() {
-	    _Game_Temp_initialize.call(this);
-	    this._isSellShop = false;
+	Game_Temp.prototype.initialize = function () {
+		_Game_Temp_initialize.call(this);
+		this._isSellShop = false;
 	};
 
-	Game_Temp.prototype.getSellShop = function() {
-	    return this._isSellShop;
+	Game_Temp.prototype.getSellShop = function () {
+		return this._isSellShop;
 	};
 
-	Game_Temp.prototype.setSellShop = function(sell) {
-	    this._isSellShop = sell;
+	Game_Temp.prototype.setSellShop = function (sell) {
+		this._isSellShop = sell;
 	};
 
 	//-----------------------------------------------------------------------------
@@ -120,11 +196,11 @@ Imported["SumRndmDde Sell Shop"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-	    _Game_Interpreter_pluginCommand.call(this, command, args);
-	    if(command.trim().toLowerCase() === 'setsellshop') {
-	    	$gameTemp.setSellShop(true);
-	    }
+	Game_Interpreter.prototype.pluginCommand = function (command, args) {
+		_Game_Interpreter_pluginCommand.call(this, command, args);
+		if (command.trim().toLowerCase() === 'setsellshop') {
+			$gameTemp.setSellShop(true);
+		}
 	};
 
 	//-----------------------------------------------------------------------------
@@ -132,59 +208,59 @@ Imported["SumRndmDde Sell Shop"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Scene_Shop_popScene = Scene_Shop.prototype.popScene;
-	Scene_Shop.prototype.popScene = function() {
+	Scene_Shop.prototype.popScene = function () {
 		$gameTemp.setSellShop(false);
 		_Scene_Shop_popScene.call(this)
 	};
 
 	var _Scene_Shop_onBuyOk = Scene_Shop.prototype.onBuyOk;
-	Scene_Shop.prototype.onBuyOk = function() {
-		if(!$gameTemp.getSellShop()) _Scene_Shop_onBuyOk.call(this);
+	Scene_Shop.prototype.onBuyOk = function () {
+		if (!$gameTemp.getSellShop()) _Scene_Shop_onBuyOk.call(this);
 		else {
-		    this._item = this._buyWindow.item();
-		    this._buyWindow.hide();
-		    this._numberWindow.setup(this._item, this.maxSell(), this.sellingPrice());
-		    this._numberWindow.setCurrencyUnit(this.currencyUnit());
-		    this._numberWindow.show();
-		    this._numberWindow.activate();
-		    this._statusWindow.setItem(this._item);
-		    this._statusWindow.show();
+			this._item = this._buyWindow.item();
+			this._buyWindow.hide();
+			this._numberWindow.setup(this._item, this.maxSell(), this.sellingPrice());
+			this._numberWindow.setCurrencyUnit(this.currencyUnit());
+			this._numberWindow.show();
+			this._numberWindow.activate();
+			this._statusWindow.setItem(this._item);
+			this._statusWindow.show();
 		}
 	};
 
 	var _Scene_Shop_onBuyCancel = Scene_Shop.prototype.onBuyCancel;
-	Scene_Shop.prototype.onBuyCancel = function() {
-		if(!$gameTemp.getSellShop()) _Scene_Shop_onBuyCancel.call(this);
+	Scene_Shop.prototype.onBuyCancel = function () {
+		if (!$gameTemp.getSellShop()) _Scene_Shop_onBuyCancel.call(this);
 		else {
-		    this._buyWindow.deselect();
-		    this._commandWindow.activate();
-		    this._statusWindow.setItem(null);
-		    this._helpWindow.clear();
+			this._buyWindow.deselect();
+			this._commandWindow.activate();
+			this._statusWindow.setItem(null);
+			this._helpWindow.clear();
 		}
 	};
 
 	var _Scene_Shop_onNumberOk = Scene_Shop.prototype.onNumberOk;
-	Scene_Shop.prototype.onNumberOk = function() {
-		if(!$gameTemp.getSellShop()) _Scene_Shop_onNumberOk.call(this);
+	Scene_Shop.prototype.onNumberOk = function () {
+		if (!$gameTemp.getSellShop()) _Scene_Shop_onNumberOk.call(this);
 		else {
-		    SoundManager.playShop();
-		    switch (this._commandWindow.currentSymbol()) {
-		    case 'buy':
-		        this.doSell(this._numberWindow.number());
-		        break;
-		    case 'sell':
-		        this.doSell(this._numberWindow.number());
-		        break;
-		    }
-		    this.endNumberInput();
-		    this._goldWindow.refresh();
-		    this._statusWindow.refresh();
+			SoundManager.playShop();
+			switch (this._commandWindow.currentSymbol()) {
+				case 'buy':
+					this.doSell(this._numberWindow.number());
+					break;
+				case 'sell':
+					this.doSell(this._numberWindow.number());
+					break;
+			}
+			this.endNumberInput();
+			this._goldWindow.refresh();
+			this._statusWindow.refresh();
 		}
 	};
 
 	var _Scene_Shop_sellingPrice = Scene_Shop.prototype.sellingPrice;
-	Scene_Shop.prototype.sellingPrice = function() {
-		if(!$gameTemp.getSellShop()) return _Scene_Shop_sellingPrice.call(this);
+	Scene_Shop.prototype.sellingPrice = function () {
+		if (!$gameTemp.getSellShop()) return _Scene_Shop_sellingPrice.call(this);
 		else return this._buyWindow.price(this._item);
 	};
 
@@ -193,11 +269,11 @@ Imported["SumRndmDde Sell Shop"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Window_ShopCommand_makeCommandList = Window_ShopCommand.prototype.makeCommandList;
-	Window_ShopCommand.prototype.makeCommandList = function() {
-		if(!$gameTemp.getSellShop()) _Window_ShopCommand_makeCommandList.call(this);
+	Window_ShopCommand.prototype.makeCommandList = function () {
+		if (!$gameTemp.getSellShop()) _Window_ShopCommand_makeCommandList.call(this);
 		else {
-			this.addCommand(TextManager.sell,    'buy');
-	    	this.addCommand(TextManager.cancel, 'cancel');
+			this.addCommand(TextManager.sell, 'buy');
+			this.addCommand(TextManager.cancel, 'cancel');
 		}
 	};
 
@@ -206,17 +282,17 @@ Imported["SumRndmDde Sell Shop"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
-	Window_ShopBuy.prototype.isEnabled = function(item) {
-		if(!$gameTemp.getSellShop()) return _Window_ShopBuy_isEnabled.call(this, item);
+	Window_ShopBuy.prototype.isEnabled = function (item) {
+		if (!$gameTemp.getSellShop()) return _Window_ShopBuy_isEnabled.call(this, item);
 		else return (item && $gameParty.hasItem(item));
 	};
 
 	var _Window_ShopBuy_price = Window_ShopBuy.prototype.price;
-	Window_ShopBuy.prototype.price = function(item) {
+	Window_ShopBuy.prototype.price = function (item) {
 		var price = _Window_ShopBuy_price.call(this, item);
-	    if(!$gameTemp.getSellShop()) return price;
+		if (!$gameTemp.getSellShop()) return price;
 		else {
-			if(item && item.ss_price) return item.ss_price;
+			if (item && item.ss_price) return item.ss_price;
 			else return Math.floor(price * _.priceMul);
 		}
 	};

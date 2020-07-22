@@ -36,69 +36,115 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc 拡張プラグインです。Face/Info Box/Mobileで使用すると、顔画像にHPとMPバーを追加します。
+ * @author SumRndmDde
+ *
+ * @param Bar Rows
+ * @text バー行数
+ * @desc 1行または2行にできます。
+ * 2行の方が読みやすいですが、顔のカバーが多くなります。
+ * @default 1
+ *
+ * @param Show TP
+ * @text TP表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * @desc アクターのTPを表示
+ * 表示:true / 非表示:false
+ * @default false
+ *
+ * @param Bar Offset
+ * @text バーYオフセット
+ * @desc バーのY位置オフセット。
+ * 上下位置を変更できます。
+ * @default 20
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/ams-face-bars/
+ *
+ *
+ * Alternative Menu Screen: Face Bars
+ * Extension Plugin
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * 'SRD Alt Menu Screen: Face/Info Box/Mobile'の拡張プラグインです。
+ * メニューの顔画像にHP/MPバーを追加します。
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-(function() {
+(function () {
 
 	var rows = Number(PluginManager.parameters('SRD_AltMenuScreen_FaceBars')['Bar Rows']);
 	var tp = String(PluginManager.parameters('SRD_AltMenuScreen_FaceBars')['Show TP']).trim().toLowerCase() === 'true';
 	var off = Number(PluginManager.parameters('SRD_AltMenuScreen_FaceBars')['Bar Offset']);
 
 	var _Window_MenuStatus_drawItemImage = Window_MenuStatus.prototype.drawItemImage;
-	Window_MenuStatus.prototype.drawItemImage = function(index) {
-	    _Window_MenuStatus_drawItemImage.call(this, index);
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    if(rows === 1) {
-	    	if(!tp) {
-		    	var h = (rect.width / 2);
-		    	this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
-	    		this.drawActorMp(actor, rect.x + h, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
-	    	} else {
-	    		var h = (rect.width / 2);
-		    	this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
-		    	this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
-	    		this.drawActorTp(actor, rect.x + h, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
-	    	}
-	    } else {
-	    	if(!tp) {
-		    	this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
-	    		this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, rect.width);
-	    	} else {
-	    		this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 1 + off, rect.width);
-	    		this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
-	    		this.drawActorTp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, rect.width);
-	    	}
-	    }
+	Window_MenuStatus.prototype.drawItemImage = function (index) {
+		_Window_MenuStatus_drawItemImage.call(this, index);
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		if (rows === 1) {
+			if (!tp) {
+				var h = (rect.width / 2);
+				this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
+				this.drawActorMp(actor, rect.x + h, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
+			} else {
+				var h = (rect.width / 2);
+				this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
+				this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
+				this.drawActorTp(actor, rect.x + h, rect.y + this.lineHeight() * 3 + off, (rect.width / 2) - 2);
+			}
+		} else {
+			if (!tp) {
+				this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
+				this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, rect.width);
+			} else {
+				this.drawActorHp(actor, rect.x, rect.y + this.lineHeight() * 1 + off, rect.width);
+				this.drawActorMp(actor, rect.x, rect.y + this.lineHeight() * 2 + off, rect.width);
+				this.drawActorTp(actor, rect.x, rect.y + this.lineHeight() * 3 + off, rect.width);
+			}
+		}
 	};
 
-	if(rows === 1) {
-		Window_MenuStatus.prototype.drawActorHp = function(actor, x, y, width) {
-		    width = width || 186;
-		    var color1 = this.hpGaugeColor1();
-		    var color2 = this.hpGaugeColor2();
-		    this.drawGauge(x, y, width, actor.hpRate(), color1, color2);
-		    this.changeTextColor(this.systemColor());
-		    this.drawCurrentAndMax(actor.hp, actor.mhp, x, y, width,
-		                           this.hpColor(actor), this.normalColor());
+	if (rows === 1) {
+		Window_MenuStatus.prototype.drawActorHp = function (actor, x, y, width) {
+			width = width || 186;
+			var color1 = this.hpGaugeColor1();
+			var color2 = this.hpGaugeColor2();
+			this.drawGauge(x, y, width, actor.hpRate(), color1, color2);
+			this.changeTextColor(this.systemColor());
+			this.drawCurrentAndMax(actor.hp, actor.mhp, x, y, width,
+				this.hpColor(actor), this.normalColor());
 		};
 
-		Window_MenuStatus.prototype.drawActorMp = function(actor, x, y, width) {
-		    width = width || 186;
-		    var color1 = this.mpGaugeColor1();
-		    var color2 = this.mpGaugeColor2();
-		    this.drawGauge(x, y, width, actor.mpRate(), color1, color2);
-		    this.changeTextColor(this.systemColor());
-		    this.drawCurrentAndMax(actor.mp, actor.mmp, x, y, width,
-		                           this.mpColor(actor), this.normalColor());
+		Window_MenuStatus.prototype.drawActorMp = function (actor, x, y, width) {
+			width = width || 186;
+			var color1 = this.mpGaugeColor1();
+			var color2 = this.mpGaugeColor2();
+			this.drawGauge(x, y, width, actor.mpRate(), color1, color2);
+			this.changeTextColor(this.systemColor());
+			this.drawCurrentAndMax(actor.mp, actor.mmp, x, y, width,
+				this.mpColor(actor), this.normalColor());
 		};
 
-		Window_Base.prototype.drawActorTp = function(actor, x, y, width) {
-		    width = width || 186;
-		    var color1 = this.tpGaugeColor1();
-		    var color2 = this.tpGaugeColor2();
-		    this.drawGauge(x, y, width, actor.tpRate(), color1, color2);
-		    this.changeTextColor(this.tpColor(actor));
-		    this.drawText(actor.tp, x + width - 64, y, 64, 'right');
+		Window_Base.prototype.drawActorTp = function (actor, x, y, width) {
+			width = width || 186;
+			var color1 = this.tpGaugeColor1();
+			var color2 = this.tpGaugeColor2();
+			this.drawGauge(x, y, width, actor.tpRate(), color1, color2);
+			this.changeTextColor(this.tpColor(actor));
+			this.drawText(actor.tp, x + width - 64, y, 64, 'right');
 		};
 	}
 

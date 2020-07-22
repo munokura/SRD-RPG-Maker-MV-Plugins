@@ -90,10 +90,139 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc メインメニューに追加情報と一緒にアクターの顔が表示されます
+ * @author SumRndmDde
+ *
+ * @param Information Order
+ * @text 情報表示順
+ * @desc キーワードをリストアップして情報を表示。不要な情報は除外
+ * 例：playtime, location, bgm, battles
+ * @default playtime, location, bgm, battles
+ *
+ * @param Command Position
+ * @text コマンド位置
+ * @type select
+ * @option 左
+ * @value left
+ * @option 右
+ * @value right
+ * @desc コマンドウィンドウの位置
+ * 左:left / 右:right
+ * @default left
+ *
+ * @param Gold Position
+ * @text 所持金ウィンドウ位置
+ * @desc 所持金ウィンドウをどこに配置するかを指定します。
+ * @type select
+ * @option 左
+ * @value left
+ * @option 中央
+ * @value middle
+ * @option 右
+ * @value right
+ * @desc 左:left / 中央:middle / 右:right
+ * @default middle
+ *
+ * @param Use Display Name
+ * @text マップ名の表示
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * @desc "位置"にマップの"表示名"を表示
+ * @default true
+ *
+ * @param No BGM Text
+ * @text 無BGM時テキスト
+ * @desc BGMが再生されていない時の表示テキスト
+ * @default なし
+ *
+ * @param -- Info Text --
+ * @text -- インフォ・テキスト --
+ * @default
+ *
+ * @param Playtime Text
+ * @text プレイ時間テキスト
+ * @desc プレイ時間のテキスト
+ * @default プレイ時間:
+ *
+ * @param Location Text
+ * @text 場所情報テキスト
+ * @desc 場所情報"のテキスト
+ * @default 場所:
+ *
+ * @param BGM Text
+ * @text BGMテキスト
+ * @desc BGMのテキスト
+ * @default BGM:
+ *
+ * @param Battles Text
+ * @text 戦闘回数テキスト
+ * @desc 戦闘回数のテキスト
+ * @default 戦闘回数:
+ *
+ * @param -- Minor Params --
+ * @text -- マイナーパラム --
+ * @default
+ *
+ * @param Face Padding
+ * @text フェイス余白
+ * @desc アクターの顔の周りの余白量
+ * @default 20
+ *
+ * @param Face X
+ * @text 顔画像X位置
+ * @desc 選択ボックス内の顔画像のX位置
+ * @default 10
+ *
+ * @param Face Y
+ * @text 顔画像Y位置
+ * @desc 選択ボックス内の顔画像のY位置
+ * @default 10
+ *
+ * @param Max Status Rows
+ * @text 最大ステータス行数
+ * @desc メニューの中でアクターが選択できる最大行数
+ * @default 2
+ *
+ * @param Max Status Cols
+ * @text 最大ステータス列数
+ * @desc アクターがメニューから選択できる最大列数
+ * @default 4
+ *
+ * @param Command Columns
+ * @text コマンド列数
+ * @desc メニュー内のコマンド列数
+ * @default 2
+ *
+ * @param Command Rows
+ * @text コマンド行数
+ * @desc メニュー内のコマンド行数
+ * @default 4
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/ams-info-box/
+ *
+ *
+ * Alternative Menu Screen: Information
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * ゲームに別のメニュー画面を表示します。
+ * アクターメニュー表示のアクターの顔だけが表示され、
+ * プレイ時間、位置情報、現在のBGM、戦闘回数などの追加情報を表示します。
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
-var Imported = Imported || {};
-
-(function() {
+(function () {
 	var sumItemOrder = String(PluginManager.parameters('SRD_AltMenuScreen_Info')['Information Order']).split(/\s*,\s*/);
 	var sumCommandPos = String(PluginManager.parameters('SRD_AltMenuScreen_Info')['Command Position']);
 	var sumGoldPos = String(PluginManager.parameters('SRD_AltMenuScreen_Info')['Gold Position']);
@@ -114,14 +243,14 @@ var Imported = Imported || {};
 	var sumRows = Number(PluginManager.parameters('SRD_AltMenuScreen_Info')['Command Rows']);
 
 	var _Scene_Menu_create = Scene_Menu.prototype.create;
-	Scene_Menu.prototype.create = function() {
-	    _Scene_Menu_create.call(this);
-	    this._srdMenuInfo = new Window_SumRndmMenuInfo(0, 0);
-	    this.addWindow(this._srdMenuInfo);
+	Scene_Menu.prototype.create = function () {
+		_Scene_Menu_create.call(this);
+		this._srdMenuInfo = new Window_SumRndmMenuInfo(0, 0);
+		this.addWindow(this._srdMenuInfo);
 
-	    this._statusWindow.x = (Graphics.width / 2) - (this._statusWindow.width / 2);
+		this._statusWindow.x = (Graphics.width / 2) - (this._statusWindow.width / 2);
 		this._statusWindow.y = 0;
-		if(sumCommandPos.trim().toLowerCase() === 'right') {
+		if (sumCommandPos.trim().toLowerCase() === 'right') {
 			this._commandWindow.x = Graphics.width - this._commandWindow.width;
 			this._srdMenuInfo.x = 0;
 		} else {
@@ -130,106 +259,103 @@ var Imported = Imported || {};
 		}
 		this._commandWindow.y = Graphics.height - this._commandWindow.height;
 		this._srdMenuInfo.y = Graphics.height - this._srdMenuInfo.height;
-		if(sumGoldPos.trim().toLowerCase() === 'left') {
+		if (sumGoldPos.trim().toLowerCase() === 'left') {
 			this._goldWindow.x = 0;
-		} else if(sumGoldPos.trim().toLowerCase() === 'middle') {
+		} else if (sumGoldPos.trim().toLowerCase() === 'middle') {
 			this._goldWindow.x = (Graphics.width / 2) - (this._goldWindow.width / 2);
-		} else if(sumGoldPos.trim().toLowerCase() === 'right') {
+		} else if (sumGoldPos.trim().toLowerCase() === 'right') {
 			this._goldWindow.x = (Graphics.width) - (this._goldWindow.width);
 		}
-	    this._goldWindow.y = this._commandWindow.y - this._goldWindow.height;
+		this._goldWindow.y = this._commandWindow.y - this._goldWindow.height;
 	};
-	Window_MenuCommand.prototype.windowWidth = function() {
-	    return Graphics.width / 2;
+	Window_MenuCommand.prototype.windowWidth = function () {
+		return Graphics.width / 2;
 	};
-	Window_MenuCommand.prototype.maxCols = function() {
-	    return sumColumns;
+	Window_MenuCommand.prototype.maxCols = function () {
+		return sumColumns;
 	};
-	Window_MenuCommand.prototype.numVisibleRows = function() {
-	    return sumRows;
+	Window_MenuCommand.prototype.numVisibleRows = function () {
+		return sumRows;
 	};
-	Window_MenuStatus.prototype.windowWidth = function() {
+	Window_MenuStatus.prototype.windowWidth = function () {
 		var l = Math.min(this.maxItems(), this.maxCols());
-	    return (l * this.itemWidth()) + (this.standardPadding() * 2) + (this.textPadding() * l * 2) - (this.textPadding() * 2);
+		return (l * this.itemWidth()) + (this.standardPadding() * 2) + (this.textPadding() * l * 2) - (this.textPadding() * 2);
 	};
-	Window_MenuStatus.prototype.windowHeight = function() {
-	    return (this.itemHeight() * this.numVisibleRows()) + (this.standardPadding() * 2);
+	Window_MenuStatus.prototype.windowHeight = function () {
+		return (this.itemHeight() * this.numVisibleRows()) + (this.standardPadding() * 2);
 	};
-	Window_MenuStatus.prototype.numVisibleRows = function() {
+	Window_MenuStatus.prototype.numVisibleRows = function () {
 		var rows = Math.floor((this.maxItems() - 1) / this.maxCols()) + 1;
 		return Math.min(rows, sumMaxRows);
 	};
-	Window_MenuStatus.prototype.maxCols = function() {
-	    return Math.min(this.maxItems(), sumMaxCols);
+	Window_MenuStatus.prototype.maxCols = function () {
+		return Math.min(this.maxItems(), sumMaxCols);
 	};
-	Window_MenuStatus.prototype.drawItem = function(index) {
-	    this.drawItemBackground(index);
-	    this.drawItemImage(index);
+	Window_MenuStatus.prototype.drawItem = function (index) {
+		this.drawItemBackground(index);
+		this.drawItemImage(index);
 	};
-	Window_MenuStatus.prototype.itemHeight = function() {
-	    return Window_Base._faceHeight + sumFacePadding;
+	Window_MenuStatus.prototype.itemHeight = function () {
+		return Window_Base._faceHeight + sumFacePadding;
 	};
-	Window_MenuStatus.prototype.itemWidth = function() {
-	    return Window_Base._faceWidth + sumFacePadding;
+	Window_MenuStatus.prototype.itemWidth = function () {
+		return Window_Base._faceWidth + sumFacePadding;
 	};
-	Window_MenuStatus.prototype.drawItemImage = function(index) {
-	    var actor = $gameParty.members()[index];
-	    var rect = this.itemRect(index);
-	    this.changePaintOpacity(actor.isBattleMember());
-	    this.drawActorFace(actor, rect.x + sumX, rect.y + sumY, Window_Base._faceWidth, Window_Base._faceHeight);
-	    this.changePaintOpacity(true);
+	Window_MenuStatus.prototype.drawItemImage = function (index) {
+		var actor = $gameParty.members()[index];
+		var rect = this.itemRect(index);
+		this.changePaintOpacity(actor.isBattleMember());
+		this.drawActorFace(actor, rect.x + sumX, rect.y + sumY, Window_Base._faceWidth, Window_Base._faceHeight);
+		this.changePaintOpacity(true);
 	};
 	function Window_SumRndmMenuInfo() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 	Window_SumRndmMenuInfo.prototype = Object.create(Window_Base.prototype);
 	Window_SumRndmMenuInfo.prototype.constructor = Window_SumRndmMenuInfo;
-	Window_SumRndmMenuInfo.prototype.initialize = function(x, y) {
-	    var width = this.windowWidth();
-	    var height = this.windowHeight();
-	    Window_Base.prototype.initialize.call(this, x, y, width, height);
-	    this.refresh();
+	Window_SumRndmMenuInfo.prototype.initialize = function (x, y) {
+		var width = this.windowWidth();
+		var height = this.windowHeight();
+		Window_Base.prototype.initialize.call(this, x, y, width, height);
+		this.refresh();
 	};
-	Window_SumRndmMenuInfo.prototype.windowWidth = function() {
-	    return Graphics.width / 2;
+	Window_SumRndmMenuInfo.prototype.windowWidth = function () {
+		return Graphics.width / 2;
 	};
-	Window_SumRndmMenuInfo.prototype.windowHeight = function() {
-	    return 180;
+	Window_SumRndmMenuInfo.prototype.windowHeight = function () {
+		return 180;
 	};
-	Window_SumRndmMenuInfo.prototype.refresh = function() {
-	    var x = this.textPadding();
-	    var width = this.contents.width - this.textPadding() * 2;
-	    this.contents.clear();
-	    var items = Math.min(4, sumItemOrder.length)
-	    for(var i = 0; i < items; i++) { 
-	    	var item = sumItemOrder[i];
-	    	if(item.match(/(?:playtime|time|play)/i)) {
-		    	this.drawText(playtimeText + " " + $gameSystem.playtimeText(), x, this.lineHeight() * i, width, 'left');
-		    } else if(item.match(/location/i)) {
-		    	var mapName = (sumDisplayName) ? $gameMap.displayName() : $dataMapInfos[$gameMap.mapId()].name;
-		    	this.drawText(locationText + " " + mapName, x, this.lineHeight() * i, width, 'left');
-		    } else if(item.match(/(?:bgm|music)/i)) {
-		    	this.drawText(bgmText + " " + AudioManager.sumRndmCurrentBgm(), x, this.lineHeight() * i, width, 'left');
-		    } else if(item.match(/battle/i)) {
-		    	this.drawText(battlesText + " " + $gameSystem.battleCount(), x, this.lineHeight() * i, width, 'left');
-		    }
+	Window_SumRndmMenuInfo.prototype.refresh = function () {
+		var x = this.textPadding();
+		var width = this.contents.width - this.textPadding() * 2;
+		this.contents.clear();
+		var items = Math.min(4, sumItemOrder.length)
+		for (var i = 0; i < items; i++) {
+			var item = sumItemOrder[i];
+			if (item.match(/(?:playtime|time|play)/i)) {
+				this.drawText(playtimeText + " " + $gameSystem.playtimeText(), x, this.lineHeight() * i, width, 'left');
+			} else if (item.match(/location/i)) {
+				var mapName = (sumDisplayName) ? $gameMap.displayName() : $dataMapInfos[$gameMap.mapId()].name;
+				this.drawText(locationText + " " + mapName, x, this.lineHeight() * i, width, 'left');
+			} else if (item.match(/(?:bgm|music)/i)) {
+				this.drawText(bgmText + " " + AudioManager.sumRndmCurrentBgm(), x, this.lineHeight() * i, width, 'left');
+			} else if (item.match(/battle/i)) {
+				this.drawText(battlesText + " " + $gameSystem.battleCount(), x, this.lineHeight() * i, width, 'left');
+			}
 		}
 	};
-	Window_SumRndmMenuInfo.prototype.update = function() {
+	Window_SumRndmMenuInfo.prototype.update = function () {
 		this.refresh();
 	}
-	Window_SumRndmMenuInfo.prototype.open = function() {
-	    this.refresh();
-	    Window_Base.prototype.open.call(this);
+	Window_SumRndmMenuInfo.prototype.open = function () {
+		this.refresh();
+		Window_Base.prototype.open.call(this);
 	};
-	AudioManager.sumRndmCurrentBgm = function() {
-	    if (this._currentBgm) {
-	        return this._currentBgm.name;
-	    } else {
-	        return sumBGMNone;
-	    }
+	AudioManager.sumRndmCurrentBgm = function () {
+		if (this._currentBgm) {
+			return this._currentBgm.name;
+		} else {
+			return sumBGMNone;
+		}
 	};
-	if(Imported.YEP_MainMenuManager) {
-		Scene_Menu.prototype.resizeGoldWindow = function() {};
-	}
 })();

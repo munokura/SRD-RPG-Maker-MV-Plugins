@@ -61,6 +61,74 @@
  *   ~ SumRndmDde
  *
  */
+/*:ja
+ * @plugindesc 召喚されたアクターにSV戦闘キャラ画像ではなく、静的画像を使用できます。
+ * @author SumRndmDde
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/summon-battler-images/
+ *
+ *
+ * Summon Battler Images
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * このプラグインにはSRD_SummonCoreプラグインが必要です。
+ * http://sumrndm.site/summon-core/
+ *
+ * このプラグインにより、
+ * 召喚されたアクターにSV戦闘キャラ画像ではなく、静的画像を使用できます。
+ *
+ *
+ * ==========================================================================
+ *  アクターのメモタグ
+ * ==========================================================================
+ *
+ * 召喚したいアクターにこれらのメモタグを配置します。
+ * 召喚されたアクターは、
+ * これらのメモタグを使用して設定された静止画像の設定を使用します。
+ *
+ *
+ *   <Summon Battler Image: filename>
+ *
+ * filename を、下記に保存されている画像ファイル名に置き換えてください。
+ *   /img/SumRndmDde/summon/
+ * このアクターは召喚時にこの画像をバトラーとして使用します。
+ *
+ *
+ *   <Summon Battler Scale: scale>
+ *
+ * デフォルトから変更したい場合、バトラーの拡縮率を設定します。
+ * デフォルトでは1ですが、
+ * 例えば0.5に設定するとバトラーの大きさを50%にできます。
+ *
+ *
+ *   <Summon Battler Hue: hue>
+ * バトラーの色相を設定します。
+ * デフォルトでは0を使用します。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ *
+ */
 
 var SRD = SRD || {};
 SRD.SummonBattlerImages = SRD.SummonBattlerImages || {};
@@ -69,199 +137,199 @@ SRD.NotetagGetters = SRD.NotetagGetters || [];
 var Imported = Imported || {};
 Imported["SumRndmDde Summon Battler Images"] = 1.00;
 
-(function(_, N) {
+(function (_, N) {
 
-"use strict";
+	"use strict";
 
-//-----------------------------------------------------------------------------
-// SRD.SummonBattlerImages
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// SRD.SummonBattlerImages
+	//-----------------------------------------------------------------------------
 
-_.meetsRequirements = Imported["SumRndmDde Summon Core"];
+	_.meetsRequirements = Imported["SumRndmDde Summon Core"];
 
-_.loadImage = function(filename, hue) {
-	return ImageManager.loadBitmap('img/SumRndmDde/summon/', filename, hue, false);
-};
-
-_.loadNotetags = function() {
-	const data = $dataActors;
-	const regex = /<Summon\s*Battler\s*Image\s*:\s*(.*)\s*>/im;
-	const regex1 = /<Summon\s*Battler\s*Scale\s*:\s*(.*)\s*>/im;
-	const regex2 = /<Summon\s*Battler\s*Hue\s*:\s*(.*)\s*>/im;
-	for(let i = 1; i < data.length; i++) {
-		const note = data[i].note;
-		if(note.match(regex)) {
-			data[i]._sei_image = String(RegExp.$1);
-		}
-		if(note.match(regex1)) {
-			data[i]._sei_scale = parseFloat(RegExp.$1);
-		}
-		if(note.match(regex2)) {
-			data[i]._sei_hue = parseInt(RegExp.$1);
-		}
-	}
-};
-
-SRD.NotetagGetters.push(_.loadNotetags);
-
-_.alertNeedSummonCore = function() {
-	alert("The 'SRD_SummonCore' plugin is required for using the 'SRD_SummonBattlerImages' plugin.");
-	if(confirm("Do you want to open the download page to 'SRD_SummonCore'?")) {
-		window.open('http://sumrndm.site/summon-core/');
-	}
-};
-
-if(!_.meetsRequirements) {
-	_.alertNeedSummonCore();
-}
-
-//-----------------------------------------------------------------------------
-// DataManager
-//-----------------------------------------------------------------------------
-
-if(!SRD.DataManager_isDatabaseLoaded) {
-
-SRD.notetagsLoaded = false;
-SRD.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-DataManager.isDatabaseLoaded = function() {
-	if(!SRD.DataManager_isDatabaseLoaded.apply(this, arguments)) return false;
-	if(!SRD.notetagsLoaded) {
-		N.forEach(function(func) {
-			func.call(this);
-		}, this);
-		SRD.notetagsLoaded = true;
-	}
-	return true;
-};
-
-}
-
-//-----------------------------------------------------------------------------
-// Game_Summon
-//-----------------------------------------------------------------------------
-
-_.Game_Summon_setup = Game_Summon.prototype.setup;
-Game_Summon.prototype.setup = function() {
-	_.Game_Summon_setup.apply(this, arguments);
-	this._staticSummonImage = this.actor()._sei_image || null;
-};
-
-Game_Summon.prototype.staticSummonImage = function() {
-	return this._staticSummonImage;
-};
-
-Game_Summon.prototype.hasStaticSummonImage = function() {
-	return !!this._staticSummonImage;
-};
-
-Game_Summon.prototype.staticSummonImageScale = function() {
-	return this.actor()._sei_scale || 1;
-};
-
-Game_Summon.prototype.staticSummonImageHue = function() {
-	return this.actor()._sei_hue || 0;
-};
-
-//-----------------------------------------------------------------------------
-// Sprite_Summon
-//-----------------------------------------------------------------------------
-
-_.Sprite_Summon_initialize = Sprite_Summon.prototype.initialize;
-Sprite_Summon.prototype.initialize = function() {
-	_.Sprite_Summon_initialize.apply(this, arguments);
-	this._actionStartStuffs = ['thrust', 'swing', 'missile', 'skill', 'spell', 'item'];
-};
-
-Sprite_Summon.prototype.hasStaticSummonImage = function() {
-	return this._actor && this._actor.hasStaticSummonImage();
-};
-
-_.Sprite_Summon_updateBitmap = Sprite_Summon.prototype.updateBitmap;
-Sprite_Summon.prototype.updateBitmap = function() {
-	if(this.hasStaticSummonImage()) {
-		if(this._staticSpriteName !== this._actor.staticSummonImage()) {
-			this._staticSpriteName = this._actor.staticSummonImage();
-			this._mainSprite.bitmap = _.loadImage(this._staticSpriteName, this._actor.staticSummonImageHue());
-			this._mainSprite.scale.set(this._actor.staticSummonImageScale());
-			this._shadowSprite.opacity = 0;
-			this._stateSprite.opacity = 0;
-		}
-	} else {
-		if(this._battlerName !== name) {
-			this._shadowSprite.opacity = 255;
-			this._stateSprite.opacity = 255;
-			this._mainSprite.scale.set(1);
-			this._stateSprite.y = 0;
-		};
-		_.Sprite_Summon_updateBitmap.apply(this, arguments);
-	}
-};
-
-_.Sprite_Summon_updateFrame = Sprite_Summon.prototype.updateFrame;
-Sprite_Summon.prototype.updateFrame = function() {
-	if(this.hasStaticSummonImage()) {
-		const bit = this._mainSprite.bitmap;
-		this.setFrame(0, 0, bit.width, bit.height);
-	} else {
-		_.Sprite_Summon_updateFrame.apply(this, arguments);
-	}
-};
-
-_.Sprite_Summon_setupWeaponAnimation = Sprite_Summon.prototype.setupWeaponAnimation;
-Sprite_Summon.prototype.setupWeaponAnimation = function() {
-	if(!this.hasStaticSummonImage()) {
-		_.Sprite_Summon_setupWeaponAnimation.apply(this, arguments);
+	_.loadImage = function (filename, hue) {
+		return ImageManager.loadBitmap('img/SumRndmDde/summon/', filename, hue, false);
 	};
-};
 
-Sprite_Summon.prototype.startWhiten = function() {
-	this._effectType = 'white';
-	this._effectDuration = 16;
-};
-
-Sprite_Summon.prototype.startBlink = function() {
-	this._effectType = 'blink';
-	this._effectDuration = 20;
-};
-
-_.Sprite_Summon_update = Sprite_Summon.prototype.update;
-Sprite_Summon.prototype.update = function() {
-	_.Sprite_Summon_update.apply(this, arguments);
-	if(this.hasStaticSummonImage()) {
-		this.updateStaticEffect();
-	}
-};
-
-Sprite_Summon.prototype.updateStaticEffect = function() {
-	if(this._effectType && this._effectDuration > 0) {
-		this._effectDuration--;
-		if(this._effectType === 'white') this.updateWhiten();
-		else if(this._effectType === 'blink') this.updateBlink();
-		if(this._effectDuration === 0) {
-			this._effectType = null;
+	_.loadNotetags = function () {
+		const data = $dataActors;
+		const regex = /<Summon\s*Battler\s*Image\s*:\s*(.*)\s*>/im;
+		const regex1 = /<Summon\s*Battler\s*Scale\s*:\s*(.*)\s*>/im;
+		const regex2 = /<Summon\s*Battler\s*Hue\s*:\s*(.*)\s*>/im;
+		for (let i = 1; i < data.length; i++) {
+			const note = data[i].note;
+			if (note.match(regex)) {
+				data[i]._sei_image = String(RegExp.$1);
+			}
+			if (note.match(regex1)) {
+				data[i]._sei_scale = parseFloat(RegExp.$1);
+			}
+			if (note.match(regex2)) {
+				data[i]._sei_hue = parseInt(RegExp.$1);
+			}
 		}
-	}
-};
+	};
 
-Sprite_Summon.prototype.updateWhiten = function() {
-	var alpha = 128 - (16 - this._effectDuration) * 10;
-	this._mainSprite.setBlendColor([255, 255, 255, alpha]);
-};
+	SRD.NotetagGetters.push(_.loadNotetags);
 
-Sprite_Summon.prototype.updateBlink = function() {
-	this.opacity = (this._effectDuration % 10 < 5) ? 255 : 0;
-};
-
-_.Sprite_Summon_startMotion = Sprite_Summon.prototype.startMotion;
-Sprite_Summon.prototype.startMotion = function(motionType) {
-    _.Sprite_Summon_startMotion.apply(this, arguments);
-    if(this.hasStaticSummonImage()) {
-		if(motionType === 'damage') {
-			this.startBlink();
-		} else if(this._actionStartStuffs.contains(motionType)) {
-			this.startWhiten();
+	_.alertNeedSummonCore = function () {
+		alert("The 'SRD_SummonCore' plugin is required for using the 'SRD_SummonBattlerImages' plugin.");
+		if (confirm("Do you want to open the download page to 'SRD_SummonCore'?")) {
+			window.open('http://sumrndm.site/summon-core/');
 		}
+	};
+
+	if (!_.meetsRequirements) {
+		_.alertNeedSummonCore();
 	}
-};
+
+	//-----------------------------------------------------------------------------
+	// DataManager
+	//-----------------------------------------------------------------------------
+
+	if (!SRD.DataManager_isDatabaseLoaded) {
+
+		SRD.notetagsLoaded = false;
+		SRD.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
+		DataManager.isDatabaseLoaded = function () {
+			if (!SRD.DataManager_isDatabaseLoaded.apply(this, arguments)) return false;
+			if (!SRD.notetagsLoaded) {
+				N.forEach(function (func) {
+					func.call(this);
+				}, this);
+				SRD.notetagsLoaded = true;
+			}
+			return true;
+		};
+
+	}
+
+	//-----------------------------------------------------------------------------
+	// Game_Summon
+	//-----------------------------------------------------------------------------
+
+	_.Game_Summon_setup = Game_Summon.prototype.setup;
+	Game_Summon.prototype.setup = function () {
+		_.Game_Summon_setup.apply(this, arguments);
+		this._staticSummonImage = this.actor()._sei_image || null;
+	};
+
+	Game_Summon.prototype.staticSummonImage = function () {
+		return this._staticSummonImage;
+	};
+
+	Game_Summon.prototype.hasStaticSummonImage = function () {
+		return !!this._staticSummonImage;
+	};
+
+	Game_Summon.prototype.staticSummonImageScale = function () {
+		return this.actor()._sei_scale || 1;
+	};
+
+	Game_Summon.prototype.staticSummonImageHue = function () {
+		return this.actor()._sei_hue || 0;
+	};
+
+	//-----------------------------------------------------------------------------
+	// Sprite_Summon
+	//-----------------------------------------------------------------------------
+
+	_.Sprite_Summon_initialize = Sprite_Summon.prototype.initialize;
+	Sprite_Summon.prototype.initialize = function () {
+		_.Sprite_Summon_initialize.apply(this, arguments);
+		this._actionStartStuffs = ['thrust', 'swing', 'missile', 'skill', 'spell', 'item'];
+	};
+
+	Sprite_Summon.prototype.hasStaticSummonImage = function () {
+		return this._actor && this._actor.hasStaticSummonImage();
+	};
+
+	_.Sprite_Summon_updateBitmap = Sprite_Summon.prototype.updateBitmap;
+	Sprite_Summon.prototype.updateBitmap = function () {
+		if (this.hasStaticSummonImage()) {
+			if (this._staticSpriteName !== this._actor.staticSummonImage()) {
+				this._staticSpriteName = this._actor.staticSummonImage();
+				this._mainSprite.bitmap = _.loadImage(this._staticSpriteName, this._actor.staticSummonImageHue());
+				this._mainSprite.scale.set(this._actor.staticSummonImageScale());
+				this._shadowSprite.opacity = 0;
+				this._stateSprite.opacity = 0;
+			}
+		} else {
+			if (this._battlerName !== name) {
+				this._shadowSprite.opacity = 255;
+				this._stateSprite.opacity = 255;
+				this._mainSprite.scale.set(1);
+				this._stateSprite.y = 0;
+			};
+			_.Sprite_Summon_updateBitmap.apply(this, arguments);
+		}
+	};
+
+	_.Sprite_Summon_updateFrame = Sprite_Summon.prototype.updateFrame;
+	Sprite_Summon.prototype.updateFrame = function () {
+		if (this.hasStaticSummonImage()) {
+			const bit = this._mainSprite.bitmap;
+			this.setFrame(0, 0, bit.width, bit.height);
+		} else {
+			_.Sprite_Summon_updateFrame.apply(this, arguments);
+		}
+	};
+
+	_.Sprite_Summon_setupWeaponAnimation = Sprite_Summon.prototype.setupWeaponAnimation;
+	Sprite_Summon.prototype.setupWeaponAnimation = function () {
+		if (!this.hasStaticSummonImage()) {
+			_.Sprite_Summon_setupWeaponAnimation.apply(this, arguments);
+		};
+	};
+
+	Sprite_Summon.prototype.startWhiten = function () {
+		this._effectType = 'white';
+		this._effectDuration = 16;
+	};
+
+	Sprite_Summon.prototype.startBlink = function () {
+		this._effectType = 'blink';
+		this._effectDuration = 20;
+	};
+
+	_.Sprite_Summon_update = Sprite_Summon.prototype.update;
+	Sprite_Summon.prototype.update = function () {
+		_.Sprite_Summon_update.apply(this, arguments);
+		if (this.hasStaticSummonImage()) {
+			this.updateStaticEffect();
+		}
+	};
+
+	Sprite_Summon.prototype.updateStaticEffect = function () {
+		if (this._effectType && this._effectDuration > 0) {
+			this._effectDuration--;
+			if (this._effectType === 'white') this.updateWhiten();
+			else if (this._effectType === 'blink') this.updateBlink();
+			if (this._effectDuration === 0) {
+				this._effectType = null;
+			}
+		}
+	};
+
+	Sprite_Summon.prototype.updateWhiten = function () {
+		var alpha = 128 - (16 - this._effectDuration) * 10;
+		this._mainSprite.setBlendColor([255, 255, 255, alpha]);
+	};
+
+	Sprite_Summon.prototype.updateBlink = function () {
+		this.opacity = (this._effectDuration % 10 < 5) ? 255 : 0;
+	};
+
+	_.Sprite_Summon_startMotion = Sprite_Summon.prototype.startMotion;
+	Sprite_Summon.prototype.startMotion = function (motionType) {
+		_.Sprite_Summon_startMotion.apply(this, arguments);
+		if (this.hasStaticSummonImage()) {
+			if (motionType === 'damage') {
+				this.startBlink();
+			} else if (this._actionStartStuffs.contains(motionType)) {
+				this.startWhiten();
+			}
+		}
+	};
 
 })(SRD.SummonBattlerImages, SRD.NotetagGetters);

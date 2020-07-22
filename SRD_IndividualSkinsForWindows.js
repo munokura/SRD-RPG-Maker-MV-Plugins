@@ -483,6 +483,589 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc ウィンドウ毎にウィンドウスキンをカスタマイズできます。
+ * @author SumRndmDde
+ *
+ * @param == Main Windows ==
+ * @text -- メインウィンドウ --
+ * @default
+ *
+ * @param Help
+ * @text ヘルプ
+ * @desc ヘルプウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Gold
+ * @text 所持金
+ * @desc 所持金ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Event Windows ==
+ * @text -- イベントウィンドウ --
+ * @default
+ *
+ * @param Message
+ * @text 文章
+ * @desc 文章ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Choice List
+ * @text 選択肢
+ * @desc 選択ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Number Input
+ * @text 数値入力
+ * @desc 数値入力のウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Event Item
+ * @text アイテム選択
+ * @desc アイテム選択ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Battle Windows ==
+ * @text -- 戦闘ウィンドウ --
+ * @default
+ *
+ * @param Party Command
+ * @text パーティーコマンド
+ * @desc パーティコマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Actor Command
+ * @text アクターコマンド
+ * @desc アクターコマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Battle Status
+ * @text 戦闘ステータス
+ * @desc 戦闘ステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Battle Actor
+ * @text 戦闘アクター
+ * @desc 戦闘アクターウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Battle Enemy
+ * @text 戦闘敵キャラ
+ * @desc 戦闘エネミーウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Battle Skill
+ * @text 戦闘スキル
+ * @desc 戦闘スキルウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Battle Item
+ * @text 戦闘アイテム
+ * @desc 戦闘アイテムウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Title Windows ==
+ * @text -- タイトルウィンドウ --
+ * @default
+ *
+ * @param Title Command
+ * @text タイトルコマンド
+ * @desc タイトルコマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Menu Windows ==
+ * @text -- メニューウィンドウ --
+ * @default
+ *
+ * @param Menu Command
+ * @text メニューコマンド
+ * @desc メニューコマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Menu Status
+ * @text メニューステータス
+ * @desc メニューステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Menu Actor
+ * @text メニューアクター
+ * @desc メニューアクターウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Item Windows ==
+ * @text -- アイテムウィンドウ --
+ * @default
+ *
+ * @param Item Category
+ * @text アイテム分類
+ * @desc アイテム分類ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Item List
+ * @text アイテム一覧
+ * @desc アイテム一覧ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Skill Windows ==
+ * @text -- スキルウィンドウ --
+ * @default
+ *
+ * @param Skill Type
+ * @text スキルタイプ
+ * @desc スキルタイプウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Skill Status
+ * @text スキルのステータス
+ * @desc スキルステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Skill List
+ * @text スキル一覧
+ * @desc スキル一覧ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Equip Windows ==
+ * @text -- 装備ウィンドウ --
+ * @default
+ *
+ * @param Equip Status
+ * @text 装備ステータス
+ * @desc 装備ステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Equip Command
+ * @text 装備コマンド
+ * @desc 装備コマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Equip Slot
+ * @text 装備スロット
+ * @desc 装備スロットウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Equip Item
+ * @text 装備品
+ * @desc 装備アイテムウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Status Windows ==
+ * @text -- ステータスウィンドウ --
+ * @default
+ *
+ * @param Status
+ * @text ステータス
+ * @desc ステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Options Windows ==
+ * @text -- オプション設定ウィンドウ --
+ * @default
+ *
+ * @param Options
+ * @text オプション
+ * @desc オプション設定ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == End Windows ==
+ * @text -- 終了ウィンドウ --
+ * @default
+ *
+ * @param Game End
+ * @text ゲーム終了
+ * @desc ゲーム終了ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Shop Windows ==
+ * @text -- ショップウィンドウ --
+ * @default
+ *
+ * @param Shop Command
+ * @text ショップコマンド
+ * @desc ショップコマンドウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Shop Buy
+ * @text ショップ購入
+ * @desc ショップ購入ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Shop Sell
+ * @text ショップ販売
+ * @desc ショップ販売ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Shop Number
+ * @text ショップ番号
+ * @desc ショップ番号ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Shop Status
+ * @text ショップのステータス
+ * @desc ショップステータスウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Name Windows ==
+ * @text -- 名前ウィンドウ --
+ * @default
+ *
+ * @param Name Edit
+ * @text 名前の編集
+ * @desc 名前編集ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Name Input
+ * @text 名前入力
+ * @desc 名前入力ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Save Windows ==
+ * @text -- セーブウィンドウ --
+ * @default
+ *
+ * @param Save/Load List
+ * @text セーブ/ロード一覧
+ * @desc 保存/読み込み一覧ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Debug Windows ==
+ * @text -- デバッグウィンドウ --
+ * @default
+ *
+ * @param Debug Range
+ * @text デバッグ範囲
+ * @desc デバッグ範囲ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Debug Edit
+ * @text デバッグ編集
+ * @desc デバッグ編集ウィンドウのスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param == Custom Windows ==
+ * @text -- カスタムウィンドウ --
+ * @default
+ *
+ * @param Custom Window 1
+ * @text カスタムウィンドウ1
+ * @desc カスタムウィンドウ1のクラス名
+ * スキンにカスタムスキン1を設定
+ * @default
+ *
+ * @param Custom Skin 1
+ * @text カスタムスキン1
+ * @desc カスタムウィンドウ1のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 2
+ * @text カスタムウィンドウ2
+ * @desc カスタムウィンドウ2のクラス名
+ * スキンにカスタムスキン2を設定
+ * @default
+ *
+ * @param Custom Skin 2
+ * @text カスタムスキン2
+ * @desc カスタムウィンドウ2のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 3
+ * @text カスタムウィンドウ3
+ * @desc カスタムウィンドウ3のクラス名
+ * スキンにカスタムスキン3を設定
+ * @default
+ *
+ * @param Custom Skin 3
+ * @text カスタムスキン3
+ * @desc カスタムウィンドウ3のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 4
+ * @text カスタムウィンドウ4
+ * @desc カスタムウィンドウ4のクラス名
+ * スキンにカスタムスキン4を設定
+ * @default
+ *
+ * @param Custom Skin 4
+ * @text カスタムスキン4
+ * @desc カスタムウィンドウ4のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 5
+ * @text カスタムウィンドウ5
+ * @desc カスタムウィンドウ5のクラス名
+ * スキンにカスタムスキン5を設定
+ * @default
+ *
+ * @param Custom Skin 5
+ * @text カスタムスキン5
+ * @desc カスタムウィンドウ5のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 6
+ * @text カスタムウィンドウ6
+ * @desc カスタムウィンドウ6のクラス名
+ * スキンにカスタムスキン6を設定
+ * @default
+ *
+ * @param Custom Skin 6
+ * @text カスタムスキン6
+ * @desc カスタムウィンドウ6のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 7
+ * @text カスタムウィンドウ7
+ * @desc カスタムウィンドウ7のクラス名
+ * スキンにカスタムスキン7を設定
+ * @default
+ *
+ * @param Custom Skin 7
+ * @text カスタムスキン7
+ * @desc カスタムウィンドウ7のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 8
+ * @text カスタムウィンドウ8
+ * @desc カスタムウィンドウ8のクラス名
+ * スキンにカスタムスキン8を設定
+ * @default
+ *
+ * @param Custom Skin 8
+ * @text カスタムスキン8
+ * @desc カスタムウィンドウ8のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 9
+ * @text カスタムウィンドウ9
+ * @desc カスタムウィンドウ9のクラス名
+ * スキンにカスタムスキン9を設定
+ * @default
+ *
+ * @param Custom Skin 9
+ * @text カスタムスキン9
+ * @desc カスタムウィンドウ9のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 10
+ * @text カスタムウィンドウ10
+ * @desc カスタムウィンドウ10のクラス名
+ * スキンにカスタムスキン10を設定
+ * @default
+ *
+ * @param Custom Skin 10
+ * @text カスタムスキン10
+ * @desc カスタムウィンドウ10のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 11
+ * @text カスタムウィンドウ11
+ * @desc カスタムウィンドウ11のクラス名
+ * スキンにカスタムスキン11を設定
+ * @default
+ *
+ * @param Custom Skin 11
+ * @text カスタムスキン11
+ * @desc カスタムウィンドウ11のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 12
+ * @text カスタムウィンドウ12
+ * @desc カスタムウィンドウ12のクラス名
+ * スキンにカスタムスキン12を設定
+ * @default
+ *
+ * @param Custom Skin 12
+ * @text カスタムスキン12
+ * @desc カスタムウィンドウ12のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 13
+ * @text カスタムウィンドウ13
+ * @desc カスタムウィンドウ13のクラス名
+ * スキンにカスタムスキン13を設定
+ * @default
+ *
+ * @param Custom Skin 13
+ * @text カスタムスキン13
+ * @desc カスタムウィンドウ13のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 14
+ * @text カスタムウィンドウ14
+ * @desc カスタムウィンドウ14のクラス名
+ * スキンにカスタムスキン14を設定
+ * @default
+ *
+ * @param Custom Skin 14
+ * @text カスタムスキン14
+ * @desc カスタムウィンドウ14のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 15
+ * @text カスタムウィンドウ15
+ * @desc カスタムウィンドウ15のクラス名
+ * スキンにカスタムスキン15を設定
+ * @default
+ *
+ * @param Custom Skin 15
+ * @text カスタムスキン15
+ * @desc カスタムウィンドウ15のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 16
+ * @text カスタムウィンドウ16
+ * @desc カスタムウィンドウ16のクラス名
+ * スキンにカスタムスキン16を設定
+ * @default
+ *
+ * @param Custom Skin 16
+ * @text カスタムスキン16
+ * @desc カスタムウィンドウ16のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 17
+ * @text カスタムウィンドウ17
+ * @desc カスタムウィンドウ17のクラス名
+ * スキンにカスタムスキン17を設定
+ * @default
+ *
+ * @param Custom Skin 17
+ * @text カスタムスキン17
+ * @desc カスタムウィンドウ17のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 18
+ * @text カスタムウィンドウ18
+ * @desc カスタムウィンドウ18のクラス名
+ * スキンにカスタムスキン18を設定
+ * @default
+ *
+ * @param Custom Skin 18
+ * @text カスタムスキン18
+ * @desc カスタムウィンドウ18のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 19
+ * @text カスタムウィンドウ19
+ * @desc カスタムウィンドウ19のクラス名
+ * スキンにカスタムスキン19を設定
+ * @default
+ *
+ * @param Custom Skin 19
+ * @text カスタムスキン19
+ * @desc カスタムウィンドウ19のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @param Custom Window 20
+ * @text カスタムウィンドウ20
+ * @desc カスタムウィンドウ20のクラス名
+ * スキンにカスタムスキン20を設定
+ * @default
+ *
+ * @param Custom Skin 20
+ * @text カスタムスキン20
+ * @desc カスタムウィンドウ20のウィンドウスキンファイル名
+ * /img/SumRndmDde/window/ に保存
+ * @default
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/individual-skins/
+ *
+ *
+ * Individual Skins for Windows
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * ウィンドウ毎にウィンドウスキンをカスタマイズできます。
+ *
+ * 使用したいウィンドウスキンは、下記に保存する必要があります。
+ * /img/SumRndmDde/window/
+ *
+ * 特定のウィンドウで使用されるウィンドウスキンをカスタマイズするには、
+ * パラメータでウィンドウスキンのファイル名を設定します。
+ *
+ * パラメータを空白のままにしておくと、
+ * そのウィンドウはデフォルトのウィンドウスキンを使用します。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.IndividualSkinsForWindows = SRD.IndividualSkinsForWindows || {};
@@ -490,7 +1073,7 @@ SRD.IndividualSkinsForWindows = SRD.IndividualSkinsForWindows || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Individual Skins for Windows"] = true;
 
-(function(_) {
+(function (_) {
 
 	_.skins = {
 		Window_Help: String(PluginManager.parameters('SRD_IndividualSkinsForWindows')['Help']),
@@ -534,32 +1117,32 @@ Imported["SumRndmDde Individual Skins for Windows"] = true;
 		Window_DebugEdit: String(PluginManager.parameters('SRD_IndividualSkinsForWindows')['Debug Edit'])
 	}
 
-	for(var i = 1; i <= 20; i++) {
+	for (var i = 1; i <= 20; i++) {
 		var wind = String(PluginManager.parameters('SRD_IndividualSkinsForWindows')['Custom Window ' + i]);
 		var skin = String(PluginManager.parameters('SRD_IndividualSkinsForWindows')['Custom Skin ' + i]);
-		if(wind.trim().length > 0 && skin.trim().length > 0) {
+		if (wind.trim().length > 0 && skin.trim().length > 0) {
 			_.skins[wind] = skin;
 		}
 	}
 
-	_.loadSumRndmDdeWindow = function(filename, hue) {
+	_.loadSumRndmDdeWindow = function (filename, hue) {
 		return ImageManager.loadBitmap('img/SumRndmDde/window/', filename, hue, true);
 	};
 
 	var _Scene_Boot_create = Scene_Boot.prototype.create;
-	Scene_Boot.prototype.create = function() {
+	Scene_Boot.prototype.create = function () {
 		_Scene_Boot_create.call(this);
-		for(var i in _.skins) {
-			if(_.skins[i].trim().length > 0) {
+		for (var i in _.skins) {
+			if (_.skins[i].trim().length > 0) {
 				_.loadSumRndmDdeWindow(_.skins[i]);
 			}
 		}
 	};
 
 	var _Window_Base_loadWindowskin = Window_Base.prototype.loadWindowskin;
-	Window_Base.prototype.loadWindowskin = function() {
+	Window_Base.prototype.loadWindowskin = function () {
 		_Window_Base_loadWindowskin.call(this);
-		if(_.skins[this.constructor.name]){
+		if (_.skins[this.constructor.name]) {
 			this.windowskin = _.loadSumRndmDdeWindow(_.skins[this.constructor.name]);
 		}
 	};

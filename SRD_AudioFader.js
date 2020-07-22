@@ -70,6 +70,87 @@
  *   ~ SumRndmDde
  *
  */
+/*:ja
+ * @plugindesc BGM、BGS、MEオーディオエフェクトの音量フェードをより細かにコントロールできます。
+ * @author SumRndmDde
+ * 
+ * @param Replay Fade Time
+ * @text リプレイフェードタイム
+ * @type number
+ * @desc 戦闘やMEの後にBGMやBGSがフェードインするまでの時間(フレーム単位)
+ * @default 30
+ * 
+ * @param Auto-BGM Fade In
+ * @text 自動BGMフェードイン
+ * @type number
+ * @desc 0より大きい値に設定すると、BGMが変更される度に、この時間でフェードインします。
+ * @default 0
+ * 
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ * 
+ * 元プラグイン: http://sumrndm.site/audio-fader/
+ * 
+ * 
+ * Audio Fader
+ * Version 1.01
+ * SumRndmDde
+ * 
+ * 
+ * BGM、BGS、MEオーディオエフェクトの音量フェードを
+ * より細かにコントロールできます。
+ * 
+ * 
+ * ==========================================================================
+ *  プラグインコマンド
+ * ==========================================================================
+ * 
+ * オーディオをフェードインするには、以下のプラグインコマンドを使用します。
+ * 全てのプラグインコマンドでは、"type"を定義する必要があります。
+ * タイプはBGM、BGS、MEのいずれかです。
+ * 現在のBGM、BGS、MEにそれぞれ影響を与えます。
+ * 
+ * 
+ *   FadeIn [type] [duration]
+ * 
+ * 特定のオーディオタイプをフレーム単位でフェードします。
+ * 
+ * 
+ *   FadeOut [type] [duration]
+ * 
+ * 特定のオーディオタイプをフレーム単位でフェードアウトします。
+ * 
+ * 
+ *   FadeTo [type] [duration] [volume]
+ * 
+ * オーディオタイプをフレーム単位で特定の音量にフェードします。
+ * 
+ * 
+ *   FadeFromTo [type] [duration] [first-volume] [target-volume]
+ * 
+ * オーディオタイプを最初に'first volume'に設定してから、
+ * 'target-volume'をフレーム単位でフェードします。
+ * 
+ * 
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ * 
+ * ヘルプファイルの終わりへようこそ。
+ * 
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ * 
+ * https://www.youtube.com/c/SumRndmDde
+ * 
+ * 
+ * 次の機会まで
+ *   ~ SumRndmDde
+ * 
+ */
 
 var SRD = SRD || {};
 SRD.AudioFader = SRD.AudioFader || {};
@@ -78,205 +159,205 @@ SRD.PluginCommands = SRD.PluginCommands || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Audio Fader"] = 1.01;
 
-(function(_, $) {
+(function (_, $) {
 
-"use strict";
+	"use strict";
 
-//-----------------------------------------------------------------------------
-// SRD.AudioFader
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// SRD.AudioFader
+	//-----------------------------------------------------------------------------
 
-const params = PluginManager.parameters('SRD_AudioFader');
+	const params = PluginManager.parameters('SRD_AudioFader');
 
-_.replayFadeTime = parseInt(params['Replay Fade Time']);
-_.autoFadeIn = parseInt(params['Auto-BGM Fade In']);
+	_.replayFadeTime = parseInt(params['Replay Fade Time']);
+	_.autoFadeIn = parseInt(params['Auto-BGM Fade In']);
 
-//-----------------------------------------------------------------------------
-// SRD.PluginCommands
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// SRD.PluginCommands
+	//-----------------------------------------------------------------------------
 
-$['fadein'] = function(args) {
-	const type = String(args[0]).toLowerCase();
-	const frames = parseInt(args[1]) / 60;
-	switch(type) {
-		case 'bgm':
-			AudioManager.fadeInBgm(frames);
-			break;
-		case 'bgs':
-			AudioManager.fadeInBgs(frames);
-			break;
-		case 'me':
-			AudioManager.fadeInMe(frames);
-			break;
-	}
-};
-
-$['fadeout'] = function(args) {
-	const type = String(args[0]).toLowerCase();
-	const frames = parseInt(args[1]) / 60;
-	switch(type) {
-		case 'bgm':
-			AudioManager.fadeOutBgm(frames);
-			break;
-		case 'bgs':
-			AudioManager.fadeOutBgs(frames);
-			break;
-		case 'me':
-			AudioManager.fadeOutMe(frames);
-			break;
-	}
-};
-
-$['fadeto'] = function(args) {
-	const type = String(args[0]).toLowerCase();
-	const frames = parseInt(args[1]) / 60;
-	const target = parseFloat(args[2] / 100).clamp(0, 1);
-	switch(type) {
-		case 'bgm':
-			AudioManager.fadeToBgm(frames, target);
-			break;
-		case 'bgs':
-			AudioManager.fadeToBgs(frames, target);
-			break;
-		case 'me':
-			AudioManager.fadeToMe(frames, target);
-			break;
-	}
-};
-
-$['fadefromto'] = function(args) {
-	const type = String(args[0]).toLowerCase();
-	const frames = parseInt(args[1]) / 60;
-	const current = parseFloat(args[2] / 100).clamp(0, 1);
-	const target = parseFloat(args[3] / 100).clamp(0, 1);
-	switch(type) {
-		case 'bgm':
-			AudioManager.fadeFromToBgm(frames, current, target);
-			break;
-		case 'bgs':
-			AudioManager.fadeFromToBgm(frames, current, target);
-			break;
-		case 'me':
-			AudioManager.fadeFromToBgm(frames, current, target);
-			break;
-	}
-};
-
-//-----------------------------------------------------------------------------
-// WebAudio
-//-----------------------------------------------------------------------------
-
-WebAudio.prototype.fadeTo = function(duration, target) {
-	if(this.isReady()) {
-		if(this._gainNode) {
-			const gain = this._gainNode.gain;
-			const currentTime = WebAudio._context.currentTime;
-			gain.setValueAtTime(gain.value, currentTime);
-			gain.linearRampToValueAtTime(target, currentTime + duration);
+	$['fadein'] = function (args) {
+		const type = String(args[0]).toLowerCase();
+		const frames = parseInt(args[1]) / 60;
+		switch (type) {
+			case 'bgm':
+				AudioManager.fadeInBgm(frames);
+				break;
+			case 'bgs':
+				AudioManager.fadeInBgs(frames);
+				break;
+			case 'me':
+				AudioManager.fadeInMe(frames);
+				break;
 		}
-	} else if(this._autoPlay) {
-		this.addLoadListener(function() {
-			this.fadeTo(duration, target);
-		}.bind(this));
-	}
-};
+	};
 
-WebAudio.prototype.fadeFromTo = function(duration, current, target) {
-	if(this.isReady()) {
-		if(this._gainNode) {
-			const gain = this._gainNode.gain;
-			const currentTime = WebAudio._context.currentTime;
-			gain.setValueAtTime(current, currentTime);
-			gain.linearRampToValueAtTime(target, currentTime + duration);
+	$['fadeout'] = function (args) {
+		const type = String(args[0]).toLowerCase();
+		const frames = parseInt(args[1]) / 60;
+		switch (type) {
+			case 'bgm':
+				AudioManager.fadeOutBgm(frames);
+				break;
+			case 'bgs':
+				AudioManager.fadeOutBgs(frames);
+				break;
+			case 'me':
+				AudioManager.fadeOutMe(frames);
+				break;
 		}
-	} else if(this._autoPlay) {
-		this.addLoadListener(function() {
-			this.fadeTo(duration, current, target);
-		}.bind(this));
+	};
+
+	$['fadeto'] = function (args) {
+		const type = String(args[0]).toLowerCase();
+		const frames = parseInt(args[1]) / 60;
+		const target = parseFloat(args[2] / 100).clamp(0, 1);
+		switch (type) {
+			case 'bgm':
+				AudioManager.fadeToBgm(frames, target);
+				break;
+			case 'bgs':
+				AudioManager.fadeToBgs(frames, target);
+				break;
+			case 'me':
+				AudioManager.fadeToMe(frames, target);
+				break;
+		}
+	};
+
+	$['fadefromto'] = function (args) {
+		const type = String(args[0]).toLowerCase();
+		const frames = parseInt(args[1]) / 60;
+		const current = parseFloat(args[2] / 100).clamp(0, 1);
+		const target = parseFloat(args[3] / 100).clamp(0, 1);
+		switch (type) {
+			case 'bgm':
+				AudioManager.fadeFromToBgm(frames, current, target);
+				break;
+			case 'bgs':
+				AudioManager.fadeFromToBgm(frames, current, target);
+				break;
+			case 'me':
+				AudioManager.fadeFromToBgm(frames, current, target);
+				break;
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// WebAudio
+	//-----------------------------------------------------------------------------
+
+	WebAudio.prototype.fadeTo = function (duration, target) {
+		if (this.isReady()) {
+			if (this._gainNode) {
+				const gain = this._gainNode.gain;
+				const currentTime = WebAudio._context.currentTime;
+				gain.setValueAtTime(gain.value, currentTime);
+				gain.linearRampToValueAtTime(target, currentTime + duration);
+			}
+		} else if (this._autoPlay) {
+			this.addLoadListener(function () {
+				this.fadeTo(duration, target);
+			}.bind(this));
+		}
+	};
+
+	WebAudio.prototype.fadeFromTo = function (duration, current, target) {
+		if (this.isReady()) {
+			if (this._gainNode) {
+				const gain = this._gainNode.gain;
+				const currentTime = WebAudio._context.currentTime;
+				gain.setValueAtTime(current, currentTime);
+				gain.linearRampToValueAtTime(target, currentTime + duration);
+			}
+		} else if (this._autoPlay) {
+			this.addLoadListener(function () {
+				this.fadeTo(duration, current, target);
+			}.bind(this));
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// AudioManager
+	//-----------------------------------------------------------------------------
+
+	AudioManager._replayFadeTime = (_.replayFadeTime / 60);
+
+	if (_.autoFadeIn) {
+
+		_.AudioManager_playBgm = AudioManager.playBgm;
+		AudioManager.playBgm = function (bgm, pos) {
+			let fadeIn = false;
+			const bgmName = bgm.name;
+			if (!this.isCurrentBgm(bgm) && bgm.name && !this._meBuffer) {
+				fadeIn = true;
+			}
+			_.AudioManager_playBgm.apply(this, arguments);
+			if (fadeIn && bgmName !== bgm.name) {
+				AudioManager.fadeInBgm(_.autoFadeIn / 60);
+			}
+		};
+
 	}
-};
 
-//-----------------------------------------------------------------------------
-// AudioManager
-//-----------------------------------------------------------------------------
+	AudioManager.fadeInMe = function (duration) {
+		if (this._meBuffer) {
+			this._meBuffer.fadeIn(duration);
+		}
+	};
 
-AudioManager._replayFadeTime = (_.replayFadeTime / 60);
+	AudioManager.fadeToBgm = function (duration, target) {
+		if (this._bgmBuffer && this._currentBgm) {
+			this._bgmBuffer.fadeTo(duration, target);
+		}
+	};
 
-if(_.autoFadeIn) {
+	AudioManager.fadeToBgs = function (duration, target) {
+		if (this._bgsBuffer && this._currentBgs) {
+			this._bgsBuffer.fadeTo(duration, target);
+		}
+	};
 
-_.AudioManager_playBgm = AudioManager.playBgm;
-AudioManager.playBgm = function(bgm, pos) {
-	let fadeIn = false;
-	const bgmName = bgm.name;
-	if(!this.isCurrentBgm(bgm) && bgm.name && !this._meBuffer) {
-		fadeIn = true;
+	AudioManager.fadeToMe = function (duration, target) {
+		if (this._meBuffer) {
+			this._meBuffer.fadeTo(duration, target);
+		}
+	};
+
+	AudioManager.fadeFromToBgm = function (duration, current, target) {
+		if (this._bgmBuffer && this._currentBgm) {
+			this._bgmBuffer.fadeFromTo(duration, current, target);
+		}
+	};
+
+	AudioManager.fadeFromToBgs = function (duration, current, target) {
+		if (this._bgsBuffer && this._currentBgs) {
+			this._bgsBuffer.fadeFromTo(duration, current, target);
+		}
+	};
+
+	AudioManager.fadeFromToMe = function (duration, current, target) {
+		if (this._meBuffer) {
+			this._meBuffer.fadeFromTo(duration, current, target);
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// Game_Interpreter
+	//-----------------------------------------------------------------------------
+
+	if (!SRD.Game_Interpreter_pluginCommand) {
+
+		SRD.Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+		Game_Interpreter.prototype.pluginCommand = function (command, args) {
+			const com = command.trim().toLowerCase();
+			if ($[com]) {
+				$[com].call(this, args);
+				return;
+			}
+			SRD.Game_Interpreter_pluginCommand.apply(this, arguments);
+		};
+
 	}
-	_.AudioManager_playBgm.apply(this, arguments);
-	if(fadeIn && bgmName !== bgm.name) {
-		AudioManager.fadeInBgm(_.autoFadeIn / 60);
-	}
-};
-
-}
-
-AudioManager.fadeInMe = function(duration) {
-	if (this._meBuffer) {
-		this._meBuffer.fadeIn(duration);
-	}
-};
-
-AudioManager.fadeToBgm = function(duration, target) {
-	if (this._bgmBuffer && this._currentBgm) {
-		this._bgmBuffer.fadeTo(duration, target);
-	}
-};
-
-AudioManager.fadeToBgs = function(duration, target) {
-	if (this._bgsBuffer && this._currentBgs) {
-		this._bgsBuffer.fadeTo(duration, target);
-	}
-};
-
-AudioManager.fadeToMe = function(duration, target) {
-	if (this._meBuffer) {
-		this._meBuffer.fadeTo(duration, target);
-	}
-};
-
-AudioManager.fadeFromToBgm = function(duration, current, target) {
-	if (this._bgmBuffer && this._currentBgm) {
-		this._bgmBuffer.fadeFromTo(duration, current, target);
-	}
-};
-
-AudioManager.fadeFromToBgs = function(duration, current, target) {
-	if (this._bgsBuffer && this._currentBgs) {
-		this._bgsBuffer.fadeFromTo(duration, current, target);
-	}
-};
-
-AudioManager.fadeFromToMe = function(duration, current, target) {
-	if (this._meBuffer) {
-		this._meBuffer.fadeFromTo(duration, current, target);
-	}
-};
-
-//-----------------------------------------------------------------------------
-// Game_Interpreter
-//-----------------------------------------------------------------------------
-
-if(!SRD.Game_Interpreter_pluginCommand) {
-
-SRD.Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-Game_Interpreter.prototype.pluginCommand = function(command, args) {
-	const com = command.trim().toLowerCase();
-	if($[com]) {
-		$[com].call(this, args);
-		return;
-	}
-	SRD.Game_Interpreter_pluginCommand.apply(this, arguments);
-};
-
-}
 
 })(SRD.AudioFader, SRD.PluginCommands);

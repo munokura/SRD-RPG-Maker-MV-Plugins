@@ -101,6 +101,136 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc '選択肢の表示'イベントで、選択肢に歩行キャラ画像を表示できます。
+ * @author SumRndmDde
+ *
+ * @param Walking Speed
+ * @text 歩行速度
+ * @type number
+ * @desc 表示歩行キャラ画像のアニメーション間隔
+ * 0:停止 / 値が小さい:速い / 大きい:遅い
+ * @default 16
+ *
+ * @param Character Padding
+ * @text 歩行キャラ余白
+ * @type number
+ * @desc 歩行キャラ画像の周りの余白
+ * デフォルト:18
+ * @default 18
+ *
+ * @param Sprite Width
+ * @text 画像の幅
+ * @type number
+ * @desc 通常のサイズと異なる歩行キャラ画像を使用している場合、幅を入力
+ * @default 48
+ *
+ * @param Sprite Height
+ * @text 画像の高さ
+ * @type number
+ * @desc 通常サイズと異なる歩行キャラ画像を使用している場合、高さを入力
+ * @default 48
+ *
+ * @param X Offset
+ * @text Xオフセット
+ * @type number
+ * @min -9007
+ * @max 9007
+ * @desc 歩行キャラ画像のX位置オフセット
+ * @default 12
+ *
+ * @param Y Offset
+ * @text Yオフセット
+ * @type number
+ * @min -9007
+ * @max 9007
+ * @desc 歩行キャラ画像のY位置オフセット
+ * @default 14
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/character-choices/
+ *
+ *
+ * Character Choices
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * 選択肢に歩行キャラ画像を表示できます。
+ *
+ * 例えば、選択肢を'Actor1'、インデックスを'0'に設定すると、
+ * 選択肢にハロルドの歩行キャラ画像が表示されます。
+ *
+ *
+ * ==========================================================================
+ *  プラグインの使い方
+ * ==========================================================================
+ *
+ * 始めに、プラグインコマンドを使用します。
+ *  StartCharacterChoices
+ *
+ *
+ * 次に、'選択肢の表示'イベントを作成します。
+ * キャラクターを表示する'選択肢'の中を、以下のように入力します。
+ *
+ *  filename index
+ *
+ * 選択肢に歩行キャラ画像が表示されます。
+ *
+ * filename = 使用するファイル名
+ * index = ファイル内の文字のインデックス(0から7の番号)
+ *
+ * このファイルは、下記にある必要があります。
+ * /img/characters/
+ *
+ * 例:
+ *
+ *  Actor1 0
+ *  Actor3 2
+ *  People1 4
+ *  Monster 7
+ *
+ *
+ * ==========================================================================
+ *  注意点
+ * ==========================================================================
+ *
+ * プラグインコマンドはイベントの一連の最初に入れておくことをお勧めします。
+ * 文章の表示、プラグインコマンド、選択肢の表示の順で実行すると、
+ * 文章ウィンドウが閉じて、選択肢のみが表示されます。
+ *
+ * プラグインコマンド後の選択肢で、通常のテキストを入れても表示されません。
+ * 歩行キャラ画像の指定に当たらない選択肢は空白の選択肢になります。
+ *
+ *
+ * ==========================================================================
+ *  パラメータ
+ * ==========================================================================
+ *
+ * パラメータを使用して、
+ * 選択肢に表示する歩行キャラ画像の歩行速度を設定できます。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.CharacterChoices = SRD.CharacterChoices || {};
@@ -108,31 +238,31 @@ SRD.CharacterChoices = SRD.CharacterChoices || {};
 var Imported = Imported || {};
 Imported["SumRndmDde Character Choices"] = true;
 
-(function(_) {
+(function (_) {
 
- 	_.speed = Number(PluginManager.parameters('SRD_CharacterChoices')['Walking Speed']);
- 	_.pad = Number(PluginManager.parameters('SRD_CharacterChoices')['Character Padding']);
- 	_.width = Number(PluginManager.parameters('SRD_CharacterChoices')['Sprite Width']);
- 	_.height = Number(PluginManager.parameters('SRD_CharacterChoices')['Sprite Height']);
- 	_.x = Number(PluginManager.parameters('SRD_CharacterChoices')['X Offset']);
- 	_.y = Number(PluginManager.parameters('SRD_CharacterChoices')['Y Offset']);
+	_.speed = Number(PluginManager.parameters('SRD_CharacterChoices')['Walking Speed']);
+	_.pad = Number(PluginManager.parameters('SRD_CharacterChoices')['Character Padding']);
+	_.width = Number(PluginManager.parameters('SRD_CharacterChoices')['Sprite Width']);
+	_.height = Number(PluginManager.parameters('SRD_CharacterChoices')['Sprite Height']);
+	_.x = Number(PluginManager.parameters('SRD_CharacterChoices')['X Offset']);
+	_.y = Number(PluginManager.parameters('SRD_CharacterChoices')['Y Offset']);
 
 	//-----------------------------------------------------------------------------
 	// Game_Message
 	//-----------------------------------------------------------------------------
 
 	var _Game_Message_clear = Game_Message.prototype.clear;
-	Game_Message.prototype.clear = function() {
-	    _Game_Message_clear.call(this);
-	    this._isCharacterChoices = false;
+	Game_Message.prototype.clear = function () {
+		_Game_Message_clear.call(this);
+		this._isCharacterChoices = false;
 	};
 
-	Game_Message.prototype.setCharacterChoices = function(boolean) {
-	    this._isCharacterChoices = boolean;
+	Game_Message.prototype.setCharacterChoices = function (boolean) {
+		this._isCharacterChoices = boolean;
 	};
 
-	Game_Message.prototype.getCharacterChoices = function() {
-	    return this._isCharacterChoices;
+	Game_Message.prototype.getCharacterChoices = function () {
+		return this._isCharacterChoices;
 	};
 
 	//-----------------------------------------------------------------------------
@@ -140,13 +270,13 @@ Imported["SumRndmDde Character Choices"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-	    _Game_Interpreter_pluginCommand.call(this, command, args);
-	    if(command.trim().toLowerCase() === 'startcharacterchoices') {
-	    	$gameMessage.setCharacterChoices(true);
-	    } else if(command.trim().toLowerCase() === 'cancelcharacterchoices') {
-	    	$gameMessage.setCharacterChoices(false);
-	    }
+	Game_Interpreter.prototype.pluginCommand = function (command, args) {
+		_Game_Interpreter_pluginCommand.call(this, command, args);
+		if (command.trim().toLowerCase() === 'startcharacterchoices') {
+			$gameMessage.setCharacterChoices(true);
+		} else if (command.trim().toLowerCase() === 'cancelcharacterchoices') {
+			$gameMessage.setCharacterChoices(false);
+		}
 	};
 
 	//-----------------------------------------------------------------------------
@@ -154,26 +284,26 @@ Imported["SumRndmDde Character Choices"] = true;
 	//-----------------------------------------------------------------------------
 
 	var _Window_Message_subWindows = Window_Message.prototype.subWindows;
-	Window_Message.prototype.subWindows = function() {
+	Window_Message.prototype.subWindows = function () {
 		var temp = _Window_Message_subWindows.call(this);
-	    temp.push(this._characterChoiceWindow);
-	    return temp;
+		temp.push(this._characterChoiceWindow);
+		return temp;
 	};
 
 	var _Window_Message_createSubWindows = Window_Message.prototype.createSubWindows;
-	Window_Message.prototype.createSubWindows = function() {
-	    _Window_Message_createSubWindows.call(this);
-	    this._characterChoiceWindow = new Window_CharacterChoiceList(this);
+	Window_Message.prototype.createSubWindows = function () {
+		_Window_Message_createSubWindows.call(this);
+		this._characterChoiceWindow = new Window_CharacterChoiceList(this);
 	};
 
 	var _Window_Message_isAnySubWindowActive = Window_Message.prototype.isAnySubWindowActive;
-	Window_Message.prototype.isAnySubWindowActive = function() {
-	    return (_Window_Message_isAnySubWindowActive.call(this) || this._characterChoiceWindow.active);
+	Window_Message.prototype.isAnySubWindowActive = function () {
+		return (_Window_Message_isAnySubWindowActive.call(this) || this._characterChoiceWindow.active);
 	};
 
 	var _Window_Message_startInput = Window_Message.prototype.startInput;
-	Window_Message.prototype.startInput = function() {
-		if($gameMessage.isChoice() && $gameMessage.getCharacterChoices()) {
+	Window_Message.prototype.startInput = function () {
+		if ($gameMessage.isChoice() && $gameMessage.getCharacterChoices()) {
 			this._characterChoiceWindow.start();
 			return true;
 		} else {
@@ -186,161 +316,161 @@ Imported["SumRndmDde Character Choices"] = true;
 	//-----------------------------------------------------------------------------
 
 	function Window_CharacterChoiceList() {
-	    this.initialize.apply(this, arguments);
+		this.initialize.apply(this, arguments);
 	}
 
 	Window_CharacterChoiceList.prototype = Object.create(Window_HorzCommand.prototype);
 	Window_CharacterChoiceList.prototype.constructor = Window_CharacterChoiceList;
 
-	Window_CharacterChoiceList.prototype.initialize = function(messageWindow) {
-	    this._messageWindow = messageWindow;
-	    Window_HorzCommand.prototype.initialize.call(this, 0, 0);
-	    this.openness = 0;
-	    this.deactivate();
-	    this._background = 0;
-	    this._animationIndex = 1;
-	    this._frameIndex = 0;
+	Window_CharacterChoiceList.prototype.initialize = function (messageWindow) {
+		this._messageWindow = messageWindow;
+		Window_HorzCommand.prototype.initialize.call(this, 0, 0);
+		this.openness = 0;
+		this.deactivate();
+		this._background = 0;
+		this._animationIndex = 1;
+		this._frameIndex = 0;
 	};
 
-	Window_CharacterChoiceList.prototype.start = function() {
+	Window_CharacterChoiceList.prototype.start = function () {
 		this.updatePlacement();
-	    this.updateBackground();
-	    this.refresh();
-	    this.selectDefault();
-	    this.open();
-	    this.activate();
+		this.updateBackground();
+		this.refresh();
+		this.selectDefault();
+		this.open();
+		this.activate();
 	};
 
 	var _Window_CharacterChoiceList_update = Window_CharacterChoiceList.prototype.update;
-	Window_CharacterChoiceList.prototype.update = function() {
-	    _Window_CharacterChoiceList_update.call(this);
-	    if(this._frameIndex === _.speed) {
-	    	this._animationIndex++;
-	    	if(this._animationIndex > 2) this._animationIndex = -1;
-	    	this._frameIndex = 0;
-	    }
-	    this._frameIndex++;
-	    this.drawAllItems();
+	Window_CharacterChoiceList.prototype.update = function () {
+		_Window_CharacterChoiceList_update.call(this);
+		if (this._frameIndex === _.speed) {
+			this._animationIndex++;
+			if (this._animationIndex > 2) this._animationIndex = -1;
+			this._frameIndex = 0;
+		}
+		this._frameIndex++;
+		this.drawAllItems();
 	};
 
-	Window_CharacterChoiceList.prototype.updatePlacement = function() {
-	    var positionType = $gameMessage.choicePositionType();
-	    var messageY = this._messageWindow.y;
-	    this.width = this.windowWidth();
-	    this.height = this.windowHeight();
-	    switch (positionType) {
-	    case 0:
-	        this.x = 0;
-	        break;
-	    case 1:
-	        this.x = (Graphics.boxWidth - this.width) / 2;
-	        break;
-	    case 2:
-	        this.x = Graphics.boxWidth - this.width;
-	        break;
-	    }
-	    if (messageY >= Graphics.boxHeight / 2) {
-	        this.y = messageY - this.height;
-	    } else {
-	        this.y = messageY + this._messageWindow.height;
-	    }
+	Window_CharacterChoiceList.prototype.updatePlacement = function () {
+		var positionType = $gameMessage.choicePositionType();
+		var messageY = this._messageWindow.y;
+		this.width = this.windowWidth();
+		this.height = this.windowHeight();
+		switch (positionType) {
+			case 0:
+				this.x = 0;
+				break;
+			case 1:
+				this.x = (Graphics.boxWidth - this.width) / 2;
+				break;
+			case 2:
+				this.x = Graphics.boxWidth - this.width;
+				break;
+		}
+		if (messageY >= Graphics.boxHeight / 2) {
+			this.y = messageY - this.height;
+		} else {
+			this.y = messageY + this._messageWindow.height;
+		}
 	};
 
-	Window_HorzCommand.prototype.maxCols = function() {
-	    return 6;
+	Window_HorzCommand.prototype.maxCols = function () {
+		return 6;
 	};
 
-	Window_CharacterChoiceList.prototype.windowWidth = function() {
-	    return (this.itemWidth() * $gameMessage.choices().length) + (this.standardPadding() * 2) + 
-	    	(this.spacing() * ($gameMessage.choices().length - 1));
+	Window_CharacterChoiceList.prototype.windowWidth = function () {
+		return (this.itemWidth() * $gameMessage.choices().length) + (this.standardPadding() * 2) +
+			(this.spacing() * ($gameMessage.choices().length - 1));
 	};
 
-	Window_CharacterChoiceList.prototype.windowHeight = function() {
-	    return this.itemHeight() + (this.standardPadding() * 2);
+	Window_CharacterChoiceList.prototype.windowHeight = function () {
+		return this.itemHeight() + (this.standardPadding() * 2);
 	};
 
-	Window_CharacterChoiceList.prototype.itemHeight = function() {
+	Window_CharacterChoiceList.prototype.itemHeight = function () {
 		return _.height + (this.characterPadding() * 2);
 	};
 
-	Window_CharacterChoiceList.prototype.itemWidth = function() {
+	Window_CharacterChoiceList.prototype.itemWidth = function () {
 		return _.width + (this.characterPadding() * 2);
 	};
 
-	Window_CharacterChoiceList.prototype.characterPadding = function() {
+	Window_CharacterChoiceList.prototype.characterPadding = function () {
 		return _.pad;
 	};
 
-	Window_CharacterChoiceList.prototype.selectDefault = function() {
-	    this.select($gameMessage.choiceDefaultType());
+	Window_CharacterChoiceList.prototype.selectDefault = function () {
+		this.select($gameMessage.choiceDefaultType());
 	};
 
-	Window_CharacterChoiceList.prototype.updateBackground = function() {
-	    this._background = $gameMessage.choiceBackground();
-	    this.setBackgroundType(this._background);
+	Window_CharacterChoiceList.prototype.updateBackground = function () {
+		this._background = $gameMessage.choiceBackground();
+		this.setBackgroundType(this._background);
 	};
 
-	Window_CharacterChoiceList.prototype.textWidthEx = function(text) {
-	    return this.drawTextEx(text, 0, this.contents.height);
+	Window_CharacterChoiceList.prototype.textWidthEx = function (text) {
+		return this.drawTextEx(text, 0, this.contents.height);
 	};
 
-	Window_CharacterChoiceList.prototype.makeCommandList = function() {
-	    var choices = $gameMessage.choices();
-	    for (var i = 0; i < choices.length; i++) {
-	        this.addCommand(choices[i], 'choice');
-	    }
-	    //this.width = this.windowWidth;
+	Window_CharacterChoiceList.prototype.makeCommandList = function () {
+		var choices = $gameMessage.choices();
+		for (var i = 0; i < choices.length; i++) {
+			this.addCommand(choices[i], 'choice');
+		}
+		//this.width = this.windowWidth;
 	};
 
 	var _Window_CharacterChoiceList_drawAllItems = Window_CharacterChoiceList.prototype.drawAllItems;
-	Window_CharacterChoiceList.prototype.drawAllItems = function() {
+	Window_CharacterChoiceList.prototype.drawAllItems = function () {
 		this.contents.clear();
-	    _Window_CharacterChoiceList_drawAllItems.call(this);
+		_Window_CharacterChoiceList_drawAllItems.call(this);
 	};
 
-	Window_CharacterChoiceList.prototype.drawItem = function(index) {
-	    var rect = this.itemRectForText(index);
-	    var name = this.commandName(index);
-	    var data = name.match(/(.*)[ ](\d+)/im);
-	    if(data) this.drawCharacter(data[1], data[2], rect.x + _.x, rect.y + _.y);
+	Window_CharacterChoiceList.prototype.drawItem = function (index) {
+		var rect = this.itemRectForText(index);
+		var name = this.commandName(index);
+		var data = name.match(/(.*)[ ](\d+)/im);
+		if (data) this.drawCharacter(data[1], data[2], rect.x + _.x, rect.y + _.y);
 	};
 
-	Window_CharacterChoiceList.prototype.drawCharacter = function(characterName, characterIndex, x, y) {
-	    var bitmap = ImageManager.loadCharacter(characterName);
-	    var big = ImageManager.isBigCharacter(characterName);
-	    var pw = bitmap.width / (big ? 3 : 12);
-	    var ph = bitmap.height / (big ? 4 : 8);
-	    var n = characterIndex;
-	    var index = (this._animationIndex === 2) ? 0 : this._animationIndex;
-	    var sx = (n % 4 * 3 + 1) * pw + (index * _.width);
-	    var sy = (Math.floor(n / 4) * 4) * ph;
-	    this.contents.blt(bitmap, sx, sy, pw, ph, x, y);
+	Window_CharacterChoiceList.prototype.drawCharacter = function (characterName, characterIndex, x, y) {
+		var bitmap = ImageManager.loadCharacter(characterName);
+		var big = ImageManager.isBigCharacter(characterName);
+		var pw = bitmap.width / (big ? 3 : 12);
+		var ph = bitmap.height / (big ? 4 : 8);
+		var n = characterIndex;
+		var index = (this._animationIndex === 2) ? 0 : this._animationIndex;
+		var sx = (n % 4 * 3 + 1) * pw + (index * _.width);
+		var sy = (Math.floor(n / 4) * 4) * ph;
+		this.contents.blt(bitmap, sx, sy, pw, ph, x, y);
 	};
 
-	Window_CharacterChoiceList.prototype.isCancelEnabled = function() {
-	    return $gameMessage.choiceCancelType() !== -1;
+	Window_CharacterChoiceList.prototype.isCancelEnabled = function () {
+		return $gameMessage.choiceCancelType() !== -1;
 	};
 
-	Window_CharacterChoiceList.prototype.isOkTriggered = function() {
-	    return Input.isTriggered('ok');
+	Window_CharacterChoiceList.prototype.isOkTriggered = function () {
+		return Input.isTriggered('ok');
 	};
 
-	Window_CharacterChoiceList.prototype.callOkHandler = function() {
-	    $gameMessage.onChoice(this.index());
-	    this._messageWindow.terminateMessage();
-	    this.close();
+	Window_CharacterChoiceList.prototype.callOkHandler = function () {
+		$gameMessage.onChoice(this.index());
+		this._messageWindow.terminateMessage();
+		this.close();
 	};
 
-	Window_CharacterChoiceList.prototype.callCancelHandler = function() {
-	    $gameMessage.onChoice($gameMessage.choiceCancelType());
-	    this._messageWindow.terminateMessage();
-	    this.close();
+	Window_CharacterChoiceList.prototype.callCancelHandler = function () {
+		$gameMessage.onChoice($gameMessage.choiceCancelType());
+		this._messageWindow.terminateMessage();
+		this.close();
 	};
 
 	var _Window_CharacterChoiceList_close = Window_CharacterChoiceList.prototype.close;
-	Window_CharacterChoiceList.prototype.close = function() {
-	    _Window_CharacterChoiceList_close.call(this);
-	    $gameMessage.setCharacterChoices(false);
+	Window_CharacterChoiceList.prototype.close = function () {
+		_Window_CharacterChoiceList_close.call(this);
+		$gameMessage.setCharacterChoices(false);
 	};
 
 })(SRD.CharacterChoices);

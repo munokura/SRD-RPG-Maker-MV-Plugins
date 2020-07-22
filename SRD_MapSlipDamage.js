@@ -34,7 +34,7 @@
  * @help
  *
  * Map Slip Damage
- * Version 1.01
+ * Version 1.00
  * SumRndmDde
  *
  *
@@ -134,182 +134,347 @@
  *   ~ SumRndmDde
  *
  */
+/*:ja
+ * @plugindesc ステートによるマップ上で発生するダメージをよりコントロールできるようにします。
+ * @author SumRndmDde
+ *
+ * @param Default Slip Damage
+ * @text スリップダメージ
+ * @type boolean
+ * @on 有効
+ * @off 無効
+ * @desc ステートはスリップダメージがデフォルトで有効
+ * 有効:true / 無効:false
+ * @default false
+ *
+ * @param Default Slip Steps
+ * @text スリップ歩数
+ * @type number
+ * @desc スリップダメージの頻度を決定するデフォルト歩数
+ * @default 20
+ *
+ * @param Default Use Flash
+ * @text フラッシュ使用
+ * @type boolean
+ * @on 表示
+ * @off 非表示
+ * @desc スリップダメージ時に画面フラッシュを表示
+ * 表示:true / 非表示:false
+ * @default true
+ *
+ * @param Default Flash Color
+ * @text フラッシュ色
+ * @desc スリップダメージ時のフラッシュのデフォルト色
+ * 書式: R, G, B, A
+ * @default 255, 0, 0, 125
+ *
+ * @param Default Flash Duration
+ * @text フラッシュ時間
+ * @type number
+ * @desc スリップダメージ時のフラッシュのデフォルト表示時間
+ * @default 8
+ *
+ * @param Default Sound Effect
+ * @text サウンドエフェクト
+ * @type file
+ * @require 1
+ * @dir audio/se
+ * @desc スリップダメージ時のデフォルトSE
+ * 無効にするには無入力
+ * @default Slash5
+ *
+ * @param Default Common Event
+ * @text コモンイベント
+ * @type common_event
+ * @desc スリップダメージ時のデフォルトコモンイベント
+ * 無効にするには0
+ * @default 0
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/map-slip-damage/
+ *
+ *
+ * Map Slip Damage
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * デフォルトのスリップダメージシステムを新しいシステムに置き換え、
+ * マップ上で発生するステートダメージをよりコントロールできるようにします。
+ *
+ *
+ * ==========================================================================
+ *  ステートのメモタグ
+ * ==========================================================================
+ *
+ * ステートにスリップダメージを望む場合、以下のメモタグを使用してください。
+ *
+ *   <Allow Slip Damage>
+ *
+ * ==========================================================================
+ *
+ * 以下のメモタグで、歩数でスリップダメージが発生する頻度を設定できます。
+ *
+ *   <Slip Steps: [steps]>
+ *
+ * 例:
+ *   <Slip Steps: 20>
+ *
+ * ==========================================================================
+ *
+ * スリップダメージをカスタマイズするには、以下のメモタグを使用します。
+ *
+ *   <Slip HP Damage: [damage]>
+ *   <Slip HP Damage: [damage]%>
+ *   <Slip MP Damage: [damage]>
+ *   <Slip MP Damage: [damage]%>
+ *   <Slip TP Damage: [damage]>
+ *   <Slip TP Damage: [damage]%>
+ *
+ * 例:
+ *   <Slip HP Damage: 5>
+ *   <Slip MP Damage 20%>
+ *   <Slip TP Damage: -50>
+ *
+ * ==========================================================================
+ *
+ * スリップダメージを示すスクリーンフラッシュを使用する場合、
+ * 以下のメモタグを使用してください。
+ *
+ *   <Use Screen Flash for Slip Damage>
+ *
+ * ==========================================================================
+ *
+ * 画面のフラッシュの色をカスタマイズするには、以下のメモタグを使用します。
+ *
+ *   <Slip Damage Flash Color: [red], [green], [blue], [intensity]>
+ *
+ * 例:
+ *   <Slip Damage Flash Color: 255, 0, 0, 125>
+ *
+ * ==========================================================================
+ *
+ * 画面の点滅時間をカスタマイズするには、以下のメモタグを使用します。
+ *
+ *   <Slip Damage Flash Duration: [duration]>
+ *
+ * 例:
+ *   <Slip Damage Flash Duration: 8>
+ *
+ * ==========================================================================
+ *
+ * 以下のメモタグで、スリップダメージを示すSEを設定してください。
+ *
+ *   <Slip Damage Sound Effect: [sound-effect]>
+ *
+ * 例:
+ *   <Slip Damage Sound Effect: Damage1>
+ *
+ * ==========================================================================
+ *
+ * スリップダメージを示すために実行するコモンイベントを指定するには、
+ * 以下のメモタグを使用します。
+ *
+ *   <Slip Damage Common Event: [common-event-id]>
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ *
+ */
 
 var SRD = SRD || {};
 SRD.MapSlipDamage = SRD.MapSlipDamage || {};
 SRD.HelpfulFunctions = SRD.HelpfulFunctions || {};
 
-if(SRD.HelpfulFunctions.AllArrayToInt === undefined) {
-	SRD.HelpfulFunctions.AllArrayToInt = function(array) {
+if (SRD.HelpfulFunctions.AllArrayToInt === undefined) {
+	SRD.HelpfulFunctions.AllArrayToInt = function (array) {
 		"use strict";
-		for(let i = 0; i < array.length; i++) {
-			if(array[i]) array[i] = parseInt(array[i]);
+		for (let i = 0; i < array.length; i++) {
+			if (array[i]) array[i] = parseInt(array[i]);
 		}
 	};
 }
 
 var Imported = Imported || {};
-Imported["SumRndmDde Map Slip Damage"] = 1.01;
+Imported["SumRndmDde Map Slip Damage"] = 1.00;
 
-(function(_, help) {
+(function (_, help) {
 
-"use strict";
+	"use strict";
 
-//-----------------------------------------------------------------------------
-// SRD.MapSlipDamage
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// SRD.MapSlipDamage
+	//-----------------------------------------------------------------------------
 
-const params = PluginManager.parameters('SRD_MapSlipDamage');
+	const params = PluginManager.parameters('SRD_MapSlipDamage');
 
-_.defaultSlipDamage = String(params['Default Slip Damage']).trim().toLowerCase() === 'true';
-_.defaultSlipSteps = parseInt(params['Default Slip Steps']);
-_.defaultUseFlash = String(params['Default Use Flash']).trim().toLowerCase() === 'true';
-_.defaultFlashColor = String(params['Default Flash Color']).split(/\s*,\s*/);
-_.defaultFlashDuration = parseInt(params['Default Flash Duration']);
-_.defaultSoundEffect = String(params['Default Sound Effect']);
-_.defaultCommonEvent = parseInt(params['Default Common Event']);
+	_.defaultSlipDamage = String(params['Default Slip Damage']).trim().toLowerCase() === 'true';
+	_.defaultSlipSteps = parseInt(params['Default Slip Steps']);
+	_.defaultUseFlash = String(params['Default Use Flash']).trim().toLowerCase() === 'true';
+	_.defaultFlashColor = String(params['Default Flash Color']).split(/\s*,\s*/);
+	_.defaultFlashDuration = parseInt(params['Default Flash Duration']);
+	_.defaultSoundEffect = String(params['Default Sound Effect']);
+	_.defaultCommonEvent = parseInt(params['Default Common Event']);
 
-help.AllArrayToInt(_.defaultFlashColor);
+	help.AllArrayToInt(_.defaultFlashColor);
 
-_.loadNotetags = function() {
-	const tagBool = /<Allow\s*Slip\s*Damage>/im;
-	const tagSteps = /<Slip\s*Steps\s*:\s*(\d+)\s*>/im;
-	const tagHp = /<Slip\s*HP\s*Damage\s*:\s*(-?\d+)\s*>/im;
-	const tagHpP = /<Slip\s*HP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
-	const tagMp = /<Slip\s*MP\s*Damage\s*:\s*(-?\d+)\s*>/im;
-	const tagMpP = /<Slip\s*MP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
-	const tagTp = /<Slip\s*TP\s*Damage\s*:\s*(-?\d+)\s*>/im;
-	const tagTpP = /<Slip\s*TP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
-	const tagFlash = /<Use\s*Screen\s*Flash\s*for\s*Slip\s*Damage>/im;
-	const tagColor = /<Slip\s*Damage\s*Flash\s*Color\s*:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*>/im;
-	const tagDur = /<Slip\s*Damage\s*Flash\s*Duration\s*:\s*(\d+)\s*>/im;
-	const tagSe = /<Slip\s*Damage\s*Sound\s*Effect\s*:\s*(.+)\s*>/im;
-	const tagCe = /<Slip\s*Damage\s*Common\s*Event\s*:\s*(\d+)\s*>/im;
-	for(let i = 1; i < $dataStates.length; i++) {
-		const state = $dataStates[i];
-		if(state) {
-			const note = state.note;
-			if(note.match(tagBool)) {
-				state._sdu_active = true;
-			} else {
-				state._sdu_active = _.defaultSlipDamage;
-			}
-			if(note.match(tagSteps)) {
-				state._sdu_slipSteps = parseInt(RegExp.$1);
-			} else {
-				state._sdu_slipSteps = _.defaultSlipSteps;
-			}
-			if(note.match(tagHp)) {
-				state._sdu_hpDam = parseInt(RegExp.$1);
-			}
-			if(note.match(tagHpP)) {
-				state._sdu_hpDamPer = parseFloat(RegExp.$1) / 100;
-			}
-			if(note.match(tagMp)) {
-				state._sdu_mpDam = parseInt(RegExp.$1);
-			}
-			if(note.match(tagMpP)) {
-				state._sdu_mpDamPer = parseFloat(RegExp.$1) / 100;
-			}
-			if(note.match(tagTp)) {
-				state._sdu_tpDam = parseInt(RegExp.$1);
-			}
-			if(note.match(tagTpP)) {
-				state._sdu_tpDamPer = parseFloat(RegExp.$1) / 100;
-			}
-			if(note.match(tagFlash)) {
-				state._sdu_isFlash = true;
-			} else {
-				state._sdu_isFlash = _.defaultUseFlash;
-			}
-			if(note.match(tagColor)) {
-				const red = parseInt(RegExp.$1);
-				const green = parseInt(RegExp.$2);
-				const blue = parseInt(RegExp.$3);
-				const intensity = parseInt(RegExp.$4);
-				state._sdu_flashColor = [red, green, blue, intensity];
-			} else {
-				state._sdu_flashColor = _.defaultFlashColor;
-			}
-			if(note.match(tagDur)) {
-				state._sdu_Dur = parseInt(RegExp.$1);
-			} else {
-				state._sdu_Dur = _.defaultFlashDuration;
-			}
-			if(note.match(tagSe)) {
-				state._sdu_Se = String(RegExp.$1);
-			} else {
-				state._sdu_Se = _.defaultSoundEffect;
-			}
-			if(note.match(tagCe)) {
-				state._sdu_commonEvent = parseInt(RegExp.$1);
-			} else {
-				state._sdu_commonEvent = _.defaultCommonEvent;
-			}
-		}
-	}
-};
-
-//-----------------------------------------------------------------------------
-// DataManager
-//-----------------------------------------------------------------------------
-
-let notetagsLoaded = false;
-const _DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-DataManager.isDatabaseLoaded = function() {
-	if(!_DataManager_isDatabaseLoaded.apply(this, arguments)) return false;
-	if(!notetagsLoaded) {
-		_.loadNotetags();
-		notetagsLoaded = true;
-	}
-	return true;
-};
-
-//-----------------------------------------------------------------------------
-// Game_Actor
-//-----------------------------------------------------------------------------
-
-Game_Actor.prototype.turnEndOnMap = function() {};
-Game_Actor.prototype.performMapDamage = function() {};
-
-const _Game_Actor_updateStateSteps = Game_Actor.prototype.updateStateSteps;
-Game_Actor.prototype.updateStateSteps = function(state) {
-	if(state._sdu_active) {
-		const steps = state._sdu_slipSteps;
-		if($gameParty.steps() % steps === 0) {
-			this.updateSlipDamage(state);
-		}
-	}
-	_Game_Actor_updateStateSteps.apply(this, arguments);
-};
-
-Game_Actor.prototype.updateSlipDamage = function(state) {
-	this.clearResult();
-	if(state._sdu_hpDam) this.gainHp(-state._sdu_hpDam);
-	if(state._sdu_mpDam) this.gainMp(-state._sdu_mpDam);
-	if(state._sdu_tpDam) this.gainTp(-state._sdu_tpDam);
-	if(state._sdu_hpDamPer) this.gainHp(state._sdu_hpDamPer * -this.mhp);
-	if(state._sdu_mpDamPer) this.gainMp(state._sdu_mpDamPer * -this.mmp);
-	if(state._sdu_tpDamPer) this.gainTp(state._sdu_tpDamPer * -this.maxTp());
-
-	this._hp = Math.round(this._hp);
-	this._mp = Math.round(this._mp);
-	this._tp = Math.round(this._tp);
-	this.refresh();
-
-	if(state._sdu_isFlash) {
-		if (this.result().hpDamage !== 0 || 
-			this.result().mpDamage !== 0 || 
-			this.result().tpDamage !== 0) {
-			if(!$gameParty.inBattle()) {
-				$gameScreen.startFlash(state._sdu_flashColor, state._sdu_Dur);
-				AudioManager.playSe({name: state._sdu_Se, volume: 90, pitch: 100, pan: 0});
+	_.loadNotetags = function () {
+		const tagBool = /<Allow\s*Slip\s*Damage>/im;
+		const tagSteps = /<Slip\s*Steps\s*:\s*(\d+)\s*>/im;
+		const tagHp = /<Slip\s*HP\s*Damage\s*:\s*(-?\d+)\s*>/im;
+		const tagHpP = /<Slip\s*HP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
+		const tagMp = /<Slip\s*MP\s*Damage\s*:\s*(-?\d+)\s*>/im;
+		const tagMpP = /<Slip\s*MP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
+		const tagTp = /<Slip\s*TP\s*Damage\s*:\s*(-?\d+)\s*>/im;
+		const tagTpP = /<Slip\s*TP\s*Damage\s*:\s*(-?\d+)%\s*>/im;
+		const tagFlash = /<Use\s*Screen\s*Flash\s*for\s*Slip\s*Damage>/im;
+		const tagColor = /<Slip\s*Damage's*Flash\s*Color\s*:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*>/im;
+		const tagDur = /<Slip\s*Damage\s*Flash\s*Duration\s*:\s*(\d+)\s*>/im;
+		const tagSe = /<Slip\s*Damage\s*Sound\s*Effect\s*:\s*(.+)\s*>/im;
+		const tagCe = /<Slip\s*Damage\s*Common\s*Event\s*:\s*(\d+)\s*>/im;
+		for (let i = 1; i < $dataStates.length; i++) {
+			const state = $dataStates[i];
+			if (state) {
+				const note = state.note;
+				if (note.match(tagBool)) {
+					state._sdu_active = true;
+				} else {
+					state._sdu_active = _.defaultSlipDamage;
+				}
+				if (note.match(tagSteps)) {
+					state._sdu_slipSteps = parseInt(RegExp.$1);
+				} else {
+					state._sdu_slipSteps = _.defaultSlipSteps;
+				}
+				if (note.match(tagHp)) {
+					state._sdu_hpDam = parseInt(RegExp.$1);
+				}
+				if (note.match(tagHpP)) {
+					state._sdu_hpDamPer = parseFloat(RegExp.$1) / 100;
+				}
+				if (note.match(tagMp)) {
+					state._sdu_mpDam = parseInt(RegExp.$1);
+				}
+				if (note.match(tagMpP)) {
+					state._sdu_mpDamPer = parseFloat(RegExp.$1) / 100;
+				}
+				if (note.match(tagTp)) {
+					state._sdu_tpDam = parseInt(RegExp.$1);
+				}
+				if (note.match(tagTpP)) {
+					state._sdu_tpDamPer = parseFloat(RegExp.$1) / 100;
+				}
+				if (note.match(tagFlash)) {
+					state._sdu_isFlash = true;
+				} else {
+					state._sdu_isFlash = _.defaultUseFlash;
+				}
+				if (note.match(tagColor)) {
+					const red = parseInt(RegExp.$1);
+					const green = parseInt(RegExp.$2);
+					const blue = parseInt(RegExp.$3);
+					const intensity = parseInt(RegExp.$4);
+					state._sdu_flashColor = [red, green, blue, intensity];
+				} else {
+					state._sdu_flashColor = _.defaultFlashColor;
+				}
+				if (note.match(tagDur)) {
+					state._sdu_Dur = parseInt(RegExp.$1);
+				} else {
+					state._sdu_Dur = _.defaultFlashDuration;
+				}
+				if (note.match(tagSe)) {
+					state._sdu_Se = String(RegExp.$1);
+				} else {
+					state._sdu_Se = _.defaultSoundEffect;
+				}
+				if (note.match(tagCe)) {
+					state._sdu_commonEvent = parseInt(RegExp.$1);
+				} else {
+					state._sdu_commonEvent = _.defaultCommonEvent;
+				}
 			}
 		}
-	}
-	if(state._sdu_commonEvent !== 0) {
-		$gameTemp.reserveCommonEvent(state._sdu_commonEvent);
-	}
-};
+	};
+
+	//-----------------------------------------------------------------------------
+	// DataManager
+	//-----------------------------------------------------------------------------
+
+	let notetagsLoaded = false;
+	const _DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
+	DataManager.isDatabaseLoaded = function () {
+		if (!_DataManager_isDatabaseLoaded.apply(this, arguments)) return false;
+		if (!notetagsLoaded) {
+			_.loadNotetags();
+			notetagsLoaded = true;
+		}
+		return true;
+	};
+
+	//-----------------------------------------------------------------------------
+	// Game_Actor
+	//-----------------------------------------------------------------------------
+
+	Game_Actor.prototype.turnEndOnMap = function () { };
+	Game_Actor.prototype.performMapDamage = function () { };
+
+	const _Game_Actor_updateStateSteps = Game_Actor.prototype.updateStateSteps;
+	Game_Actor.prototype.updateStateSteps = function (state) {
+		if (state._sdu_active) {
+			const steps = state._sdu_slipSteps;
+			if ($gameParty.steps() % steps === 0) {
+				this.updateSlipDamage(state);
+			}
+		}
+		_Game_Actor_updateStateSteps.apply(this, arguments);
+	};
+
+	Game_Actor.prototype.updateSlipDamage = function (state) {
+		this.clearResult();
+		if (state._sdu_hpDam) this.gainHp(-state._sdu_hpDam);
+		if (state._sdu_mpDam) this.gainMp(-state._sdu_mpDam);
+		if (state._sdu_tpDam) this.gainTp(-state._sdu_tpDam);
+		if (state._sdu_hpDamPer) this.gainHp(state._sdu_hpDamPer * -this.mhp);
+		if (state._sdu_mpDamPer) this.gainMp(state._sdu_mpDamPer * -this.mmp);
+		if (state._sdu_tpDamPer) this.gainTp(state._sdu_tpDamPer * -this.maxTp());
+
+		this._hp = Math.round(this._hp);
+		this._mp = Math.round(this._mp);
+		this._tp = Math.round(this._tp);
+		this.refresh();
+
+		if (state._sdu_isFlash) {
+			if (this.result().hpDamage !== 0 ||
+				this.result().mpDamage !== 0 ||
+				this.result().tpDamage !== 0) {
+				if (!$gameParty.inBattle()) {
+					$gameScreen.startFlash(state._sdu_flashColor, state._sdu_Dur);
+					AudioManager.playSe({ name: state._sdu_Se, volume: 90, pitch: 100, pan: 0 });
+				}
+			}
+		}
+		if (state._sdu_commonEvent !== 0) {
+			$gameTemp.reserveCommonEvent(state._sdu_commonEvent);
+		}
+	};
 
 })(SRD.MapSlipDamage, SRD.HelpfulFunctions);

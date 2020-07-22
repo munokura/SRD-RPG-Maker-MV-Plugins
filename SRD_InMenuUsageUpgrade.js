@@ -83,6 +83,132 @@
  * Until next time,
  *   ~ SumRndmDde
  */
+/*:ja
+ * @plugindesc アクター選択ウィンドウをカスタマイズします。
+ * @author SumRndmDde
+ *
+ * @param Use Default Window
+ * @text デフォルト使用
+ * @type boolean
+ * @on 有効
+ * @off 無効
+ * @desc AltMenuScreen使用時、アクター選択ウィンドウをデフォルトに
+ * 有効:true / 無効:false
+ * @default true
+ *
+ * @param Condense Mode
+ * @text 簡易モード
+ * @type boolean
+ * @on 有効
+ * @off 無効
+ * @desc デフォルトウィンドウ使用時、名前・HP・MPのみ表示
+ * 有効:true / 無効:false
+ * @default false
+ *
+ * @param == Window Position ==
+ * @text -- ウィンドウの位置 --
+ * @default
+ *
+ * @param Horiontal Align
+ * @text 行揃え
+ * @option 左
+ * @value Left
+ * @option 中央
+ * @value Center
+ * @option 右
+ * @value Right
+ * @option 自動
+ * @value Auto
+ * @desc アクター選択ウィンドウの水平方向の配置
+ * 左:Left / 中央:Center / 右:Right / 自動:Auto
+ * @default Auto
+ *
+ * @param Vertical Align
+ * @text 垂直配置
+ * @option 上
+ * @value Up
+ * @option 中央
+ * @value Center
+ * @option 下
+ * @value Down
+ * @desc アクター選択ウィンドウの垂直方向の配置
+ * 上:Up / 中央:Center 下:Down
+ * @default Center
+ *
+ * @param X Offset
+ * @text X オフセット
+ * @desc アクター選択ウィンドウのX位置に加算
+ * @default 0
+ *
+ * @param Y Offset
+ * @text Y オフセット
+ * @desc アクター選択ウィンドウのY位置に加算
+ * @default 0
+ *
+ * @param == Default Options ==
+ * @text -- デフォルトのオプション --
+ * @default
+ *
+ * @param Width
+ * @text ウィンドウ幅
+ * @desc アクター選択ウィンドウの幅
+ * 数値またはJavaScriptが使用可能
+ * @default Graphics.boxWidth - 240
+ *
+ * @param Height
+ * @text ウィンドウ高
+ * @desc アクター選択ウィンドウの高さ
+ * 数値またはJavaScriptが使用可能
+ * @default Math.min(Graphics.boxHeight, Graphics.boxHeight * (this.maxItems() / 4))
+ *
+ * @param Visible Rows
+ * @text ウィンドウ行
+ * @desc アクター選択ウィンドウの行数
+ * 数値またはJavaScriptが使用可能
+ * @default Math.min(this.maxItems(), 4)
+ *
+ * @param Max Columns
+ * @text ウィンドウ最大列数
+ * @desc アクター選択ウィンドウの最大列数
+ * 数値またはJavaScriptが使用可能
+ * @default 1
+ *
+ * @help
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * 元プラグイン: http://sumrndm.site/in-menu-usage-upgrade/
+ *
+ * In-Menu Usage Upgrade
+ * Version 1.00
+ * SumRndmDde
+ *
+ *
+ * プレイヤーがメニュー内のアイテムやスキルを使用する際に、
+ * アクターを選択する必要があるウィンドウをカスタマイズすることができます。
+ * このプラグインの最大の特徴は、
+ * AltMenuScreenプラグインを使用しているウィンドウを
+ * デフォルトに戻して通常通りに使用できるようにする機能です。
+ * また、ウィンドウの位置、配置、サイズはパラメータで変更することができます。
+ *
+ *
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ *
+ * ヘルプファイルの終わりへようこそ。
+ *
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ *
+ * https://www.youtube.com/c/SumRndmDde
+ *
+ *
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var SRD = SRD || {};
 SRD.InMenuUsageUpgrade = SRD.InMenuUsageUpgrade || {};
@@ -90,21 +216,21 @@ SRD.InMenuUsageUpgrade = SRD.InMenuUsageUpgrade || {};
 var Imported = Imported || {};
 Imported["SumRndmDde In-Menu Usage Upgrade"] = true;
 
-(function(_) {
+(function (_) {
 
 	_.default = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Use Default Window']).trim().toLowerCase() === 'true';
 	_.condense = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Condense Mode']).trim().toLowerCase() === 'true';
 
 	var xAlign = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Horiontal Align']);
 	_.xAlign = 'auto';
-	if(xAlign.match(/center/i)) _.xAlign = 'center';
-	if(xAlign.match(/right/i)) _.xAlign = 'right';
-	if(xAlign.match(/left/i)) _.xAlign = 'left';
+	if (xAlign.match(/center/i)) _.xAlign = 'center';
+	if (xAlign.match(/right/i)) _.xAlign = 'right';
+	if (xAlign.match(/left/i)) _.xAlign = 'left';
 
 	var yAlign = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Vertical Align']);
 	_.yAlign = 'center';
-	if(yAlign.match(/up/i)) _.yAlign = 'up';
-	if(yAlign.match(/down/i)) _.yAlign = 'down';
+	if (yAlign.match(/up/i)) _.yAlign = 'up';
+	if (yAlign.match(/down/i)) _.yAlign = 'down';
 
 	_.x = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['X Offset']);
 	_.y = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Y Offset']);
@@ -113,167 +239,167 @@ Imported["SumRndmDde In-Menu Usage Upgrade"] = true;
 	_.rows = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Visible Rows']);
 	_.cols = String(PluginManager.parameters('SRD_InMenuUsageUpgrade')['Max Columns']);
 
-	Scene_ItemBase.prototype.showSubWindow = function(window) {
-		if(_.xAlign === 'auto') window.x = this.isCursorLeft() ? Graphics.boxWidth - window.width : 0;
-		else if(_.xAlign === 'center') window.x = (Graphics.boxWidth / 2) - (window.width / 2);
-		else if(_.xAlign === 'right') window.x = Graphics.boxWidth - window.width;
-		else if(_.xAlign === 'left') window.x = 0;
-		if(_.yAlign === 'center') window.y = (Graphics.boxHeight / 2) - (window.height / 2);
-		else if(_.yAlign === 'up') window.y = 0;
-		else if(_.yAlign === 'down') window.y = Graphics.boxHeight - window.height;
+	Scene_ItemBase.prototype.showSubWindow = function (window) {
+		if (_.xAlign === 'auto') window.x = this.isCursorLeft() ? Graphics.boxWidth - window.width : 0;
+		else if (_.xAlign === 'center') window.x = (Graphics.boxWidth / 2) - (window.width / 2);
+		else if (_.xAlign === 'right') window.x = Graphics.boxWidth - window.width;
+		else if (_.xAlign === 'left') window.x = 0;
+		if (_.yAlign === 'center') window.y = (Graphics.boxHeight / 2) - (window.height / 2);
+		else if (_.yAlign === 'up') window.y = 0;
+		else if (_.yAlign === 'down') window.y = Graphics.boxHeight - window.height;
 		window.x += eval(_.x);
 		window.y += eval(_.y);
-	    window.show();
-	    window.activate();
+		window.show();
+		window.activate();
 	};
 
-	if(_.default) {
+	if (_.default) {
 
-		Window_MenuActor.prototype.initialize = function() {
-		    Window_MenuStatus.prototype.initialize.call(this, 0, 0);
-		    this.hide();
+		Window_MenuActor.prototype.initialize = function () {
+			Window_MenuStatus.prototype.initialize.call(this, 0, 0);
+			this.hide();
 		};
 
-		Window_MenuActor.prototype.windowWidth = function() {
+		Window_MenuActor.prototype.windowWidth = function () {
 			return eval(_.w);
 		};
 
-		Window_MenuActor.prototype.windowHeight = function() {
+		Window_MenuActor.prototype.windowHeight = function () {
 			return eval(_.h);
 		};
 
-		Window_MenuActor.prototype.numVisibleRows = function() {
+		Window_MenuActor.prototype.numVisibleRows = function () {
 			return eval(_.rows);
 		};
 
-		Window_MenuActor.prototype.maxCols = function() {
+		Window_MenuActor.prototype.maxCols = function () {
 			return eval(_.cols);
 		};
 
-		Window_MenuActor.prototype.drawActorSimpleStatus = function(actor, x, y, width) {
-		    var lineHeight = this.lineHeight();
-		    var x2 = x + 180;
-		    var width2 = Math.min(200, width - 180 - this.textPadding());
-		    if(_.condense) {
-		    	this.drawActorName(actor, x, y);
-		    	this.drawActorHp(actor, x, y + lineHeight * 1, width2);
-		    	this.drawActorMp(actor, x, y + lineHeight * 2, width2);
-		    } else {
-			    this.drawActorName(actor, x, y);
-			    this.drawActorLevel(actor, x, y + lineHeight * 1);
-			    this.drawActorIcons(actor, x, y + lineHeight * 2);
-			    this.drawActorClass(actor, x2, y);
-			    this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
-			    this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
+		Window_MenuActor.prototype.drawActorSimpleStatus = function (actor, x, y, width) {
+			var lineHeight = this.lineHeight();
+			var x2 = x + 180;
+			var width2 = Math.min(200, width - 180 - this.textPadding());
+			if (_.condense) {
+				this.drawActorName(actor, x, y);
+				this.drawActorHp(actor, x, y + lineHeight * 1, width2);
+				this.drawActorMp(actor, x, y + lineHeight * 2, width2);
+			} else {
+				this.drawActorName(actor, x, y);
+				this.drawActorLevel(actor, x, y + lineHeight * 1);
+				this.drawActorIcons(actor, x, y + lineHeight * 2);
+				this.drawActorClass(actor, x2, y);
+				this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
+				this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
 			}
 		};
 
-		Window_MenuActor.prototype.maxItems = function() {
-		    return $gameParty.size();
+		Window_MenuActor.prototype.maxItems = function () {
+			return $gameParty.size();
 		};
 
-		Window_MenuActor.prototype.itemHeight = function() {
-		    var clientHeight = this.height - this.padding * 2;
-		    return Math.floor(clientHeight / this.numVisibleRows());
+		Window_MenuActor.prototype.itemHeight = function () {
+			var clientHeight = this.height - this.padding * 2;
+			return Math.floor(clientHeight / this.numVisibleRows());
 		};
 
-		Window_MenuActor.prototype.loadImages = function() {
-		    $gameParty.members().forEach(function(actor) {
-		        ImageManager.loadFace(actor.faceName());
-		    }, this);
+		Window_MenuActor.prototype.loadImages = function () {
+			$gameParty.members().forEach(function (actor) {
+				ImageManager.loadFace(actor.faceName());
+			}, this);
 		};
 
-		Window_MenuActor.prototype.drawItem = function(index) {
-		    this.drawItemBackground(index);
-		    this.drawItemImage(index);
-		    this.drawItemStatus(index);
+		Window_MenuActor.prototype.drawItem = function (index) {
+			this.drawItemBackground(index);
+			this.drawItemImage(index);
+			this.drawItemStatus(index);
 		};
 
-		Window_MenuActor.prototype.drawItemBackground = function(index) {
-		    if (index === this._pendingIndex) {
-		        var rect = this.itemRect(index);
-		        var color = this.pendingColor();
-		        this.changePaintOpacity(false);
-		        this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
-		        this.changePaintOpacity(true);
-		    }
+		Window_MenuActor.prototype.drawItemBackground = function (index) {
+			if (index === this._pendingIndex) {
+				var rect = this.itemRect(index);
+				var color = this.pendingColor();
+				this.changePaintOpacity(false);
+				this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
+				this.changePaintOpacity(true);
+			}
 		};
 
-		Window_MenuActor.prototype.drawItemImage = function(index) {
-		    var actor = $gameParty.members()[index];
-		    var rect = this.itemRect(index);
-		    this.changePaintOpacity(actor.isBattleMember());
-		    this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
-		    this.changePaintOpacity(true);
+		Window_MenuActor.prototype.drawItemImage = function (index) {
+			var actor = $gameParty.members()[index];
+			var rect = this.itemRect(index);
+			this.changePaintOpacity(actor.isBattleMember());
+			this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
+			this.changePaintOpacity(true);
 		};
 
-		Window_MenuActor.prototype.drawItemStatus = function(index) {
-		    var actor = $gameParty.members()[index];
-		    var rect = this.itemRect(index);
-		    var x = rect.x + 162;
-		    var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
-		    var width = rect.width - x - this.textPadding();
-		    this.drawActorSimpleStatus(actor, x, y, width);
+		Window_MenuActor.prototype.drawItemStatus = function (index) {
+			var actor = $gameParty.members()[index];
+			var rect = this.itemRect(index);
+			var x = rect.x + 162;
+			var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
+			var width = rect.width - x - this.textPadding();
+			this.drawActorSimpleStatus(actor, x, y, width);
 		};
 
-		Window_MenuActor.prototype.processOk = function() {
-		    if (!this.cursorAll()) {
-		        $gameParty.setTargetActor($gameParty.members()[this.index()]);
-		    }
-		    this.callOkHandler();
+		Window_MenuActor.prototype.processOk = function () {
+			if (!this.cursorAll()) {
+				$gameParty.setTargetActor($gameParty.members()[this.index()]);
+			}
+			this.callOkHandler();
 		};
 
-		Window_MenuActor.prototype.isCurrentItemEnabled = function() {
-		    if (this._formationMode) {
-		        var actor = $gameParty.members()[this.index()];
-		        return actor && actor.isFormationChangeOk();
-		    } else {
-		        return true;
-		    }
+		Window_MenuActor.prototype.isCurrentItemEnabled = function () {
+			if (this._formationMode) {
+				var actor = $gameParty.members()[this.index()];
+				return actor && actor.isFormationChangeOk();
+			} else {
+				return true;
+			}
 		};
 
-		Window_MenuActor.prototype.selectLast = function() {
-		    this.select($gameParty.targetActor().index() || 0);
+		Window_MenuActor.prototype.selectLast = function () {
+			this.select($gameParty.targetActor().index() || 0);
 		};
 
-		Window_MenuActor.prototype.formationMode = function() {
-		    return this._formationMode;
+		Window_MenuActor.prototype.formationMode = function () {
+			return this._formationMode;
 		};
 
-		Window_MenuActor.prototype.setFormationMode = function(formationMode) {
-		    this._formationMode = formationMode;
+		Window_MenuActor.prototype.setFormationMode = function (formationMode) {
+			this._formationMode = formationMode;
 		};
 
-		Window_MenuActor.prototype.pendingIndex = function() {
-		    return this._pendingIndex;
+		Window_MenuActor.prototype.pendingIndex = function () {
+			return this._pendingIndex;
 		};
 
-		Window_MenuActor.prototype.setPendingIndex = function(index) {
-		    var lastPendingIndex = this._pendingIndex;
-		    this._pendingIndex = index;
-		    this.redrawItem(this._pendingIndex);
-		    this.redrawItem(lastPendingIndex);
+		Window_MenuActor.prototype.setPendingIndex = function (index) {
+			var lastPendingIndex = this._pendingIndex;
+			this._pendingIndex = index;
+			this.redrawItem(this._pendingIndex);
+			this.redrawItem(lastPendingIndex);
 		};
 
-		Window_MenuActor.prototype.selectForItem = function(item) {
-		    var actor = $gameParty.menuActor();
-		    var action = new Game_Action(actor);
-		    action.setItemObject(item);
-		    this.setCursorFixed(false);
-		    this.setCursorAll(false);
-		    if (action.isForUser()) {
-		        if (DataManager.isSkill(item)) {
-		            this.setCursorFixed(true);
-		            this.select(actor.index());
-		        } else {
-		            this.selectLast();
-		        }
-		    } else if (action.isForAll()) {
-		        this.setCursorAll(true);
-		        this.select(0);
-		    } else {
-		        this.selectLast();
-		    }
+		Window_MenuActor.prototype.selectForItem = function (item) {
+			var actor = $gameParty.menuActor();
+			var action = new Game_Action(actor);
+			action.setItemObject(item);
+			this.setCursorFixed(false);
+			this.setCursorAll(false);
+			if (action.isForUser()) {
+				if (DataManager.isSkill(item)) {
+					this.setCursorFixed(true);
+					this.select(actor.index());
+				} else {
+					this.selectLast();
+				}
+			} else if (action.isForAll()) {
+				this.setCursorAll(true);
+				this.select(0);
+			} else {
+				this.selectLast();
+			}
 		};
 	}
 
