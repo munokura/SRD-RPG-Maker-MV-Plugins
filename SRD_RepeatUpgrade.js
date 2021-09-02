@@ -120,6 +120,7 @@
  *   ~ SumRndmDde
  */
 /*:ja
+ * @target MV MZ
  * @plugindesc ツクールの制限を超えて、スキルやアイテムの連続回数を数値や式で決定できます。
  * @author SumRndmDde
  *
