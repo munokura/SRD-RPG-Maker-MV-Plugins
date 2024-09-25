@@ -279,30 +279,39 @@
  * アクターや敵キャラの戦闘画像に歩行キャラを設定するには、
  * 以下のメモタグを使用します。
  *
- *
- *   <Walk Battler: [image-name]>
+ * 1.Walk Battlerタグ（必須）
+ * <Walk Battler: [image-name]>
  * 'image-name'には、 /img/characters/ フォルダ内の画像の名前を設定します。
- *
- *
+ * 
+ * 2.Walk Battler Indexタグ（ケースにより必須）
  *   <Walk Battler Index: [image-index]>
  * 'image-index'には、キャラクター画像のインデックス(0～7まで)を設定します。
  * キャラクター画像ファイルが'single character'の画像であれば、
  * このメモタグの使用は気にする必要はありません。
  *
- *
+ * 
+ * # デフォルト画像での設定例
+ * <Walk Battler: Actor3>
+ * <Walk Battler Index: 7>
+ * この2行をメモ欄に記述すると、
+ * MVデフォルトのアクターキャラであるマーシャが割り当てられます。
+ * 
+ * 
+ * 3.Walk Battler Scaleタグ（任意）
  *   <Walk Battler Scale: [scale]>
  * 'scale'には、元の画像に対するバトラーの拡縮率を表す値を設定します。
  * これを1に設定すると、画像内の文字と同じサイズになります。
  * 2に設定すると2倍、0.5に設定すると半分になります。
  *
- *
+ * 4.Walk Battler Sleepタグ（任意）
  *   <Walk Battler Sleep: [image-name]>
  * 睡眠や戦闘不能モーションのキャラクターに目を閉じた状態にしたい場合、
  * 特定のファイルを設定しておくことで、そのような状態にすることができます。
  *
- *
+ *5.Walk Battler Sleep Index（任意）
  *   <Walk Battler Sleep Index: [image-index]>
  * 睡眠やデッドモーションで使用されているスリープイメージ内のインデックス
+ * 指定方法は、2.Walk Battler Indexタグと同じです。
  *
  *
  * ==========================================================================
