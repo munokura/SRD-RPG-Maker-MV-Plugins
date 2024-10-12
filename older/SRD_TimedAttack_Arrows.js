@@ -3,106 +3,102 @@
  * @author SumRndmDde
  *
  * @param Up Condition
- * @text 上判定
- * @desc 「上」コマンドをtrueとする JavaScript式。
- * 
+ * @desc The JavaScript condition that must be true for the ”Up” command to be processed.
+ * @default Input.isTriggered('up')
+ *
  * @param Right Condition
- * @text 右判定
- * @desc 「右」コマンドをtrueとする JavaScript式。
+ * @desc The JavaScript condition that must be true for the ”Right” command to be processed.
  * @default Input.isTriggered('right')
- * 
+ *
  * @param Down Condition
- * @text 下判定
- * @desc 「下」コマンドをtrueとする JavaScript式。
+ * @desc The JavaScript condition that must be true for the ”Down” command to be processed.
  * @default Input.isTriggered('down')
- * 
+ *
  * @param Left Condition
- * @text 左判定
- * @desc 「左」コマンドをtrueとする JavaScript式。
+ * @desc The JavaScript condition that must be true for the ”Left” command to be processed.
  * @default Input.isTriggered('left')
- * 
+ *
  * @param == Default Props. ==
- * @text == デフォルト要素 ==
  * @default
- * 
+ *
  * @param Normal SE
- * @text 通常の SE
- * @desc デフォルトの通常SE。/audio/se/ 内のSEのファイル名
+ * @desc The default Normal SE when one is not specified.
+ * Input filename of Sound Effect in /audio/se/
  * @default Wind4
- * 
+ *
  * @param Miss SE
- * @text ミス SE
- * @desc デフォルトの失敗SE。/audio/se/ 内のSEのファイル名
+ * @desc The default Miss SE when one is not specified.
+ * Input filename of Sound Effect in /audio/se/
  * @default Buzzer1
- * 
+ *
  * @param Success SE
- * @text 成功 SE
- * @desc デフォルトの成功SE。/audio/se/ 内のSEのファイル名
+ * @desc The default Success SE when one is not specified.
+ * Input filename of Sound Effect in /audio/se/
  * @default Bell3
- * 
+ *
  * @param Fail SE
- * @text 失敗 SE
- * @desc デフォルトの失敗SE。/audio/se/ 内のSEのファイル名
+ * @desc The default Fail SE when one is not specified.
+ * Input filename of Sound Effect in /audio/se/
  * @default Break
- * 
+ *
  * @param Image
- * @text 画像
- * @desc デフォルトの画像。/img/SumRndmDde/tas/ 内の画像のファイル名
+ * @desc The default Image when one is not specified.
+ * Input filename of Image in /img/SumRndmDde/tas/
  * @default Arrows
- * 
+ *
  * @param Phrase
- * @text フレーズ
- * @desc デフォルトのフレーズ。単語またはフレーズを入力。%1 はカウンターを表します。
+ * @desc The default Phrase when one is not specified.
+ * Input a word or phrase. %1 will represent the counter.
  * @default Time Limit: %1
- * 
+ *
  * @param Command Amount
- * @text コマンド量
- * @desc デフォルトのコマンド量。正の値を入力。
+ * @desc The default Command Amount when one is not specified.
+ * Input a Positive Number.
  * @default 4
- * 
+ *
  * @param Randomize Commands
- * @text コマンドをランダム化
- * @desc コマンドをランダム化するか指定。「true」または「上、下、左」などの特定のパターンを入力。
+ * @desc Determines whether the commands are randomized.
+ * Input 'true' or a specific pattern like: 'up, down, left'.
  * @default true
- * 
+ *
  * @param Frames
- * @text フレーム
- * @desc デフォルトのフレーム値。正の値を入力。
+ * @desc The default Frames when one is not specified.
+ * Input a Positive Number.
  * @default 150
- * 
+ *
  * @param Penalty
- * @text ペナルティ
- * @desc デフォルトのペナルティ。減少するフレームの正の値を入力。
+ * @desc The default Penalty when one is not specified.
+ * Input a Positive Number of Frames to lose.
  * @default 40
- * 
+ *
  * @param Success Power
- * @text 成功パワー
- * @desc デフォルトの成功パワー。正の値またはJavaScript式を入力。
+ * @desc The default Success Power when one is not specified.
+ * Input a Positive Number or JavaScript eval.
  * @default 1
- * 
+ *
  * @param Fail Power
- * @text 失敗パワー
- * @desc デフォルトの成功パワー。正の値またはJavaScript式を入力。
+ * @desc The default Success Power when one is not specified.
+ * Input a Positive Number or JavaScript eval.
  * @default 0
- * 
+ *
  * @param Above Height
- * @text 高さ超過
- * @desc デフォルトの高さ超過。正の値を入力。
+ * @desc The default Above Height when one is not specified.
+ * Input a Positive Number.
  * @default 130
- * 
+ *
  * @param Hit Animation
- * @text ヒット アニメーション
- * @desc デフォルトのアニメーション。形式は、不透明度、x スケール、y スケール、x 移動、y 移動です。
+ * @desc The default Animation when one is not specified.
+ * Use the format: opacity, x-scale, y-scale, x-move, y-move
  * @default -20, 0.1, 0.1, -2, -2
- * 
+ *
  * @param Flash Rate
- * @text フラッシュ レート
- * @desc デフォルトのフラッシュ レート。正の値を入力。
+ * @desc The default Flash Rate when one is not specified.
+ * Input a Positive Number
  * @default 16
- * 
+ *
  * @param Flash Time
- * @text フラッシュ時間
- * @desc デフォルトのフラッシュ時間。正の値を入力。
+ * @desc The default Flash Time when one is not specified.
+ * Input a Positive Number
  * @default 40
  *
  * @help
@@ -129,12 +125,12 @@
  *
  * Use $gameTemp.tas_power to have the power affect the skill.
  * This value will be a value from 0 to 1 depending on how close the 
- * "Timed Attack" was to being perfect.
+ * ”Timed Attack” was to being perfect.
  *
  * For example:
  * (a.atk * 4 - b.def * 2) * ($gameTemp.tas_power)
  *
- * In that example, getting a perfect hit in the "Timed Attack" would result
+ * In that example, getting a perfect hit in the ”Timed Attack” would result
  * in full damage, and getting any besides perfect would give only a percent
  * of the full damage.
  *
@@ -148,11 +144,11 @@
  * <Timed Attack: arrows>
  * <End Timed Attack>
  *
- * Setting those in a Skill's notebox will activate the "Timed Attack System"
+ * Setting those in a Skill's notebox will activate the ”Timed Attack System”
  * for that Skill.
  *
- * The part that says "arrows" can be changed to have other types of "Timed
- * Attacks" be used.
+ * The part that says ”arrows” can be changed to have other types of ”Timed
+ * Attacks” be used.
  *
  *
  * ==========================================================================
@@ -210,6 +206,7 @@
  *   ~ SumRndmDde
  *
  */
+
 /*:ja
  * @plugindesc プレイヤーが画面に表示された順序で矢印キーを押す必要があるタイミング攻撃を追加できます。
  * @author SumRndmDde
