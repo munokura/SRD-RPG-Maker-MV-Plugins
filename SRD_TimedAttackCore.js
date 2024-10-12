@@ -365,14 +365,14 @@
  * @value None
  * @option 繰り返し
  * @value Repeat
- * @option 逆順
+ * @option 往復
  * @value Reverse
  * @default None
  * @parent == Default Props. ==
  * 
  * @param Speed
  * @text 速度
- * @desc デフォルトの速度。正の数値または JavaScript 値になります。
+ * @desc デフォルトの速度。正の数値または JavaScript 式
  * @default 10
  * @parent == Default Props. ==
  * 
