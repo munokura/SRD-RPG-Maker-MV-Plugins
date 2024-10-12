@@ -254,7 +254,7 @@
  * 
  * このプラグインには、
  * Timed Attack Core プラグイン (SRD_TimedAttackCore) が必要です。
- * http://sumrndm.site/timed-attack-core
+ * https://fungamemake.com/archives/15741
  * プラグイン管理でSRD_TimedAttackCoreの下側に配置してください。
  * 
  * 敵の周りに円が現れ、それが小さくなり始めます。
