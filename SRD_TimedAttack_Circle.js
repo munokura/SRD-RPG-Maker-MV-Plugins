@@ -163,229 +163,427 @@
  *   ~ SumRndmDde
  *
  */
+/*:ja
+ * @plugindesc 輪型のタイミング攻撃を追加します。円が徐々に小さくなり、止めたタイミングでスキルの効果を変えられます。
+ * @author SumRndmDde
+ * 
+ * @param Sound Effect
+ * @text 効果音
+ * @desc SEがデフォルトのSE。/audio/se/ 内ファイル名
+ * @type file
+ * @require 1
+ * @dir audio/se
+ * @default Sword2
+ * 
+ * @param Circle Image
+ * @text 円の画像
+ * @desc デフォルトの円画像。/img/SumRndmDde/tas/ 内ファイル名
+ * @require 1
+ * @default
+ * 
+ * @param Background Image
+ * @text 背景画像
+ * @desc デフォルトの背景画像。/img/SumRndmDde/tas/ 内ファイル名
+ * @require 1
+ * @default
+ * 
+ * @param Repeat Type
+ * @text 繰り返しタイプ
+ * @desc デフォルトの繰り返しタイプ。
+ * @type select
+ * @option なし
+ * @value None
+ * @option 繰り返し
+ * @value Repeat
+ * @option 往復
+ * @value Reverse
+ * @default None
+ * 
+ * @param Color
+ * @text 色
+ * @desc デフォルトの色。JavaScript または HTML の色コード
+ * @default Red
+ * 
+ * @param Speed
+ * @text 速度
+ * @desc デフォルトの速度。正の数値または JavaScript 式
+ * @default 5
+ * 
+ * @param Initial Radius
+ * @text 初期半径
+ * @desc デフォルトの初期半径。正の数値
+ * @type number
+ * @default 200
+ * 
+ * @param Ring Thickness
+ * @text リングの厚さ
+ * @desc デフォルトのリングの厚さ指定。正の数値
+ * @type number
+ * @default 8
+ * 
+ * @param Flash Rate
+ * @text フラッシュ速度
+ * @desc デフォルトのフラッシュ レート。正の数値
+ * @type number
+ * @default 16
+ * 
+ * @param Flash Time
+ * @text フラッシュ時間
+ * @desc デフォルトのフラッシュ時間。正の数値
+ * @type number
+ * @default 40
+ * 
+ * @param Time Limit
+ * @text 制限時間
+ * @desc 「繰り返し」が継続できる最大時間。正の数値。許可しない場合 0
+ * @type number
+ * @default 0
+ * 
+ * @help
+ * 
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://x.com/munokura/
+ * 
+ * 元プラグイン: http://sumrndm.site/timed-attack-circle/
+ * 
+ * Timed Attack: Circle
+ * Version 1.12
+ * SumRndmDde
+ * 
+ * 
+ * このプラグインには、
+ * Timed Attack Core プラグイン (SRD_TimedAttackCore) が必要です。
+ * http://sumrndm.site/timed-attack-core
+ * プラグイン管理でSRD_TimedAttackCoreの下側に配置してください。
+ * 
+ * 敵の周りに円が現れ、それが小さくなり始めます。
+ * プレイヤーは円が完全に消える前に「OK」ボタンを押さなければなりません。
+ * 円が小さいほど、スキルの威力が増します。
+ * 
+ * 
+ * ==========================================================================
+ *  タイミング攻撃によるスキルのダメージ/効果をカスタマイズする方法
+ * ==========================================================================
+ * 
+ * $gameTemp.tas_power を使用して、タイミングをスキルに反映させます。
+ * この値は"タイミング攻撃"がパーフェクトにどれだけ近かったに応じて、
+ * 0 から 1 までの値になります。
+ * 
+ * 例:
+ * (a.atk * 4 - b.def * 2) * ($gameTemp.tas_power)
+ * 
+ * この例では"タイミング攻撃"でパーフェクトヒットを取得すると
+ * 最大ダメージが得られます。
+ * パーフェクト以外のヒットの場合、最大ダメージのパーセンテージのみが得られます。
+ * 
+ * 
+ * ==========================================================================
+ *  タイミング攻撃を使用するスキルの設定方法 (輪型)
+ * ==========================================================================
+ * 
+ * メモタグ
+ * 
+ * <Timed Attack: circle>
+ * <End Timed Attack>
+ * 
+ * これらをスキルのメモ欄に設定すると、
+ * そのスキルの"タイミング攻撃"が有効になります。
+ * 
+ * circle と書かれた部分を変更して、
+ * 他のタイプの"タイミング攻撃"を使用することもできます。
+ * 
+ * 
+ * ==========================================================================
+ *  輪型のタイミング攻撃要素
+ * ==========================================================================
+ * 
+ * 各タイミング攻撃の要素をメモタグに追加することで操作できます。
+ * 
+ * 例:
+ * <Timed Attack: circle>
+ * Speed: 15
+ * Color: #00FFFF
+ * Outline Color: black
+ * <End Timed Attack>
+ * 
+ * 使用スキル毎にタイミング攻撃をアレンジできる要素があります。
+ * 輪型のタイミング攻撃の要素は次のとおりです。
+ * 
+ * Sound Effect:
+ *  /audio/se/ 内のファイル名。
+ * 
+ * Circle Image:
+ *  /img/SumRndmDde/tas/  内のファイル名。*2
+ * 
+ * Background Image:
+ *  /img/SumRndmDde/tas/  内のファイル名。
+ * 
+ * Repeat Type:
+ *  None , Repeat , Reverse のいずれか。
+ * 
+ * Speed:
+ *  正の数値かJavaScript式。*1
+ * 
+ * Color:
+ *  JavaScriptかHTML色コード。
+ * 
+ * Initial Radius:
+ *  正の数値。
+ * 
+ * Ring Thickness:
+ *  正の数値。
+ * 
+ * Flash Rate:
+ *  正の数値。
+ * 
+ * Flash Time:
+ *  正の数値。
+ * 
+ * *1 JavaScriptの式で、"フレーム数"を表すために"f"を使用できます。
+ * *2 デフォルト円形の画像を使用する場合、空白のままにしてください。
+ * 
+ * 
+ * ==========================================================================
+ *  ヘルプファイルの終わり
+ * ==========================================================================
+ * 
+ * ヘルプファイルの終わりへようこそ。
+ * 
+ * 
+ * 読んでくれてありがとう!
+ * 質問があったり、このプラグインを楽しめたら、
+ * 私のYouTubeチャンネルを登録してください!!
+ * 
+ * https://www.youtube.com/c/SumRndmDde
+ * 
+ * 
+ * 次の機会まで
+ *   ~ SumRndmDde
+ */
 
 var Imported = Imported || {};
 Imported["SumRndmDde Timed Attack Circle"] = 1.10;
 
-if(Imported["SumRndmDde Timed Attack Core"]) {
+if (Imported["SumRndmDde Timed Attack Core"]) {
 
-	if(!(Imported["SumRndmDde Timed Attack Core"] >= 1.20)) {
-		DataManager.loadMapData = function(mapId) {
-		    if (mapId > 0) {
-		        $dataMap = {
-					"autoplayBgm":false,"autoplayBgs":false,"battleback1Name":"","battleback2Name":"","bgm":0,"bgs":0,"disableDashing":false,"displayName":"","encounterList":[],"encounterStep":30,"height":1,"note":"<General Location: SumRndmDde's Basement>","parallaxLoopX":false,"parallaxLoopY":false,"parallaxName":"","parallaxShow":true,"parallaxSx":0,"parallaxSy":0,"scrollType":0,"specifyBattleback":false,"tilesetId":1,"width":1,
-					"data":[0,0,0,0,0,0],
-					"events":[null, {"id":1,"name":"EV001","note":"","pages":[{"conditions":{"actorId":1,"actorValid":false,"itemId":1,"itemValid":false,"selfSwitchCh":"A","selfSwitchValid":false,"switch1Id":1,"switch1Valid":false,"switch2Id":1,"switch2Valid":false,"variableId":1,"variableValid":false,"variableValue":0},"directionFix":false,"image":{"characterIndex":0,"characterName":"","direction":2,"pattern":0,"tileId":0},"list":[{"code":101,"indent":0,"parameters":["",0,0,2]},{"code":401,"indent":0,"parameters":["Hello."]},{"code":101,"indent":0,"parameters":["",0,0,2]},{"code":401,"indent":0,"parameters":["Are you surprised? \\!What did you expect?"]},{"code":401,"indent":0,"parameters":["\\!With all those Plugins you have installed, it's only"]},{"code":401,"indent":0,"parameters":["a matter of time something weird happens."]},{"code":101,"indent":0,"parameters":["",0,0,2]},{"code":401,"indent":0,"parameters":["But enough messing around, \\!I'm here to let you know"]},{"code":401,"indent":0,"parameters":["that you need to update the following Plugin:"]},{"code":401,"indent":0,"parameters":["\\!\\.T\\.i\\.m\\.e\\.d \\.A\\.t\\.t\\.a\\.c\\.k \\.C\\.o\\.r\\.e"]},{"code":101,"indent":0,"parameters":["",0,0,2]},{"code":401,"indent":0,"parameters":["Simply download it again and replace the old version"]},{"code":401,"indent":0,"parameters":["with the one you just downloaded in your JS folder."]},{"code":401,"indent":0,"parameters":["\\!If you don't\\..\\..\\..\\!then I guess I'll just have to"]},{"code":401,"indent":0,"parameters":["keep you here forever! >:D"]},{"code":101,"indent":0,"parameters":["",0,0,2]},{"code":401,"indent":0,"parameters":["Thanks for reading, "]},{"code":401,"indent":0,"parameters":["\\!  ~ SumRndmDde"]},{"code":123,"indent":0,"parameters":["A",0]},{"code":0,"indent":0,"parameters":[]}],"moveFrequency":3,"moveRoute":{"list":[{"code":0,"parameters":[]}],"repeat":true,"skippable":false,"wait":false},"moveSpeed":3,"moveType":0,"priorityType":0,"stepAnime":false,"through":false,"trigger":3,"walkAnime":true},{"conditions":{"actorId":1,"actorValid":false,"itemId":1,"itemValid":false,"selfSwitchCh":"A","selfSwitchValid":true,"switch1Id":1,"switch1Valid":false,"switch2Id":1,"switch2Valid":false,"variableId":1,"variableValid":false,"variableValue":0},"directionFix":false,"image":{"characterIndex":0,"characterName":"","direction":2,"pattern":0,"tileId":0},"list":[{"code":0,"indent":0,"parameters":[]}],"moveFrequency":3,"moveRoute":{"list":[{"code":0,"parameters":[]}],"repeat":true,"skippable":false,"wait":false},"moveSpeed":3,"moveType":0,"priorityType":0,"stepAnime":false,"through":false,"trigger":0,"walkAnime":true}],"x":0,"y":0}]
+	if (!(Imported["SumRndmDde Timed Attack Core"] >= 1.20)) {
+		DataManager.loadMapData = function (mapId) {
+			if (mapId > 0) {
+				$dataMap = {
+					"autoplayBgm": false, "autoplayBgs": false, "battleback1Name": "", "battleback2Name": "", "bgm": 0, "bgs": 0, "disableDashing": false, "displayName": "", "encounterList": [], "encounterStep": 30, "height": 1, "note": "<General Location: SumRndmDde's Basement>", "parallaxLoopX": false, "parallaxLoopY": false, "parallaxName": "", "parallaxShow": true, "parallaxSx": 0, "parallaxSy": 0, "scrollType": 0, "specifyBattleback": false, "tilesetId": 1, "width": 1,
+					"data": [0, 0, 0, 0, 0, 0],
+					"events": [null, { "id": 1, "name": "EV001", "note": "", "pages": [{ "conditions": { "actorId": 1, "actorValid": false, "itemId": 1, "itemValid": false, "selfSwitchCh": "A", "selfSwitchValid": false, "switch1Id": 1, "switch1Valid": false, "switch2Id": 1, "switch2Valid": false, "variableId": 1, "variableValid": false, "variableValue": 0 }, "directionFix": false, "image": { "characterIndex": 0, "characterName": "", "direction": 2, "pattern": 0, "tileId": 0 }, "list": [{ "code": 101, "indent": 0, "parameters": ["", 0, 0, 2] }, { "code": 401, "indent": 0, "parameters": ["Hello."] }, { "code": 101, "indent": 0, "parameters": ["", 0, 0, 2] }, { "code": 401, "indent": 0, "parameters": ["Are you surprised? \\!What did you expect?"] }, { "code": 401, "indent": 0, "parameters": ["\\!With all those Plugins you have installed, it's only"] }, { "code": 401, "indent": 0, "parameters": ["a matter of time something weird happens."] }, { "code": 101, "indent": 0, "parameters": ["", 0, 0, 2] }, { "code": 401, "indent": 0, "parameters": ["But enough messing around, \\!I'm here to let you know"] }, { "code": 401, "indent": 0, "parameters": ["that you need to update the following Plugin:"] }, { "code": 401, "indent": 0, "parameters": ["\\!\\.T\\.i\\.m\\.e\\.d \\.A\\.t\\.t\\.a\\.c\\.k \\.C\\.o\\.r\\.e"] }, { "code": 101, "indent": 0, "parameters": ["", 0, 0, 2] }, { "code": 401, "indent": 0, "parameters": ["Simply download it again and replace the old version"] }, { "code": 401, "indent": 0, "parameters": ["with the one you just downloaded in your JS folder."] }, { "code": 401, "indent": 0, "parameters": ["\\!If you don't\\..\\..\\..\\!then I guess I'll just have to"] }, { "code": 401, "indent": 0, "parameters": ["keep you here forever! >:D"] }, { "code": 101, "indent": 0, "parameters": ["", 0, 0, 2] }, { "code": 401, "indent": 0, "parameters": ["Thanks for reading, "] }, { "code": 401, "indent": 0, "parameters": ["\\!  ~ SumRndmDde"] }, { "code": 123, "indent": 0, "parameters": ["A", 0] }, { "code": 0, "indent": 0, "parameters": [] }], "moveFrequency": 3, "moveRoute": { "list": [{ "code": 0, "parameters": [] }], "repeat": true, "skippable": false, "wait": false }, "moveSpeed": 3, "moveType": 0, "priorityType": 0, "stepAnime": false, "through": false, "trigger": 3, "walkAnime": true }, { "conditions": { "actorId": 1, "actorValid": false, "itemId": 1, "itemValid": false, "selfSwitchCh": "A", "selfSwitchValid": true, "switch1Id": 1, "switch1Valid": false, "switch2Id": 1, "switch2Valid": false, "variableId": 1, "variableValid": false, "variableValue": 0 }, "directionFix": false, "image": { "characterIndex": 0, "characterName": "", "direction": 2, "pattern": 0, "tileId": 0 }, "list": [{ "code": 0, "indent": 0, "parameters": [] }], "moveFrequency": 3, "moveRoute": { "list": [{ "code": 0, "parameters": [] }], "repeat": true, "skippable": false, "wait": false }, "moveSpeed": 3, "moveType": 0, "priorityType": 0, "stepAnime": false, "through": false, "trigger": 0, "walkAnime": true }], "x": 0, "y": 0 }]
 				};
-		    } else {
-		        this.makeEmptyMap();
-		    }
+			} else {
+				this.makeEmptyMap();
+			}
 		};
 
-		DataManager.setupNewGame = function() {
-		    this.createGameObjects();
-		    this.selectSavefileForNewGame();
-		    $gameParty.setupStartingMembers();
-		    $gamePlayer.reserveTransfer($dataSystem.startMapId,
-		        0, 0);
-		    Graphics.frameCount = 0;
+		DataManager.setupNewGame = function () {
+			this.createGameObjects();
+			this.selectSavefileForNewGame();
+			$gameParty.setupStartingMembers();
+			$gamePlayer.reserveTransfer($dataSystem.startMapId,
+				0, 0);
+			Graphics.frameCount = 0;
 		};
 	}
 
-SRD.TimedAttackCircle = SRD.TimedAttackCircle || {};
+	SRD.TimedAttackCircle = SRD.TimedAttackCircle || {};
 
-(function(_, $) {
+	(function (_, $) {
 
-	"use strict";
-	
-	_.se = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Sound Effect']);
-	_.image = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Circle Image']);
-	_.back = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Background Image']);
-	_.rt = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Repeat Type']).trim().toLowerCase();
-	_.speed = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Speed']);
-	_.color = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Color']);
-	_.radius = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Initial Radius']);
-	_.thickness = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Ring Thickness']);
-	_.flash = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Flash Rate']);
-	_.time = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Flash Time']);
-	_.timeLimit = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Time Limit']);
+		"use strict";
 
-	var _$_organizeInfo = $.organizeInfo;
-	$.organizeInfo = function(o) {
-    	_$_organizeInfo.call(this, o);
-    	if(o.type === 'circle') {
-    		if(o.info.match(/Sound[ ]?Effect:\s*(.*)/im)) o.se = String(RegExp.$1);
-    		if(o.info.match(/Circle[ ]?Image:\s*(.*)/im)) o.image = String(RegExp.$1);
-    		if(o.info.match(/Background[ ]?Image:\s*(.*)/im)) o.back = String(RegExp.$1);
-    		if(o.info.match(/Repeat[ ]?Type:\s*(.*)/im)) o.rt = String(RegExp.$1).trim().toLowerCase();
-    		if(o.info.match(/Speed:\s*(.*)/im)) o.speed = String(RegExp.$1);
-    		if(o.info.match(/Color:\s*(.*)/im)) o.color = String(RegExp.$1);
-    		if(o.info.match(/Initial[ ]?Radius:\s*(.*)/im)) o.radius = parseInt(RegExp.$1);
-    		if(o.info.match(/Ring[ ]?Thickness:\s*(.*)/im)) o.thickness = parseInt(RegExp.$1);
-    		if(o.info.match(/Flash[ ]?Rate:\s*(.*)/im)) o.flash = parseInt(RegExp.$1);
-    		if(o.info.match(/Flash[ ]?Time:\s*(.*)/im)) o.time = parseInt(RegExp.$1);
-    		if(o.info.match(/Time[ ]?Limit:\s*(.*)/im)) o.timeLimit = parseInt(RegExp.$1);
-    		if(!o.se) o.se = _.se;
-    		if(!o.image) o.image = _.image;
-    		if(!o.back) o.back = _.back;
-    		if(!o.rt) o.rt = _.rt;
-    		if(!o.speed) o.speed = _.speed;
-    		if(!o.color) o.color = _.color;
-    		if(!o.radius) o.radius = _.radius;
-    		if(!o.thickness) o.thickness = _.thickness;
-    		if(!o.flash && o.flash !== 0) o.flash = _.flash;
-    		if(!o.time && o.time !== 0) o.time = _.time;
-    		if(!o.timeLimit && o.timeLimit !== 0) o.timeLimit = _.timeLimit;
-    	}
-    };
+		_.se = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Sound Effect']);
+		_.image = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Circle Image']);
+		_.back = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Background Image']);
+		_.rt = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Repeat Type']).trim().toLowerCase();
+		_.speed = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Speed']);
+		_.color = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Color']);
+		_.radius = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Initial Radius']);
+		_.thickness = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Ring Thickness']);
+		_.flash = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Flash Rate']);
+		_.time = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Flash Time']);
+		_.timeLimit = parseInt(PluginManager.parameters('SRD_TimedAttack_Circle')['Time Limit']);
 
-    //-----------------------------------------------------------------------------
-    // Bitmap
-    //-----------------------------------------------------------------------------
+		var _$_organizeInfo = $.organizeInfo;
+		$.organizeInfo = function (o) {
+			_$_organizeInfo.call(this, o);
+			if (o.type === 'circle') {
+				if (o.info.match(/Sound[ ]?Effect:\s*(.*)/im)) o.se = String(RegExp.$1);
+				if (o.info.match(/Circle[ ]?Image:\s*(.*)/im)) o.image = String(RegExp.$1);
+				if (o.info.match(/Background[ ]?Image:\s*(.*)/im)) o.back = String(RegExp.$1);
+				if (o.info.match(/Repeat[ ]?Type:\s*(.*)/im)) o.rt = String(RegExp.$1).trim().toLowerCase();
+				if (o.info.match(/Speed:\s*(.*)/im)) o.speed = String(RegExp.$1);
+				if (o.info.match(/Color:\s*(.*)/im)) o.color = String(RegExp.$1);
+				if (o.info.match(/Initial[ ]?Radius:\s*(.*)/im)) o.radius = parseInt(RegExp.$1);
+				if (o.info.match(/Ring[ ]?Thickness:\s*(.*)/im)) o.thickness = parseInt(RegExp.$1);
+				if (o.info.match(/Flash[ ]?Rate:\s*(.*)/im)) o.flash = parseInt(RegExp.$1);
+				if (o.info.match(/Flash[ ]?Time:\s*(.*)/im)) o.time = parseInt(RegExp.$1);
+				if (o.info.match(/Time[ ]?Limit:\s*(.*)/im)) o.timeLimit = parseInt(RegExp.$1);
+				if (!o.se) o.se = _.se;
+				if (!o.image) o.image = _.image;
+				if (!o.back) o.back = _.back;
+				if (!o.rt) o.rt = _.rt;
+				if (!o.speed) o.speed = _.speed;
+				if (!o.color) o.color = _.color;
+				if (!o.radius) o.radius = _.radius;
+				if (!o.thickness) o.thickness = _.thickness;
+				if (!o.flash && o.flash !== 0) o.flash = _.flash;
+				if (!o.time && o.time !== 0) o.time = _.time;
+				if (!o.timeLimit && o.timeLimit !== 0) o.timeLimit = _.timeLimit;
+			}
+		};
 
-    Bitmap.prototype.drawRing = function(x, y, radius, color, lineWidth) {
-	    var context = this._context;
-	    context.save();
-	    context.strokeStyle = color;
-	    context.lineWidth = lineWidth;
-	    context.beginPath();
-	    context.arc(x, y, radius, 0, Math.PI * 2, false);
-	    context.stroke();
-	    context.restore();
-	    this._setDirty();
-	};
+		//-----------------------------------------------------------------------------
+		// Bitmap
+		//-----------------------------------------------------------------------------
 
-	//-----------------------------------------------------------------------------
-    // TimedAttackSystem
-    //-----------------------------------------------------------------------------
+		Bitmap.prototype.drawRing = function (x, y, radius, color, lineWidth) {
+			var context = this._context;
+			context.save();
+			context.strokeStyle = color;
+			context.lineWidth = lineWidth;
+			context.beginPath();
+			context.arc(x, y, radius, 0, Math.PI * 2, false);
+			context.stroke();
+			context.restore();
+			this._setDirty();
+		};
 
-    var _TimedAttackSystem_loadItem = TimedAttackSystem.prototype.loadItem;
-    TimedAttackSystem.prototype.loadItem = function(item) {
-    	_TimedAttackSystem_loadItem.call(this, item);
-		if(item.type === 'circle') {
-			this._image = item.image;
-			this._back = item.back;
-			this._radius = item.radius;
-			this._xPosition = item.radius;
-			this._oRadius = this._xPosition;
-			this._flash = item.flash;
-			this._time = item.time;
-			this._color = item.color;
-			this._thickness = item.thickness;
-			this._rt = item.rt;
-			this._timeLimit = item.timeLimit;
-			this._mul = 1;
-		}
-	};
+		//-----------------------------------------------------------------------------
+		// TimedAttackSystem
+		//-----------------------------------------------------------------------------
 
-	var _TimedAttackSystem_loadStart = TimedAttackSystem.prototype.loadStart;
-	TimedAttackSystem.prototype.loadStart = function() {
-		_TimedAttackSystem_loadStart.call(this);
-		if(this._item.type === 'circle') {
-			this.opacity = 0;
-			this.contents.clear();
-			this._x = [];
-			this._y = [];
-			for(var i = 0; i < BattleManager._targets.length; i++) {
-				if(BattleManager._targets[i].isEnemy()) {
-					var height = 0;
-					if(BattleManager._spriteset._enemySprites[i]) {
-						height = BattleManager._spriteset._enemySprites[i].height;
+		var _TimedAttackSystem_loadItem = TimedAttackSystem.prototype.loadItem;
+		TimedAttackSystem.prototype.loadItem = function (item) {
+			_TimedAttackSystem_loadItem.call(this, item);
+			if (item.type === 'circle') {
+				this._image = item.image;
+				this._back = item.back;
+				this._radius = item.radius;
+				this._xPosition = item.radius;
+				this._oRadius = this._xPosition;
+				this._flash = item.flash;
+				this._time = item.time;
+				this._color = item.color;
+				this._thickness = item.thickness;
+				this._rt = item.rt;
+				this._timeLimit = item.timeLimit;
+				this._mul = 1;
+			}
+		};
+
+		var _TimedAttackSystem_loadStart = TimedAttackSystem.prototype.loadStart;
+		TimedAttackSystem.prototype.loadStart = function () {
+			_TimedAttackSystem_loadStart.call(this);
+			if (this._item.type === 'circle') {
+				this.opacity = 0;
+				this.contents.clear();
+				this._x = [];
+				this._y = [];
+				for (var i = 0; i < BattleManager._targets.length; i++) {
+					if (BattleManager._targets[i].isEnemy()) {
+						var height = 0;
+						if (BattleManager._spriteset._enemySprites[i]) {
+							height = BattleManager._spriteset._enemySprites[i].height;
+						}
+						this._x.push(BattleManager._targets[i].screenX());
+						this._y.push(BattleManager._targets[i].screenY() - (height / 2));
+					} else {
+						var actor = BattleManager._targets[i];
+						for (var j = 0; j < BattleManager._spriteset._actorSprites.length; j++) {
+							if (BattleManager._spriteset._actorSprites[j] && actor === BattleManager._spriteset._actorSprites[j]._actor) {
+								var height = BattleManager._spriteset._actorSprites[j].height;
+								this._x.push(BattleManager._spriteset._actorSprites[j].x);
+								this._y.push(BattleManager._spriteset._actorSprites[j].y - (height / 2));
+							}
+						}
 					}
-					this._x.push(BattleManager._targets[i].screenX());
-					this._y.push(BattleManager._targets[i].screenY() - (height/2));
+				}
+				this._notPressed = true;
+				this._flashTime = 0;
+			}
+		};
+
+		var _TimedAttackSystem_updateGames = TimedAttackSystem.prototype.updateGames;
+		TimedAttackSystem.prototype.updateGames = function () {
+			_TimedAttackSystem_updateGames.call(this);
+			if (this._type === 'circle') this.playCircleGame();
+		};
+
+		TimedAttackSystem.prototype.playCircleGame = function () {
+			//Movement
+			if (this._notPressed) {
+				var f = this._frame;
+				this._xPosition -= Number(eval(this._item.speed) * this._mul);
+				if (this._xPosition <= 0 || this._xPosition > this._radius) {
+					if (this._rt === 'repeat') {
+						this._xPosition = this._radius;
+					} else if (this._rt === 'reverse') {
+						this._mul *= (-1);
+					} else {
+						this.setPower(0);
+						this._flashTime = this._time;
+						this._notPressed = false;
+					}
+				}
+			} else {
+				this._flashTime++;
+			}
+
+			//Draw
+			this._content.bitmap.clear();
+			for (var i = 0; i < this._x.length; i++) {
+				if (this._back.trim().length > 0) {
+					var bit = $.loadImage(this._back);
+					this._content.bitmap.blt(bit, 0, 0, bit.width, bit.height, this._x[i] - (this._oRadius / 2), this._y[i] - (this._oRadius / 2), this._oRadius, this._oRadius);
+				}
+			}
+			if (this._flashTime % this._flash < Math.floor(this._flash / 2)) {
+				if (this._image.trim().length > 0 && this._xPosition > 0) {
+					for (var i = 0; i < this._x.length; i++) {
+						var bitmap = $.loadImage(this._image);
+						var half = this._xPosition / 2;
+						this._content.bitmap.blt(bitmap, 0, 0, bitmap.width, bitmap.height,
+							this._x[i] - half, this._y[i] - half, this._xPosition, this._xPosition);
+					}
 				} else {
-					var actor = BattleManager._targets[i];
-					for(var j = 0; j < BattleManager._spriteset._actorSprites.length; j++) {
-						if(BattleManager._spriteset._actorSprites[j] && actor === BattleManager._spriteset._actorSprites[j]._actor) {
-							var height = BattleManager._spriteset._actorSprites[j].height;
-							this._x.push(BattleManager._spriteset._actorSprites[j].x);
-							this._y.push(BattleManager._spriteset._actorSprites[j].y - (height/2));
+					if (this._xPosition > 0) {
+						for (var i = 0; i < this._x.length; i++) {
+							this._content.bitmap.drawRing(this._x[i], this._y[i], this._xPosition, this._color, this._thickness);
 						}
 					}
 				}
 			}
-			this._notPressed = true;
-		    this._flashTime = 0;
-		}
-	};
 
-	var _TimedAttackSystem_updateGames = TimedAttackSystem.prototype.updateGames;
-	TimedAttackSystem.prototype.updateGames = function() {
-	    _TimedAttackSystem_updateGames.call(this);
-	    if(this._type === 'circle') this.playCircleGame();
-	};
-
-	TimedAttackSystem.prototype.playCircleGame = function() {
-		//Movement
-	    if(this._notPressed) {
-	    	var f = this._frame;
-	    	this._xPosition -= Number(eval(this._item.speed) * this._mul);
-	    	if(this._xPosition <= 0 || this._xPosition > this._radius) {
-	    		if(this._rt === 'repeat') {
-		    		this._xPosition = this._radius;
-		    	} else if(this._rt === 'reverse') {
-		    		this._mul *= (-1);
-		    	} else {
-		    		this.setPower(0);
-		    		this._flashTime = this._time;
-		    		this._notPressed = false;
-		    	}
-	    	}
-	    } else {
-	    	this._flashTime++;
-	    }
-
-	    //Draw
-	    this._content.bitmap.clear();
-	    for(var i = 0; i < this._x.length; i++) {
-		    if(this._back.trim().length > 0) {
-				var bit = $.loadImage(this._back);
-				this._content.bitmap.blt(bit, 0, 0, bit.width, bit.height, this._x[i] - (this._oRadius/2), this._y[i] - (this._oRadius/2), this._oRadius, this._oRadius);
+			if (this._flashTime >= this._time && !this._notPressed) {
+				this._content.bitmap.clear();
+				BattleManager.endTASAttackThing();
+				this.close();
 			}
-		}
-	    if(this._flashTime % this._flash < Math.floor(this._flash / 2)) {
-	    	if(this._image.trim().length > 0 && this._xPosition > 0) {
-	 	    	for(var i = 0; i < this._x.length; i++) {
-	    			var bitmap = $.loadImage(this._image);
-	    			var half = this._xPosition / 2;
-		    		this._content.bitmap.blt(bitmap, 0, 0, bitmap.width, bitmap.height, 
-		    			this._x[i] - half, this._y[i] - half, this._xPosition, this._xPosition);
-			    }
-			} else {
-				if(this._xPosition > 0) {
-					for(var i = 0; i < this._x.length; i++) {
-			    		this._content.bitmap.drawRing(this._x[i], this._y[i], this._xPosition, this._color, this._thickness);
-			    	}
-			    }
+
+			//Input
+			if (eval($.activateCondition) && this._notPressed) {
+				this._notPressed = false;
+				AudioManager.playSe({ "name": this._item.se, "pan": 0, "pitch": 100, "volume": 100 });
+				// var x = this._xPosition;
+				// var entireLength = this.width;
+				this.setPower(1 - (this._xPosition / this._radius));
 			}
-	    }
 
-	    if(this._flashTime >= this._time && !this._notPressed) {
-	    	this._content.bitmap.clear();
-	    	BattleManager.endTASAttackThing();
-	    	this.close();
-	    }
+			//Time Limit
+			// console.log(this._timeLimit + "  " + this._frame);
+			if (this._timeLimit && this._frame > this._timeLimit) {
+				this._content.bitmap.clear();
+				this.setPower(0);
+				BattleManager.endTASAttackThing();
+				this.close();
+			}
+		};
 
-	    //Input
-	    if(eval($.activateCondition) && this._notPressed) {
-	    	this._notPressed = false;
-	    	AudioManager.playSe({"name":this._item.se,"pan":0,"pitch":100,"volume":100});
-	    	var x = this._xPosition;
-	    	var entireLength = this.width;
-	    	this.setPower(1 - (this._xPosition / this._radius));
-	    }
-
-	    //Time Limit
-	    console.log(this._timeLimit + "  " + this._frame);
-	    if(this._timeLimit && this._frame > this._timeLimit) {
-			this._content.bitmap.clear();
-			this.setPower(0);
-			BattleManager.endTASAttackThing();
-			this.close();
-		}
-	};
-
-})(SRD.TimedAttackCircle, SRD.TimedAttack);
+	})(SRD.TimedAttackCircle, SRD.TimedAttack);
 
 } else alert("Please install 'SRD_TimedAttackCore' in order to use 'SRD_TimedAttack_Circle'.");
