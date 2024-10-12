@@ -365,14 +365,14 @@
  * @value None
  * @option 繰り返し
  * @value Repeat
- * @option 逆順
+ * @option 往復
  * @value Reverse
  * @default None
  * @parent == Default Props. ==
  * 
  * @param Speed
  * @text 速度
- * @desc デフォルトの速度。正の数値または JavaScript 値になります。
+ * @desc デフォルトの速度。正の数値または JavaScript 式
  * @default 10
  * @parent == Default Props. ==
  * 
@@ -442,7 +442,7 @@
  * 元プラグイン: http://sumrndm.site/timed-attack-core/
  *
  * Timed Attack Core
- * Version 1.24
+ * Version 1.25
  * SumRndmDde
  * 
  * このプラグインは、戦闘中にスキルを実行するために
@@ -522,7 +522,7 @@
  *  /img/SumRndmDde/tas/ 内のファイル名。
  * 
  * Cursor Image:
- *  /img/SumRndmDde/tas/  内のファイル名。**
+ *  /img/SumRndmDde/tas/  内のファイル名。*2
  * 
  * Window Opacity:
  *  0から255までの数値。
@@ -534,7 +534,7 @@
  *  None , Repeat , Reverse のいずれか。
  * 
  * Speed:
- *  正の数値かJavaScript式。*
+ *  正の数値かJavaScript式。*1
  * 
  * Main Color:
  *  JavaScriptかHTML色コード。
@@ -557,8 +557,8 @@
  * Flash Rate:
  *  正の数値。
  * 
- * * JavaScriptの式で、"フレーム数"を表すために"f"を使用できます。
- * ** 長方形または円形の画像を使用する場合は空白のままにしてください。
+ * *1 JavaScriptの式で、"フレーム数"を表すために"f"を使用できます。
+ * *2 長方形または円形の画像を使用する場合は空白のままにしてください。
  * 
  * 
  * ==========================================================================
@@ -613,7 +613,8 @@ function TimedAttackSystem() {
 	_.bi = String(params['Background Image']);
 	_.opacity = parseInt(params['Window Opacity']);
 	_.target = String(params['Target Location']);
-	_.rt = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Repeat Type']).trim().toLowerCase();
+	// _.rt = String(PluginManager.parameters('SRD_TimedAttack_Circle')['Repeat Type']).trim().toLowerCase();
+	_.rt = String(params['Repeat Type']).trim().toLowerCase();
 	_.speed = String(params['Speed']);
 	_.color = String(params['Main Color']);
 	_.shape = String(params['Shape']).trim().toLowerCase();
@@ -1015,6 +1016,7 @@ function TimedAttackSystem() {
 			this._rt = item.rt;
 			this._xPosition = 0;
 			this._xSpeed = 1;
+
 			var direction = item.direction;
 			if (direction === 'random') direction = (Math.random() < 0.5) ? 'right' : 'left';
 			if (direction === 'right') {
@@ -1070,11 +1072,13 @@ function TimedAttackSystem() {
 		if (this._notPressed) {
 			var f = this._frame;
 			this._xPosition += Number(eval(this._item.speed) * this._xSpeed);
+
 			if (this._xPosition > this.windowWidth() || this._xPosition < -(this._item.width)) {
 				if (this._rt === 'repeat') {
 					this._xPosition = this._origin;
 				} else if (this._rt === 'reverse') {
 					this._xSpeed *= (-1);
+
 				} else {
 					this.setPower(0);
 					this._flashTime = 45;
@@ -1103,21 +1107,11 @@ function TimedAttackSystem() {
 				var bitmap = _.loadImage(this._image);
 				this._window.contents.blt(bitmap, 0, 0, bitmap.width, bitmap.height, (itemXpos - (bitmap.width / 2)), 0);
 			} else if (this._shape === 'rectangle') {
-				// this.contents.fillRect(this._xPosition - (this._item.width / 2), 0, this._item.width,
-				// 	this.height - (this._window.standardPadding() * 2), this._item.outline);
-				// this.contents.fillRect(this._xPosition + this._size - (this._item.width / 2), 0 + this._size,
-				// 	this._item.width - (this._size * 2), this.height - (this._window.standardPadding() * 2) - (this._size * 2), this._item.color);
-
 				this.contents.fillRect(itemXpos - (itemWidth / 2), 0, itemWidth,
 					itemHeight, this._item.outline);
 				this.contents.fillRect(itemXpos + itemSize - (itemWidth / 2), itemSize,
 					itemWidth - (itemSize * 2), itemHeight - (itemSize * 2), itemColor);
 			} else if (this._shape === 'oval') {
-				// var height = this.height - (this._window.standardPadding() * 2);
-				// this._window.contents.drawCircle(this._xPosition - (this._item.width / 2), height / 2, this._item.width, this._item.outline);
-				// this._window.contents.drawCircle(this._xPosition + (this._size / 2) - 1 - (this._item.width / 2),
-				// 	(height / 2) + (this._size / 2) - 1, this._item.width - (this._size), this._item.color);
-
 				this.contents.drawCircle(itemXpos - (itemWidth / 2), itemWidth * 2, itemWidth,
 					itemHeight, this._item.outline);
 				this.contents.drawCircle(itemXpos + itemSize - (itemWidth / 2), itemWidth * 2 + itemSize,
