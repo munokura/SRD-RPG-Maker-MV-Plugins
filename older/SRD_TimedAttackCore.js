@@ -316,7 +316,7 @@
  * @parent == Window Options ==
  * 
  * @param == Default Props. ==
- * @text == デフォルトのプロパティ ==
+ * @text == デフォルトの要素 ==
  * @default
  * 
  * @param Sound Effect
